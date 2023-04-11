@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function SideBar() {
     const Navigate = useNavigate();
@@ -9,6 +9,7 @@ function SideBar() {
         axios.post('https://foodapis.techenablers.info/api/logout')
             .then((res) => {
                 localStorage.clear('token');
+                localStorage.clear('login');
                 Navigate('/')
             })
     }
@@ -43,15 +44,14 @@ function SideBar() {
 
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
                             <li className="nav-item">
-                                <a className="nav-link">
-                                    {/* <i className="nav-icon fas fa-th"></i> */}
+                                <Link to='/orders' className="nav-link">
                                     <i class="nav-icon fas fa-home"></i>
-                                    <p>
-                                        Home
-                                    </p>
-                                </a>
+                                    <p>Orders</p>
+                                </Link>
                             </li>
+
                             <li className="nav-item">
                                 <a className="nav-link">
                                     <i className="nav-icon fas fa-address-card"></i>
@@ -70,7 +70,7 @@ function SideBar() {
                             </li>
                             <li className="nav-item" onClick={handleLogOut}>
                                 <a className="nav-link">
-                                <i class="nav-icon fa-solid fa-arrow-right"></i>
+                                    <i class="nav-icon fa-solid fa-arrow-right"></i>
                                     <p>
                                         Logout
                                     </p>

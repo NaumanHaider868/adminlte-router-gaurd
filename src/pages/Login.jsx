@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate,useHistory } from 'react-router-dom'
 import { Outlet } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,6 +8,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    // const history = useHistory();
 
     useEffect(() => {
         let login = localStorage.getItem('login');
@@ -30,9 +31,11 @@ function Login() {
                 localStorage.setItem('login',true)
                 if (res.data.data.token !== null) {
                     navigate('/dashboard')
+                    // history.push('/dashboard');
                 }
             }).catch((error) => {
-                if (error.response.status === 401) {
+                console.log(error)
+                if (error.response.status === 401 || error.response.status === 400) {
                     alert(error.response.data.errors);
                 }
             });
@@ -89,13 +92,7 @@ function Login() {
                         </div>
 
                         <div className="social-auth-links text-center mb-3">
-                            <p>- OR -</p>
-                            <a href="#" className="btn btn-block btn-primary">
-                                <i className="fab fa-facebook mr-2"></i> Sign in using Facebook
-                            </a>
-                            <a href="#" className="btn btn-block btn-danger">
-                                <i className="fab fa-google-plus mr-2"></i> Sign in using Google+
-                            </a>
+                            
                         </div>
 
                         <p className="mb-1">
