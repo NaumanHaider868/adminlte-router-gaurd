@@ -34,6 +34,11 @@ function Register() {
                 navigate('/dashboard');
                 localStorage.setItem('login',true)
             })
+            .catch((error)=>{
+                if (error.response.status === 401 || error.response.status === 400) {
+                    alert(error.response.data.errors);
+                }
+            })
     }
     return (
         <div className='hold-transition register-page'>

@@ -4,12 +4,59 @@ import Navbar from '../../componets/Navbar'
 import Footer from '../../componets/Footer'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+// Model Window
+
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+
 
 function Oders() {
-    const cardHeader = {
+    // Model Window
+    const [show, setShow] = useState(false);
+    const param = useParams();
+    const [deliveryMens, setDeliveryMens] = useState([]);
+    const [deliveryMen,setDeliveryMen] = useState();
+    const handleClose = () => setShow(false);
 
+    const handleShow = (id) => {    
+        axios.get('https://foodapis.techenablers.info/api/admin/deliverymens', {
+            headers: {
+                Authorization: `Bearer` + localStorage.getItem('token')
+            }
+        })
+            .then((res) => {
+                console.log('deliverymens', res.data.data.deliveryMens.data);
+                setDeliveryMens(res.data.data.deliveryMens.data)
+            })
+        console.log(id)
+        setShow(true)
     }
+
+    const getDeliveryMen = (e) => {
+        console.log('DeliveryMenId', e.target.value);
+        setDeliveryMen(e.target.value)
+    }
+    const payload = {
+        order_id: deliveryMens,
+        delivery_man_id : deliveryMen
+    }
+
+    const postOrder = () => {
+        axios.post(`https://foodapis.techenablers.info/api/admin/order/assign`,payload,{
+            headers : {
+                Authorization: `Bearer` + localStorage.getItem('token')
+            }
+        })
+        .then((res)=>{
+            console.log(res,'deliver id');
+            alert(res.data.errors)
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
     const [order, setOrder] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
@@ -29,11 +76,46 @@ function Oders() {
     const viewOrder = (id) => {
         navigate('/vieworder/' + id)
     }
+
     return (
         <div className="wrapper">
 
             <SideBar />
             <Navbar />
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className='row'>
+                        <div className='col-sm-6'>
+                            <div className="form-group">
+                                <label for="cars">Delivere Man</label>
+                                <select className='form-control' name="cars" id="cars"
+                                        onChange={getDeliveryMen} 
+                                        >
+                                    {deliveryMens.map((item, i) => {
+                                        return (
+                                            <option key={i} value={item.id}>{item.first_name}</option>
+                                        )
+                                    })}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={()=>{handleClose();postOrder()}}>
+                        Save Changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
             <div className="content-wrapper">
                 <section className="content-header">
                     <div className="container-fluid">
@@ -78,8 +160,9 @@ function Oders() {
                                                             <td>{item.total}</td>
                                                             <td>{item.status}</td>
                                                             <td>
-                                                                <a onClick={()=>viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>&nbsp;
+                                                                <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>&nbsp;
                                                                 <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>
+                                                                <a onClick={() => handleShow(item.id)} style={{ fontSize: '13px', cursor: 'pointer' }}>Assgin</a>
                                                             </td>
                                                         </tr>
                                                     )

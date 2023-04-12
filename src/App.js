@@ -3,10 +3,10 @@ import Login from "./pages/Login";
 import Protucted from "./pages/Protucted";
 import Register from "./pages/Register";
 
+import ViewOrder from "./pages/Apis Page/ViewOrder";
 import Orders from "./pages/Apis Page/Orders";
 import EditOrder from "./pages/Apis Page/EditOrder";
 import { BrowserRouter as Router,Routes, Route } from "react-router-dom";
-import ViewOrder from "./pages/Apis Page/ViewOrder";
 
 function App() {
   return (

@@ -18,8 +18,8 @@ function EditOrder() {
     const [price, setPrice] = useState('');
     const [total_amount, setTotalAmount] = useState('');
     const [shopId ,setShopId] = useState('');
-    const [variation_id,setVariationId] = useState();
-    const [tax , setTax] = useState('');
+    // const [variation_id,setVariationId] = useState();
+    // const [tax , setTax] = useState('');
     const [total, setTotal] = useState('');
 
     useEffect(() => {
@@ -36,7 +36,7 @@ function EditOrder() {
                 setStatus(res.data.data.order.status);
                 setTotal(res.data.data.order.total);
                 setShopId(res.data.data.order.shop_id)
-                setTax(res.data.data.order.tax)
+                // setTax(res.data.data.order.tax)
 
 
                 setCookTime(res.data.data.orderItems[0].cook_time);
@@ -45,7 +45,7 @@ function EditOrder() {
                 setName(res.data.data.orderItems[0].name);
                 setPrice(res.data.data.orderItems[0].price);
                 setTotalAmount(res.data.data.orderItems[0].total_amount);
-                setVariationId(res.data.data.orderItems[0].variation_id)
+                // setVariationId(res.data.data.orderItems[0].variation_id)
 
             })
     }, []);
@@ -93,7 +93,7 @@ function EditOrder() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Edit Order</h1>
+                                <h1 className='pl-1'>Edit Order</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
@@ -195,7 +195,7 @@ function EditOrder() {
 
 
                                     <div className="card-footer" style={{ background: '#fff' }}>
-                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} onClick={(e) => submitEdit(e)}>Submit</button>
+                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} onClick={(e) => submitEdit(e)}>Update</button>
                                     </div>
                                 </div>
                             </form>

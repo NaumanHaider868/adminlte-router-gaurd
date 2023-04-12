@@ -11,7 +11,7 @@ function ViewOrder() {
   const param = useParams();
   const [data, setData] = useState([]);
   const [orderItems, setOrderItems] = useState([]);
-  console.log(data,'data')
+  console.log(data, 'data')
 
   useEffect(() => {
     axios.get(`https://foodapis.techenablers.info/api/admin/orders/${param.id}`, {
@@ -42,9 +42,9 @@ function ViewOrder() {
         <section className="content">
           <div className="card">
             <div className="card-body">
-              <Link to='/orders'>
-                <p className='btn btn-primary btn_search_1'><i class="fa fa-arrow-left left_a"></i>Back to Orders</p>
-              </Link>
+              {/* <Link to='/orders'>
+                <p className='btn btn-primary btn_search_1'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Orders</p>
+              </Link> */}
 
               <>
                 <p className='para_bold'>Order #300112</p>
@@ -52,14 +52,14 @@ function ViewOrder() {
                   <div className='col-md-6'>
                     <div className='row'>
                       <div className='col-md-6'>
-                        
-                              <label className='label_1'>Customer Name</label>
-                              <p className='p_1'>{data.customer_name}</p>
-                              <label className='label_1'>Customer Phone</label>
-                              <p className='p_1'>{data.customer_phone}</p>
-                              <label className='label_1'>Delivery Address</label>
-                              <p className='p_1'><a href='#'>{data.location}</a></p>
-                            
+
+                        <label className='label_1'>Customer Name</label>
+                        <p className='p_1'>{data.customer_name}</p>
+                        <label className='label_1'>Customer Phone</label>
+                        <p className='p_1'>{data.customer_phone}</p>
+                        <label className='label_1'>Delivery Address</label>
+                        <p className='p_1'><a href='#'>{data.location}</a></p>
+
                       </div>
                       <div className='col-md-6'>
                         <label className='label_1'>Delivery Man Name</label>
@@ -76,30 +76,36 @@ function ViewOrder() {
                           <th scope="col">Price</th>
                         </tr>
                       </thead>
-                      
-                      <tbody>
-                        
-                        <tr>
-                          <td>name</td>
-                          <td>price</td>
-                        </tr>
 
+                      <tbody>
+                        {orderItems.map((item, i) => {
+                          return (
+                            <>
+                              <tr key={i}>
+                                <td>{item.name}</td>
+                                <td>{item.price}</td>
+                              </tr>
+                            </>
+                          )
+                        })}
                         <tr>
                           <td><b>Sub-Total</b></td>
-                          <td>sub_total</td>
+                          <td>{data.sub_total}</td>
                         </tr>
                         <tr>
                           <td><b>Tax</b></td>
-                          <td>tax</td>
+                          <td>{data.tax}</td>
                         </tr>
                         <tr>
                           <td><b>Delivery Charges</b></td>
-                          <td>delivery_charges</td>
+                          <td>{data.delivery_charges}</td>
                         </tr>
                         <tr>
                           <td><b>Total</b></td>
-                          <td>total</td>
+                          <td>{data.total}</td>
                         </tr>
+
+
                       </tbody>
                     </table>
                   </div>
