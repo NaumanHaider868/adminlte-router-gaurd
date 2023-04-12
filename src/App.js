@@ -18,9 +18,9 @@ function App() {
             {/* <Route path='/dashboard' element={<Dashborad/>} / > */}
             <Route path='/dashboard' element={<Protucted Component={Dashborad} />} />
 
-            <Route path="/orders" element={<Orders/>} />
-            <Route path="/editorder/:id" element={<EditOrder/>} />
-            <Route path="/vieworder/:id" element={<ViewOrder/>} />
+            <Route path="/orders" element={<Protucted Component={Orders} />} />
+            <Route path="/editorder/:id" element={<Protucted Component={EditOrder} />} />
+            <Route path="/vieworder/:id" eelement={<Protucted Component={ViewOrder} />} />
           </Routes>
         </Router>
       </div>

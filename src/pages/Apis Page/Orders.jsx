@@ -4,18 +4,16 @@ import Navbar from '../../componets/Navbar'
 import Footer from '../../componets/Footer'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 // Model Window
 
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
 
 function Oders() {
     // Model Window
     const [show, setShow] = useState(false);
-    const param = useParams();
     const [deliveryMens, setDeliveryMens] = useState([]);
     const [deliveryMen,setDeliveryMen] = useState();
     const handleClose = () => setShow(false);
