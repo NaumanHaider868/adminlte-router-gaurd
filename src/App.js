@@ -7,6 +7,9 @@ import ViewOrder from "./pages/Apis Page/ViewOrder";
 import Orders from "./pages/Apis Page/Orders";
 import EditOrder from "./pages/Apis Page/EditOrder";
 import { BrowserRouter as Router,Routes, Route } from "react-router-dom";
+import Shops from "./pages/Apis Page/Shops";
+import EditShop from "./pages/Apis Page/EditShop";
+import AddShop from "./pages/Apis Page/AddShop";
 
 function App() {
   return (
@@ -20,7 +23,12 @@ function App() {
 
             <Route path="/orders" element={<Protucted Component={Orders} />} />
             <Route path="/editorder/:id" element={<Protucted Component={EditOrder} />} />
-            <Route path="/vieworder/:id" eelement={<Protucted Component={ViewOrder} />} />
+            <Route path="/vieworder/:id" element={<Protucted Component={ViewOrder} />} />
+
+
+            <Route path='/shops' element={<Shops/>} />
+            <Route path="/editshop/:id" element={<EditShop/>} />
+            <Route path='/addshop' element={<AddShop/>} />
           </Routes>
         </Router>
       </div>

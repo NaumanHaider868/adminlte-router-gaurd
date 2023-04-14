@@ -42,9 +42,9 @@ function ViewOrder() {
         <section className="content">
           <div className="card">
             <div className="card-body">
-              {/* <Link to='/orders'>
-                <p className='btn btn-primary btn_search_1'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Orders</p>
-              </Link> */}
+              <Link to='/orders'>
+                <p className='btn btn_search_1' style={{background:'#343a40',color:'#fff'}}><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Orders</p>
+              </Link>
 
               <>
                 <p className='para_bold'>Order #300112</p>

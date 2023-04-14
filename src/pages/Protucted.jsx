@@ -2,16 +2,20 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function Protected(props) {
+  
   const navigate = useNavigate();
-  useEffect(()=>{
+  
+  useEffect(() => {
     let login = localStorage.getItem('login');
-    if(!login){
+    if (!login) {
       navigate('/')
       alert("Please Login First")
     }
-  },[])
-  const {Component} = props
+  }, [])
+  
+  const { Component } = props
   const isAuthenticated = localStorage.getItem('login') === 'true';
+  
   return isAuthenticated ? <Component /> : null;
 }
 

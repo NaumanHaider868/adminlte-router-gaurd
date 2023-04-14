@@ -5,21 +5,34 @@ import Footer from '../../componets/Footer'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { PaginationControl } from 'react-bootstrap-pagination-control';
 // Model Window
 
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 
-function Oders() {
+function Orders() {
     // Model Window
     const [show, setShow] = useState(false);
     const [deliveryMens, setDeliveryMens] = useState([]);
-    const [deliveryMen,setDeliveryMen] = useState();
+    const [deliveryMen, setDeliveryMen] = useState();
     const handleClose = () => setShow(false);
 
-    const handleShow = (id) => {    
-        axios.get('https://foodapis.techenablers.info/api/admin/deliverymens', {
+    // Pagination
+    const [page, setPage] = useState(1)
+    const handleChangeOrder = (page) => {
+        // setPage(page)
+        console.log(page,'handleChange')
+        console.log(page,'handleChange')
+
+        console.log(page,'handleChange')
+
+    }
+    const [currentPage, setCurrentPage] = useState(1)
+
+    const handleShow = (id) => {
+        axios.get(`https://foodapis.techenablers.info/api/admin/deliverymens`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }
@@ -38,36 +51,38 @@ function Oders() {
     }
     const payload = {
         order_id: deliveryMens,
-        delivery_man_id : deliveryMen
+        delivery_man_id: deliveryMen
     }
 
     const postOrder = () => {
-        axios.post(`https://foodapis.techenablers.info/api/admin/order/assign`,payload,{
-            headers : {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        })
-        .then((res)=>{
-            console.log(res,'deliver id');
-            alert(res.data.errors)
-        }).catch((error)=>{
-            console.log(error)
-        })
-    }
-
-    const [order, setOrder] = useState([]);
-    const navigate = useNavigate();
-    useEffect(() => {
-        axios.get('https://foodapis.techenablers.info/api/admin/orders', {
+        axios.post(`https://foodapis.techenablers.info/api/admin/order/assign`, payload, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }
         })
             .then((res) => {
-                console.log('order', res.data.data.orders.data)
-                setOrder(res.data.data.orders.data)
+                console.log(res, 'deliver id');
+                alert(res.data.errors)
+            }).catch((error) => {
+                console.log(error)
             })
-    }, [])
+    }
+
+    const [order, setOrder] = useState([]);
+    const navigate = useNavigate();
+    useEffect(() => {
+        axios.get(`https://foodapis.techenablers.info/api/admin/orders?page=${page}`, {
+            headers: {
+                Authorization: `Bearer` + localStorage.getItem('token')
+            }
+        })
+            .then((res) => {
+                // console.log('order', res.data.data.orders.data)
+                setOrder(res.data.data.orders.data)
+                // setOrder(res.data.data.order)
+
+            })
+    }, [page])
     const editOrder = (id) => {
         navigate('/editorder/' + id)
     }
@@ -91,8 +106,8 @@ function Oders() {
                             <div className="form-group">
                                 <label for="cars">Delivere Man</label>
                                 <select className='form-control' name="cars" id="cars"
-                                        onChange={getDeliveryMen} 
-                                        >
+                                    onChange={getDeliveryMen}
+                                >
                                     {deliveryMens.map((item, i) => {
                                         return (
                                             <option key={i} value={item.id}>{item.first_name}</option>
@@ -107,7 +122,7 @@ function Oders() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={()=>{handleClose();postOrder()}}>
+                    <Button variant="primary" onClick={() => { handleClose(); postOrder() }}>
                         Save Changes
                     </Button>
                 </Modal.Footer>
@@ -135,7 +150,7 @@ function Oders() {
 
                                     </div> */}
                                     <div className="card-body">
-                                        <table className="table">
+                                        <table className="table" style={{ marginBottom: '32px' }}>
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Sr.#</th>
@@ -167,6 +182,18 @@ function Oders() {
                                                 })}
                                             </tbody>
                                         </table>
+                                        <PaginationControl
+                                            page={page}
+                                            total={90}
+                                            limit={10}
+                                            changePage={(page) => {
+                                                setPage(page);
+                                                // console.log('auto change', page)
+                                                handleChangeOrder(page)
+                                            }}
+                                            ellipsis={1}
+                                            // onClick={() => }
+                                        />
                                     </div>
 
                                 </div>
@@ -180,4 +207,4 @@ function Oders() {
     )
 }
 
-export default Oders
+export default Orders

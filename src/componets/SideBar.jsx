@@ -53,12 +53,12 @@ function SideBar() {
                             </li>
 
                             <li className="nav-item">
-                                <a className="nav-link">
+                                <Link to='/shops' className="nav-link">
                                     <i className="nav-icon fas fa-address-card"></i>
                                     <p>
-                                        About
+                                        Shops
                                     </p>
-                                </a>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link">
