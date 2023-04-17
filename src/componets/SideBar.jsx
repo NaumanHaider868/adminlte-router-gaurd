@@ -44,10 +44,17 @@ function SideBar() {
 
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <li className="nav-item">
+                                <Link to='/admin' className="nav-link">
+                                    <i className="nav-icon fas fa-user"></i>
+                                    <p>Admin</p>
+                                </Link>
+                            </li>
+
 
                             <li className="nav-item">
                                 <Link to='/orders' className="nav-link">
-                                    <i class="nav-icon fas fa-home"></i>
+                                    <i className="nav-icon fas fa-home"></i>
                                     <p>Orders</p>
                                 </Link>
                             </li>
@@ -61,14 +68,40 @@ function SideBar() {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link">
-                                    <i class="nav-icon fas fa-phone-alt"></i>
+                                <Link to='/owner' className="nav-link">
+                                    <i className="nav-icon fas fa-phone-alt"></i>
                                     <p>
-                                        Content
+                                        Owner
                                     </p>
-                                </a>
+                                </Link>
                             </li>
-                            <li className="nav-item" onClick={handleLogOut}>
+                            <li className="nav-item">
+                                <Link to='/customer' className="nav-link">
+                                    <i className="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Customers
+                                    </p>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/coupons' className="nav-link">
+                                    {/* <i class="nav-icon fas fa-phone-alt"></i> */}
+                                    <i className="nav-icon fas fa-venus-double"></i>
+                                    <p>
+                                        Coupons
+                                    </p>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to='/deliveryman' className="nav-link">
+                                    {/* <i class="nav-icon fas fa-phone-alt"></i> */}
+                                    <i class="nav-icon fab fa-first-order"></i>
+                                    <p>
+                                        Deliverymans
+                                    </p>
+                                </Link>
+                            </li>
+                            <li className="nav-item" onClick={handleLogOut} style={{cursor:'pointer'}}>
                                 <a className="nav-link">
                                     <i class="nav-icon fa-solid fa-arrow-right"></i>
                                     <p>

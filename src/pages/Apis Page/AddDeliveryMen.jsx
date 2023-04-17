@@ -1,50 +1,48 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-
 import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
-function AddShop() {
+function AddDeliveryMen() {
+    const [email, setEmail] = useState();
+    const [first_name, setFirstName] = useState();
+    const [last_name, setLastName] = useState();
+    const [status, setStatus] = useState();
+    const [username, setUserName] = useState();
+    const [password, setPassword] = useState();
+    const [phone, setPhone] = useState();
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [image, setImage] = useState(null);
-    const [open_hours, setOpenHour] = useState();
-    const [close_hours, setCloseHour] = useState();
-    const [address, setAddress] = useState('');
-    const [longitude, setLongtitude] = useState(22);
-    const [latitude, setLatitude] = useState(24);
 
     const handleSubmit = (e) => {
-        const formatData = new FormData();
-        formatData.append('name', name)
-        formatData.append('address', address)
-        formatData.append('close_hours', close_hours)
-        formatData.append('open_hours', open_hours)
-        formatData.append('phone', phone)
-        formatData.append('longitude', longitude)
-        formatData.append('latitude', latitude)
-        formatData.append('image', image)
         e.preventDefault();
-        axios.post('https://foodapis.techenablers.info/api/admin/shops', formatData, {
+        let payload = {
+            email: email,
+            phone: phone,
+            first_name: first_name,
+            last_name: last_name,
+            password: password,
+            username: username,
+            status:status
+        }
+        axios.post('https://foodapis.techenablers.info/api/admin/deliverymens', payload, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token'),
                 "Content-Type": "multipart/form-data",
             }
         })
-            .then((resp) => {
-                console.log(resp,'add shop')
-                if (resp.data.data.success !== false) {
-                    navigate('/shops');
-                    alert(resp.data.messages)
-                }
-            }).catch((error)=>{
+            .then((res) => {
+                console.log(res,'add deliveryman')
+                navigate('/deliveryman')
+            })
+            .catch((error)=>{
+                console.log(error)
                 alert(error.response.data.errors)
             })
     }
+
     return (
         <div className='wrapper'>
             <Navbar />
@@ -54,12 +52,12 @@ function AddShop() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1 className='pl-1'>Add Shop</h1>
+                                <h1 className='pl-1'>Add Delivery Man</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Add Shop</li>
+                                    <li className="breadcrumb-item active">Add Delivery Man</li>
                                 </ol>
                             </div>
                         </div>
@@ -77,27 +75,26 @@ function AddShop() {
                                     <div className='row'>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Name</label>
-                                                <input type="text" className="form-control" name={name} onChange={(e) => setName(e.target.value)} />
+                                                <label>Email</label>
+                                                <input type="text" className="form-control" name={email} onChange={(e) => setEmail(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Address</label>
-                                                <input type="text" className="form-control" name={address} onChange={(e) => setAddress(e.target.value)} />
-                                            </div>
-                                        </div>
-
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Image</label><br />
-                                                <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                <label>First Name</label>
+                                                <input type="text" className="form-control" name={first_name} onChange={(e) => setFirstName(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Open Hours</label>
-                                                <input type="text" className='form-control' name={open_hours} onChange={(e) => setOpenHour(e.target.value)} />
+                                                <label>Last Name</label>
+                                                <input type="text" className="form-control" name={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>User Name</label>
+                                                <input type="text" className="form-control" name={username} onChange={(e) => setUserName(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
@@ -108,14 +105,24 @@ function AddShop() {
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Close Hours</label>
-                                                <input type="text" className="form-control" name={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                                <label for="cars">Status</label>
+                                                <select className='form-control' name="cars" id="cars" value={status} onChange={(e) => setStatus(e.target.value)}>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                </select>
                                             </div>
                                         </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Password</label>
+                                                <input type="text" className="form-control" name={password} onChange={(e) => setPassword(e.target.value)} />
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div className="card-footer" style={{ background: '#fff' }}>
-                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} >Add Shop</button>
+                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} >Add Delivery Man</button>
                                     </div>
                                 </div>
                             </form>
@@ -132,4 +139,4 @@ function AddShop() {
     )
 }
 
-export default AddShop
+export default AddDeliveryMen

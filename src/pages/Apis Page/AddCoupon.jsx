@@ -1,48 +1,53 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-
 import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
 
-function AddShop() {
+function AddCoupon() {
     const navigate = useNavigate();
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [image, setImage] = useState(null);
-    const [open_hours, setOpenHour] = useState();
-    const [close_hours, setCloseHour] = useState();
-    const [address, setAddress] = useState('');
-    const [longitude, setLongtitude] = useState(22);
-    const [latitude, setLatitude] = useState(24);
+    const [code, setCode] = useState();
+    const [description, setDescription] = useState();
+    const [discount, setDiscount] = useState();
+    const [discount_type, setDiscountType] = useState();
+    const [general, setGeneral] = useState();
+    const [expires_at, setExpires] = useState('');
+    // setExpires(expires)
 
     const handleSubmit = (e) => {
         const formatData = new FormData();
-        formatData.append('name', name)
-        formatData.append('address', address)
-        formatData.append('close_hours', close_hours)
-        formatData.append('open_hours', open_hours)
-        formatData.append('phone', phone)
-        formatData.append('longitude', longitude)
-        formatData.append('latitude', latitude)
-        formatData.append('image', image)
+        // formatData.append('code', code)
+        // formatData.append('description', description)
+        // formatData.append('discount', discount)
+        // formatData.append('discount_type', discount_type)
+        // formatData.append('general', general)
+        // formatData.append('expires_at', expires_at)
+        let payload = {
+            code: code,
+            description: description,
+            discount: discount,
+            discount_type: discount_type,
+            general: general,
+            expires_at: expires_at
+        }
         e.preventDefault();
-        axios.post('https://foodapis.techenablers.info/api/admin/shops', formatData, {
+        axios.post('https://foodapis.techenablers.info/api/admin/coupons', payload, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token'),
                 "Content-Type": "multipart/form-data",
             }
         })
             .then((resp) => {
-                console.log(resp,'add shop')
+                console.log(resp, 'add shop')
                 if (resp.data.data.success !== false) {
-                    navigate('/shops');
+                    navigate('/coupons');
                     alert(resp.data.messages)
                 }
-            }).catch((error)=>{
+            }).catch((error) => {
                 alert(error.response.data.errors)
+                console.log(error)
             })
     }
     return (
@@ -54,12 +59,12 @@ function AddShop() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1 className='pl-1'>Add Shop</h1>
+                                <h1 className='pl-1'>Add Coupon</h1>
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Add Shop</li>
+                                    <li className="breadcrumb-item active">Add Coupon</li>
                                 </ol>
                             </div>
                         </div>
@@ -77,45 +82,52 @@ function AddShop() {
                                     <div className='row'>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Name</label>
-                                                <input type="text" className="form-control" name={name} onChange={(e) => setName(e.target.value)} />
+                                                <label>Code</label>
+                                                <input type="text" className="form-control" name={code} onChange={(e) => setCode(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Address</label>
-                                                <input type="text" className="form-control" name={address} onChange={(e) => setAddress(e.target.value)} />
+                                                <label>Description</label>
+                                                <input type="text" className="form-control" name={description} onChange={(e) => setDescription(e.target.value)} />
                                             </div>
                                         </div>
 
+
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Image</label><br />
-                                                <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                <label>Discount</label>
+                                                <input type="text" className='form-control' name={discount} onChange={(e) => setDiscount(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Open Hours</label>
-                                                <input type="text" className='form-control' name={open_hours} onChange={(e) => setOpenHour(e.target.value)} />
+                                                <label for="cars">Discount Type</label>
+                                                <select className='form-control' name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
+                                                    <option value="Fixed">Fixed</option>
+                                                    <option value="Percantage">Percantage</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" className="form-control" name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                <label for="cars">General</label>
+                                                <select className='form-control' name={general} onChange={(e) => setGeneral(e.target.value)}>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label>Close Hours</label>
-                                                <input type="text" className="form-control" name={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                                <label>Expires</label>
+                                                <input type="text" className="form-control" name={expires_at} onChange={(e) => setExpires(e.target.value)} />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="card-footer" style={{ background: '#fff' }}>
-                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} >Add Shop</button>
+                                        <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} >Update</button>
                                     </div>
                                 </div>
                             </form>
@@ -132,4 +144,4 @@ function AddShop() {
     )
 }
 
-export default AddShop
+export default AddCoupon

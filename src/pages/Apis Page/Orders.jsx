@@ -21,15 +21,22 @@ function Orders() {
 
     // Pagination
     const [page, setPage] = useState(1)
-    const handleChangeOrder = (page) => {
-        // setPage(page)
-        console.log(page,'handleChange')
-        console.log(page,'handleChange')
-
-        console.log(page,'handleChange')
-
+    const [totalPage,setTotalPage] = useState();
+    // Search
+    const [search, setSearch] = useState([]);
+    const getSearch = (e) => {
+        // setSearch(e.target.value)
+        e.preventDefault();
+        axios.get(`https://foodapis.techenablers.info/api/admin/orders?keyword=${search}`,{
+            headers : {
+                Authorization : `Bearer` + localStorage.getItem('token')
+            }
+        })
+        .then((res)=>{
+            console.log(res)
+            setOrder(res.data.data.orders.data)
+        })
     }
-    const [currentPage, setCurrentPage] = useState(1)
 
     const handleShow = (id) => {
         axios.get(`https://foodapis.techenablers.info/api/admin/deliverymens`, {
@@ -79,6 +86,7 @@ function Orders() {
             .then((res) => {
                 // console.log('order', res.data.data.orders.data)
                 setOrder(res.data.data.orders.data)
+                setTotalPage(res.data.data.orders.total)
                 // setOrder(res.data.data.order)
 
             })
@@ -98,7 +106,7 @@ function Orders() {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Assgin Order</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className='row'>
@@ -146,11 +154,19 @@ function Orders() {
                         <div className="row">
                             <div className="col-12">
                                 <div className="card">
-                                    {/* <div className="card-header">
-
-                                    </div> */}
+                                    <div className="card-header">
+                                        <div className="input-group">
+                                            <input type="search" className="form-control form-control-lg" placeholder="Type your keywords here" onChange={(e)=>setSearch(e.target.value)} />
+                                            <div className="input-group-append">
+                                                <button type="submit" className="btn btn-lg btn-success" onClick={getSearch}>
+                                                    <i className="fa fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="card-body">
-                                        <table className="table" style={{ marginBottom: '32px' }}>
+
+                                        <table className="table" style={{marginBottom:'30px'}}>
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Sr.#</th>
@@ -163,36 +179,33 @@ function Orders() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {order.map((item, i) => {
-                                                    return (
-                                                        <tr key={i}>
-                                                            <td>{item.id}</td>
-                                                            <td>1/1/2023</td>
-                                                            <td>{item.username}</td>
-                                                            <td>{item.location}</td>
-                                                            <td>{item.total}</td>
-                                                            <td>{item.status}</td>
-                                                            <td>
-                                                                <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>&nbsp;
-                                                                <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>
-                                                                <a onClick={() => handleShow(item.id)} style={{ fontSize: '13px', cursor: 'pointer' }}>Assgin</a>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })}
+                                                {order.map((item, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td>{((page - 1) * 10) + index + 1}</td>
+                                                                <td>1/1/2023</td>
+                                                                <td>{item.username}</td>
+                                                                <td>{item.location}</td>
+                                                                <td>{item.total}</td>
+                                                                <td>{item.status}</td>
+                                                                <td>
+                                                                    <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>&nbsp;
+                                                                    <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '13px', cursor: 'pointer' }}></i></a>
+                                                                    <a onClick={() => handleShow(item.id)} style={{ fontSize: '13px', cursor: 'pointer' }}>Assgin</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
                                             </tbody>
                                         </table>
                                         <PaginationControl
                                             page={page}
-                                            total={90}
+                                            total={totalPage}
                                             limit={10}
                                             changePage={(page) => {
                                                 setPage(page);
-                                                // console.log('auto change', page)
-                                                handleChangeOrder(page)
                                             }}
                                             ellipsis={1}
-                                            // onClick={() => }
                                         />
                                     </div>
 
