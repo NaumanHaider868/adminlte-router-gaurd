@@ -12,8 +12,15 @@ function Owner() {
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState()
     const [search, setSearch] = useState();
+
+    // const history = useHistory();
+    
     const navigate = useNavigate();
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/login')
+        }
         getOwner();
     }, [])
     const getSearch = (e) => {

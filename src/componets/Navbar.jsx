@@ -16,7 +16,7 @@ function Navbar() {
       </ul>
 
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <a className="nav-link" data-widget="navbar-search" href="#" role="button">
             <i className="fas fa-search"></i>
           </a>
@@ -35,7 +35,7 @@ function Navbar() {
               </div>
             </form>
           </div>
-        </li>
+        </li> */}
 
         <li className="nav-item dropdown">
           <a className="nav-link" data-toggle="dropdown" href="#">
