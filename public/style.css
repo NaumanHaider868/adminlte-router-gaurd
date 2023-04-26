@@ -1,0 +1,11 @@
+/* orders */
+
+.card-body .input-group .form-control:focus{
+    box-shadow: 0 0 0 0 #ccc;
+}
+
+
+.content .container-fluid .card .card-header{
+    background: #198754;
+    color: #fff;
+}
