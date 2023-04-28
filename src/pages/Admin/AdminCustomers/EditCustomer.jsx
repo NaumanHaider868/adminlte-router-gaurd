@@ -5,6 +5,10 @@ import Footer from '../../../componets/Footer'
 import axios from '../../services/ApiUrl'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 function EditCustomer() {
     const navigate = useNavigate();
     const param = useParams();
@@ -14,6 +18,8 @@ function EditCustomer() {
     const [last_name, setLastName] = useState();
     const [phone, setPhone] = useState();
     const [password, setPassword] = useState(null)
+
+    const [alert, setAlert] = useState([]);
 
     useEffect(() => {
         axios.get(`/customers/${param.id}`)
@@ -42,10 +48,16 @@ function EditCustomer() {
                 setUserName();
                 setFirstName();
                 setLastName();
-                alert(res.data.messages,'edit customer')
+                // alert(res.data.messages,'edit customer')
                 navigate('/customer')
-            }).catch((error) => {
-                alert(error.response.data.errors);
+                toast.success(res.data.messages[0])
+            })
+            .catch(error => {
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -74,7 +86,17 @@ function EditCustomer() {
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
                             </div>
-
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>
                                 <div className="card-body">
                                     <div className='row'>

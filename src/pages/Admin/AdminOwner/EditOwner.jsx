@@ -6,16 +6,19 @@ import axios from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function EditOwner() {
     const [email, setEmail] = useState();
     const [username, setUserName] = useState();
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
     const [status, setStatus] = useState();
-    // const [last_login, setLastLogin] = useState();
-    // const [other_details, setOtherDetails] = useState();
     const [password, setPassword] = useState();
     const [ownerData, setOwnerData] = useState();
+
+    const [alert, setAlert] = useState([]);
 
 
     const param = useParams();
@@ -51,9 +54,14 @@ function EditOwner() {
                 if (res.success !== false) {
                     navigate('/owner')
                 }
-            }).catch((error) => {
-                console.log(error, 'error')
-                alert(error.response.data.errors)
+                toast.success(res.data.messages[0])
+            })
+            .catch(error => {
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -81,6 +89,18 @@ function EditOwner() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form onSubmit={handleSubmit}>

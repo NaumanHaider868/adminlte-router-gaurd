@@ -72,26 +72,7 @@ function EditShop() {
                     alert(res.errors)
                 }
             })
-            // .catch((error) => {
-                // if (error.response && error.response.data && error.response.data.errors) {
-                //     const errors = error.response.data.errors;
-                //     const errorMessage = Object.keys(errors)
-                //         .map(key => errors[key])
-                //         .join('\n');
-                //     toast.error(errorMessage);
-                //     console.log(errors);
-                // } else {
-                //     console.log(error);
-                // }
-                // toast.error(error.response.data.errors[0])
-                // console.log(error.response.data.errors)
-                
-                // setAlert(error.response.data.errors)
-                // console.log(error.response.data.errors)
-                // console.log(alert,'alert')
-            // })
             .catch(res => {
-                setAlert(alert.msg);
                 setAlert(res.response.data.errors);
                 document.querySelector('#alert-message').style.display = 'block';
                 setTimeout(() => {

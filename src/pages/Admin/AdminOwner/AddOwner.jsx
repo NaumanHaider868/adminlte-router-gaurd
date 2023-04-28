@@ -4,7 +4,10 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import axios from '../../services/ApiUrl'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link,  useNavigate } from 'react-router-dom'
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function AddOwner() {
@@ -13,12 +16,14 @@ function AddOwner() {
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
     const [status, setStatus] = useState();
-    // const [last_login, setLastLogin] = useState();
-    // const [other_details, setOtherDetails] = useState();
+
     const [password, setPassword] = useState();
     const [phone, setPhone] = useState();
 
+    const [alert, setAlert] = useState([]);
+    
     const navigate = useNavigate();
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         let payload = {
@@ -35,11 +40,14 @@ function AddOwner() {
                 console.log(res)
                 if (res.status === 200) {
                     navigate('/owner')
-                    alert(res.data.messages)
+                    toast.success(res.data.messages[0])
                 }
             }).catch((error) => {
-                alert(error.response.data.errors)
-                console.log(error.response.data.errors)
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -67,6 +75,18 @@ function AddOwner() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form onSubmit={handleSubmit}>

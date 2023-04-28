@@ -6,6 +6,9 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function AddCoupon() {
     const navigate = useNavigate();
     const [code, setCode] = useState();
@@ -14,7 +17,8 @@ function AddCoupon() {
     const [discount_type, setDiscountType] = useState();
     const [general, setGeneral] = useState();
     const [expires_at, setExpires] = useState('');
-    // setExpires(expires)
+
+    const [alert, setAlert] = useState([])
 
     const handleSubmit = (e) => {
         const formatData = new FormData();
@@ -44,10 +48,14 @@ function AddCoupon() {
                 if (resp.data.data.success !== false) {
                     navigate('/coupons');
                     alert(resp.data.messages)
+                    toast.success(resp.data.messages[0])
                 }
             }).catch((error) => {
-                alert(error.response.data.errors)
-                console.log(error)
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -75,6 +83,18 @@ function AddCoupon() {
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>

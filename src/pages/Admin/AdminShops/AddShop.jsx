@@ -7,6 +7,9 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function AddShop() {
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -17,6 +20,8 @@ function AddShop() {
     const [address, setAddress] = useState('');
     const [longitude, setLongtitude] = useState(22);
     const [latitude, setLatitude] = useState(24);
+
+    const [alert, setAlert] = useState([])
 
     const handleSubmit = (e) => {
         const formatData = new FormData();
@@ -34,10 +39,14 @@ function AddShop() {
                 console.log(resp, 'add shop')
                 if (resp.data.data.success !== false) {
                     navigate('/shops');
-                    alert(resp.data.messages)
+                    toast.success(resp.data.messages[0])
                 }
             }).catch((error) => {
-                alert(error.response.data.errors)
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -65,6 +74,18 @@ function AddShop() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>

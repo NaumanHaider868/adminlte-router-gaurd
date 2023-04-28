@@ -7,6 +7,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Deliverymans() {
     const navigate = useNavigate();
     const [search, setSearch] = useState([])
@@ -38,8 +41,8 @@ function Deliverymans() {
     const deleteDeliveryMen = (id) => {
         axios.delete(`/deliverymens/${id}`)
             .then((res) => {
-                alert(res.data.messages);
-                // console.log()
+                // alert(res.data.messages);
+                toast.success(res.data.messages[0])
             })
     }
 

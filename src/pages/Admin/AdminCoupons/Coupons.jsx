@@ -6,8 +6,9 @@ import axios from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
-// import { getAdminCoupon, getAdminCouponPagination } from '../../services/ApiUrl'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Coupons() {
     const navigate = useNavigate();
@@ -44,7 +45,7 @@ function Coupons() {
         axios.delete(`/coupons/${id}`)
             .then((res) => {
                 getCoupon()
-                alert(res.data.messages)
+                toast.success(res.data.messages[0])
             })
     }
     const ViewCoupon = (id) => {

@@ -4,6 +4,8 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from '../../services/ApiUrl'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EditCoupon() {
     const navigate = useNavigate();
@@ -15,9 +17,10 @@ function EditCoupon() {
     const [general, setGeneral] = useState();
     const [expires, setExpires] = useState();
 
+    const [alert, setAlert] = useState([]);
+
     useEffect(() => {
         axios.get(`/coupons/${param.id}`).then((res) => {
-            console.log(res.data.data.coupon)
             setCode(res.data.data.coupon.code);
             setDescription(res.data.data.coupon.description);
             setDiscount(res.data.data.coupon.discount);
@@ -38,7 +41,7 @@ function EditCoupon() {
 
         axios.post(`/coupons/${param.id}`, formData)
             .then((res) => {
-                console.log(res)
+                console.log(res.data.messages[0])
                 setCode();
                 setDescription();
                 setDiscount();
@@ -47,9 +50,13 @@ function EditCoupon() {
                 if (res.status !== false) {
                     navigate('/coupons')
                 }
+                toast.success(res.data.messages[0])
             }).catch((error) => {
-                console.log(error)
-                alert(error.response.data.errors)
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -63,6 +70,19 @@ function EditCoupon() {
                             <div className="col-sm-6">
                                 <h1 className='pl-1'>Edit Coupon</h1>
                             </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
                                     <Link to='/coupons' className="breadcrumb-item"><a href="#">Coupon</a></Link>

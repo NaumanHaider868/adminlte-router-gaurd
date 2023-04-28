@@ -4,12 +4,15 @@ import Navbar from '../../componets/Navbar'
 import Footer from '../../componets/Footer'
 import axios from '../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
-// import { AddAdminCategorie } from '../services/ApiUrl'
+
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddCategorie() {
     const [name, setName] = useState();
     const [shop_id, setShopID] = useState();
     const [image, setImage] = useState(null);
+    const [alert,setAlert] = useState([])
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
@@ -25,11 +28,14 @@ function AddCategorie() {
             if (res.status !== false) {
                 navigate('/viewcategories');
             }
-            alert(res.data.messages)
+            toast.success(res.data.messages[0])
         })
             .catch((error) => {
-                // console.log(error.response.data.errors)
-                alert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
+                setAlert(error.response.data.errors)
             })
     }
     return (
@@ -57,6 +63,18 @@ function AddCategorie() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>

@@ -7,6 +7,9 @@ import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Owner() {
     const [owner, setOwner] = useState([]);
     const [page, setPage] = useState(1);
@@ -62,7 +65,8 @@ function Owner() {
             .then((res) => {
                 console.log(res)
                 getOwner();
-                alert(res.data.messages)
+                // alert(res.data.messages)
+                toast.success(res.data.messages[0])
             })
     }
     return (

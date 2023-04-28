@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate,useHistory } from 'react-router-dom'
 import { Outlet } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login() {
 
@@ -27,6 +29,7 @@ function Login() {
         axios.post('https://foodapis.techenablers.info/api/login', payload)
             .then((res) => {
                 console.log(res);
+                toast.success(res.data.messages[0])
                 localStorage.setItem('token', res.data.data.token);
                 localStorage.setItem('login',true)
                 if (res.data.data.token !== null) {

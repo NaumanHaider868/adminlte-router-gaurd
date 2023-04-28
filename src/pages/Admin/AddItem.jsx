@@ -7,6 +7,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { AddAdminItem } from '../services/ApiUrl'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function AddItem() {
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -18,10 +21,9 @@ function AddItem() {
     const [image, setImage] = useState(null);
     const [item_cat_id, setItemCatID] = useState();
     const [active, setActive] = useState(0);
-    // const [variation,setVariation] = useState([payload]);
 
-    // const [variation_id, setVariationID] = useState();
-    // const [variation_item_id, setVariationItemID] = useState();
+    const [alert, setAlert] = useState([]);
+
     const [variation_name, setVariationName] = useState();
     const [variation_price, setVariationPrice] = useState();
     const handleSubmit = (e) => {
@@ -55,10 +57,14 @@ function AddItem() {
             if (res.data.success === true) {
                 navigate('/viewitems')
             }
-            alert(res.data.messages)
+            toast.success(res.data.messages[0])
         })
             .catch((error) => {
-                alert(error.response.data.errors)
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -86,6 +92,18 @@ function AddItem() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>

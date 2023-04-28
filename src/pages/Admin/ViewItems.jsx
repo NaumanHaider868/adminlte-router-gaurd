@@ -6,7 +6,8 @@ import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import moment from "moment";
-// import { getAdminItem, getAdminItemPagination, getAdminItemSearch } from '../services/ApiUrl'
+
+
 
 function ViewItems() {
     const [items, setItems] = useState([]);

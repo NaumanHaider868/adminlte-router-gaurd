@@ -1,10 +1,14 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { Link, useNavigate, NavLink } from 'react-router-dom';
+import { Link, useNavigate, NavLink, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SideBar() {
     const [active,setActive] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+    console.log("location", location);
     const handleLogOut = (e) => {
         e.preventDefault();
         axios.post('https://foodapis.techenablers.info/api/logout')
@@ -12,6 +16,8 @@ function SideBar() {
                 localStorage.removeItem('token');
                 localStorage.removeItem('login');
                 navigate('/')
+                // console.log(res)
+                toast.success(res.data.messages[0])
             })
     }
     return (
@@ -46,7 +52,7 @@ function SideBar() {
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                             <li className="nav-item">
-                                <NavLink to='/admin' className="nav-link">
+                                <NavLink to='/admin' className={"nav-link " + (location.pathname === "/admin" || location.pathname === "/viewcategories" || location.pathname ==="/addcategorie" || location.pathname ==="/viewitems" || location.pathname ==="/additem"  ? 'active' : '')}>
                                     <i className="nav-icon fas fa-user"></i>
                                     <p>Admin</p>
                                 </NavLink>
@@ -54,14 +60,14 @@ function SideBar() {
 
 
                             <li className="nav-item">
-                                <NavLink to='/orders' className="nav-link">
+                                <NavLink to='/orders' className={"nav-link " + ( location.pathname.startsWith("/vieworder/") || location.pathname.startsWith("/editorder/")  ? 'active' : '')}>
                                     <i className="nav-icon fas fa-home"></i>
                                     <p>Orders</p>
                                 </NavLink>
                             </li>
 
                             <li className="nav-item">
-                                <NavLink to='/shops' className="nav-link">
+                                <NavLink to='/shops' className={"nav-link " + ( location.pathname.startsWith("/editshop/") || location.pathname.startsWith("/viewshop/") || location.pathname === '/addshop'  ? 'active' : '')}>
                                     <i className="nav-icon fas fa-address-card"></i>
                                     <p>
                                         Shops
@@ -69,7 +75,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/owner' className="nav-link">
+                                <NavLink to='/owner' className={"nav-link " + ( location.pathname.startsWith("/viewowner/") || location.pathname.startsWith("/editowner/") || location.pathname === '/addowner'  ? 'active' : '')}>
                                     <i className="nav-icon fas fa-phone-alt"></i>
                                     <p>
                                         Owner
@@ -77,7 +83,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/customer' className="nav-link">
+                                <NavLink to='/customer' className={"nav-link " + ( location.pathname.startsWith("/editcustomer/") || location.pathname.startsWith("/viewcustomer/") ? 'active' : '')}>
                                     <i className="nav-icon fas fa-users"></i>
                                     <p>
                                         Customers
@@ -85,7 +91,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/coupons' className="nav-link">
+                                <NavLink to='/coupons' className={"nav-link " + (location.pathname === "/addcoupon" || location.pathname.startsWith("/editcoupon/") || location.pathname.startsWith("/viewcoupon/")  ? 'active' : '')}>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
                                     <i className="nav-icon fas fa-venus-double"></i>
                                     <p>
@@ -94,7 +100,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/deliveryman' className="nav-link">
+                                <NavLink to='/deliveryman' className={"nav-link" + ( location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") || location.pathname === '/adddeliverymen' ? 'active' : '')}>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
                                     <i class="nav-icon fab fa-first-order"></i>
                                     <p>

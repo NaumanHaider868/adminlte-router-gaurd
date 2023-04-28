@@ -21,9 +21,9 @@ function EditOrder() {
     const [price, setPrice] = useState('');
     const [total_amount, setTotalAmount] = useState('');
     const [shopId, setShopId] = useState('');
-    // const [variation_id,setVariationId] = useState();
-    // const [tax , setTax] = useState('');
     const [total, setTotal] = useState('');
+
+    const [alert , setAlert] = useState([]);
 
     useEffect(() => {
         axios.get(`/orders/${param.id}`)
@@ -80,12 +80,12 @@ function EditOrder() {
                 toast.success(res.data.messages[0])
                 console.log(res.data.messages, 'orders')
 
-            }).catch((error) => {
-                navigate('/editorder/:id')
-                console.log(error.response.data.errors)
-                toast.error(error.response.data.errors[0], {
-                    position: 'top-center'
-                })
+            }).catch(res => {
+                setAlert(res.response.data.errors);
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
 
@@ -116,7 +116,17 @@ function EditOrder() {
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
                             </div>
-
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
                             <form>
                                 <div className="card-body">
                                     <div className='row'>

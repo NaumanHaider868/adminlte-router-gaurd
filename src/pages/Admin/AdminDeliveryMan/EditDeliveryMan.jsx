@@ -6,13 +6,18 @@ import { useState, useEffect } from 'react'
 import axios from '../../services/ApiUrl'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function EditDeliveryMan() {
     const [email, setEmail] = useState();
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
     const [status, setStatus] = useState();
     const [last_login, setLastLogin] = useState();
-    const [phone,setPhone] = useState();
+    const [phone, setPhone] = useState();
+
+    const [alert, setAlert] = useState([]);
 
     const navigate = useNavigate();
     const param = useParams();
@@ -44,10 +49,14 @@ function EditDeliveryMan() {
                 setLastLogin();
                 setLastName();
                 navigate('/deliveryman')
+                toast.success(res.data.messages[0])
             })
-            .catch((error)=>{
-                console.log(error)
-                alert(error.response.data.message)
+            .catch(error => {
+                setAlert(error.response.data.errors)
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
             })
     }
     return (
@@ -77,6 +86,18 @@ function EditDeliveryMan() {
                                 <h3 class="card-title">Quick Example</h3>
                             </div>
 
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+
                             <form>
                                 <div className="card-body">
                                     <div className='row'>
@@ -99,11 +120,11 @@ function EditDeliveryMan() {
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>
-                                        <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
-                                    </div>
+                                            <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
+                                        </div>
                                     </div>
 
-                                    
+
                                 </div>
                             </form>
 
