@@ -4,8 +4,10 @@ import Navbar from '../../../componets/Navbar'
 import Footer from '../../../componets/Footer'
 import axios from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Model Window
 
 import Button from 'react-bootstrap/Button';
@@ -38,7 +40,8 @@ function Orders() {
         axios.get(`/deliverymens`)
             .then((res) => {
                 console.log('deliverymens', res.data.data.deliveryMens.data);
-                setDeliveryMens(res.data.data.deliveryMens.data)
+                setDeliveryMens(res.data.data.deliveryMens.data);
+                // toast.success("Updated Successfully")
             })
         console.log(id)
         setShow(true)
@@ -57,9 +60,14 @@ function Orders() {
         axios.post(`/order/assign`, payload)
             .then((res) => {
                 console.log(res, 'deliver id');
-                alert(res.data.errors)
+                // alert(res.data.errors)
+                // toast.success(res.data.errors)
+                
             }).catch((error) => {
-                console.log(error)
+                console.log(error.response.data.errors[0])
+                toast.error(error.response.data.errors[0],{
+                    position:'top-center'
+                })
             })
     }
 
@@ -96,7 +104,6 @@ function Orders() {
 
     return (
         <div className="wrapper">
-
             <SideBar />
             <Navbar />
 

@@ -4,8 +4,11 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
+import axios from '../../services/ApiUrl'
 
+import { toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 function EditShop() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -15,6 +18,8 @@ function EditShop() {
     const [address, setAddress] = useState('');
     const [longitude, setLongtitude] = useState();
     const [latitude, setLatitude] = useState();
+
+    const [alert,setAlert] = useState([])
 
     const param = useParams();
     const navigate = useNavigate();
@@ -58,6 +63,8 @@ function EditShop() {
                 setLatitude();
                 setLongtitude();
                 setPhone();
+                console.log(res.data.messages[0])
+                toast.success(res.data.messages[0])
                 if (res.success !== false) {
                     navigate('/shops')
                 }
@@ -65,6 +72,33 @@ function EditShop() {
                     alert(res.errors)
                 }
             })
+            // .catch((error) => {
+                // if (error.response && error.response.data && error.response.data.errors) {
+                //     const errors = error.response.data.errors;
+                //     const errorMessage = Object.keys(errors)
+                //         .map(key => errors[key])
+                //         .join('\n');
+                //     toast.error(errorMessage);
+                //     console.log(errors);
+                // } else {
+                //     console.log(error);
+                // }
+                // toast.error(error.response.data.errors[0])
+                // console.log(error.response.data.errors)
+                
+                // setAlert(error.response.data.errors)
+                // console.log(error.response.data.errors)
+                // console.log(alert,'alert')
+            // })
+            .catch(res => {
+                setAlert(alert.msg);
+                setAlert(res.response.data.errors);
+                document.querySelector('#alert-message').style.display = 'block';
+                setTimeout(() => {
+                    document.querySelector('#alert-message').style.display = 'none';
+                }, 3000);
+            })
+            
     }
     return (
         <div className='wrapper'>
@@ -91,6 +125,18 @@ function EditShop() {
                         <div class="card card-dark">
                             <div class="card-header">
                                 <h3 class="card-title">Quick Example</h3>
+                            </div>
+
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
 
                             <form encType="multipart/form-data">

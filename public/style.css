@@ -9,3 +9,20 @@
     background: #198754;
     color: #fff;
 }
+
+#alert-message{
+    display: none;
+    width: "100%";
+    margin-top: -12px;
+}
+
+.valid{
+    background-color: #DC3545;
+    color: #fff;
+    padding: 1px;
+    padding: 5px 0px;
+}
+.valid-p{
+    margin-left: 20px;
+    margin-bottom: 0px;
+}   

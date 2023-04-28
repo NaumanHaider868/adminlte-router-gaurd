@@ -31,7 +31,7 @@ function ViewShop() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Order Details</h1>
+                                <h1>Shop Details</h1>
                             </div>
                         </div>
                     </div>

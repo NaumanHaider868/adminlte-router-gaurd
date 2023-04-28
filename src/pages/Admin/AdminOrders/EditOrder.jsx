@@ -4,6 +4,9 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import axios from '../../services/ApiUrl'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function EditOrder() {
     const navigate = useNavigate();
     const param = useParams();
@@ -68,16 +71,27 @@ function EditOrder() {
         }
         axios.post(`/orders/${param.id}`, payload)
             .then((res) => {
+                // alert(res.data.messages)
                 setCustomerName('');
                 setLocation('');
                 setStatus('');
                 setTotal('');
                 navigate('/orders')
+                toast.success(res.data.messages[0])
+                console.log(res.data.messages, 'orders')
+
+            }).catch((error) => {
+                navigate('/editorder/:id')
+                console.log(error.response.data.errors)
+                toast.error(error.response.data.errors[0], {
+                    position: 'top-center'
+                })
             })
     }
 
     return (
         <div>
+            {/* <ToastContainer/> */}
             <Navbar />
             <SideBar />
             <div className="content-wrapper">
@@ -187,7 +201,7 @@ function EditOrder() {
 
                                 </div>
                                 <div className="card-footer" style={{ background: '#fff' }}>
-                                    <button type="submit" className="btn btn-success"  onClick={(e) => submitEdit(e)}>Update</button>
+                                    <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
                                 </div>
                             </form>
 

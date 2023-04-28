@@ -33,9 +33,13 @@ import ViewItems from "./pages/Admin/ViewItems";
 import AddItem from "./pages/Admin/AddItem";
 import ViewShop from "./pages/Admin/AdminShops/ViewShop";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     <div>
+      {/* <ToastContainer /> */}
       <Router>
         <Routes>
           <Route path='/' element={<Login />} />
@@ -44,10 +48,10 @@ function App() {
 
 
           <Route path="/admin" element={<Admin />} />
-          <Route path="/viewcategories" element={<ViewCategories/>} />
-          <Route path="/addcategorie" element={<AddCategorie/>} />
-          <Route path="/viewitems" element={<ViewItems/>} />
-          <Route path='/additem' element={<AddItem/>} />
+          <Route path="/viewcategories" element={<ViewCategories />} />
+          <Route path="/addcategorie" element={<AddCategorie />} />
+          <Route path="/viewitems" element={<ViewItems />} />
+          <Route path='/additem' element={<AddItem />} />
 
           <Route path="/orders" element={<Protucted Component={Orders} />} />
           <Route path="/editorder/:id" element={<Protucted Component={EditOrder} />} />
@@ -57,12 +61,12 @@ function App() {
           <Route path='/shops' element={<Shops />} />
           <Route path="/editshop/:id" element={<EditShop />} />
           <Route path='/addshop' element={<AddShop />} />
-          <Route path='/viewshop/:id' element={<ViewShop/>} />
+          <Route path='/viewshop/:id' element={<ViewShop />} />
 
-          <Route path='/owner' element={<Owner />} />
-          <Route path='/editowner/:id' element={<EditOwner />} />
-          <Route path='/viewowner/:id' element={<ViewOwner />} />
-          <Route path='/addowner' element={<AddOwner />} />
+          <Route path='/owner' element={<Protucted Component={Owner} />} />
+          <Route path='/editowner/:id' element={<Protucted Component={EditOwner} />}/>
+          <Route path='/viewowner/:id' element={<Protucted Component={ViewOwner} />} />
+          <Route path='/addowner' element={<Protucted Component={AddOwner} />} />
 
           <Route path="/customer" element={<Customers />} />
           <Route path="/editcustomer/:id" element={<EditCustomer />} />

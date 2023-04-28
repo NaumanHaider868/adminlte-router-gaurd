@@ -108,7 +108,7 @@ function AddShop() {
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-primary" style={{ backgroundColor: '#343a40', borderColor: '#343a40' }} >Add Shop</button>
+                                            <button type="submit" className="btn btn-success" >Add Shop</button>
                                         </div>
                                     </div>
 

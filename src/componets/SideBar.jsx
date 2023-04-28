@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, NavLink } from 'react-router-dom';
 
 function SideBar() {
+    const [active,setActive] = useState(false);
     const navigate = useNavigate();
     const handleLogOut = (e) => {
         e.preventDefault();

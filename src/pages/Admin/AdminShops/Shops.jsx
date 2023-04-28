@@ -6,6 +6,9 @@ import axios from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function Shops() {
     //pagination
     const [page, setPage] = useState(1)
@@ -45,7 +48,8 @@ function Shops() {
             .then((res) => {
                 getShop()
                 console.log('delete', res)
-                alert(res.data.messages)
+                // alert(res.data.messages,"Deleted successfully.")
+                toast.success(res.data.messages[0])
             })
     }
 
