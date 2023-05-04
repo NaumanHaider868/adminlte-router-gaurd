@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
-import axios from '../services/ApiUrl'
+import api from '../services/ApiUrl'
 import { useNavigate, Link } from 'react-router-dom'
 // import { getAdmindashboard } from '../services/ApiUrl'
 import apiService from '../services/ApiUrl'
@@ -18,13 +18,13 @@ function Admin() {
     useEffect(() => {
         // let url = 'https://foodapis.techenablers.info/api/admin/dashboard';
         // apiService.getAPI(url)
-        // axios('https://foodapis.techenablers.info/api/admin/dashboard').then((res) => {
+        // api('https://foodapis.techenablers.info/api/admin/dashboard').then((res) => {
         //     console.log(res.data.data)
         //     setCategories(res.data.data.categories);
         //     setShops(res.data.data.shops);
         //     setItems(res.data.data.items)
         // })
-        axios.get('/dashboard').then((res) => {
+        api.get('/dashboard').then((res) => {
             console.log(res.data.data)
             setCategories(res.data.data.categories);
             setShops(res.data.data.shops);

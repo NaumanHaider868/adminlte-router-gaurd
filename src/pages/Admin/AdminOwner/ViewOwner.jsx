@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 
@@ -14,7 +14,7 @@ function ViewOwner() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`/owners/${param.id}`)
+        api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data);
                 setOwner(res.data.data.shop)

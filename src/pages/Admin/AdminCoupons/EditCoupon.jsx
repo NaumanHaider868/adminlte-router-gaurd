@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,7 +20,7 @@ function EditCoupon() {
     const [alert, setAlert] = useState([]);
 
     useEffect(() => {
-        axios.get(`/coupons/${param.id}`).then((res) => {
+        api.get(`/coupons/${param.id}`).then((res) => {
             setCode(res.data.data.coupon.code);
             setDescription(res.data.data.coupon.description);
             setDiscount(res.data.data.coupon.discount);
@@ -39,7 +39,7 @@ function EditCoupon() {
         formData.append('general', general);
         formData.append('expires_at', expires);
 
-        axios.post(`/coupons/${param.id}`, formData)
+        api.post(`/coupons/${param.id}`, formData)
             .then((res) => {
                 console.log(res.data.messages[0])
                 setCode();

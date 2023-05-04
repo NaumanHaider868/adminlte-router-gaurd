@@ -2,7 +2,7 @@ import React from 'react'
 import SideBar from '../../../componets/SideBar'
 import Navbar from '../../../componets/Navbar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 function ViewOrder() {
@@ -14,7 +14,7 @@ function ViewOrder() {
   console.log(data, 'data')
 
   useEffect(() => {
-    axios.get(`/orders/${param.id}`).then((res) => {
+    api.get(`/orders/${param.id}`).then((res) => {
       console.log(res.data.data.order, 'order');
       console.log(res.data.data.orderItems, 'orderItems')
       setData(res.data.data.order)

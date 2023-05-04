@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
@@ -34,7 +34,7 @@ function AddShop() {
         formatData.append('latitude', latitude)
         formatData.append('image', image)
         e.preventDefault();
-        axios.post('/shops', formatData)
+        api.post('/shops', formatData)
             .then((resp) => {
                 console.log(resp, 'add shop')
                 if (resp.data.data.success !== false) {
@@ -43,10 +43,13 @@ function AddShop() {
                 }
             }).catch((error) => {
                 setAlert(error.response.data.errors)
-                document.querySelector('#alert-message').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('#alert-message').style.display = 'none';
-                }, 3000);
+                const alertMessage = document.querySelector('#alert-message');
+                if (alertMessage) {
+                    alertMessage.style.display = 'block';
+                    setTimeout(() => {
+                        alertMessage.style.display = 'none';
+                    }, 3000);
+                }
             })
     }
     return (

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import SideBar from '../../componets/SideBar'
 import Navbar from '../../componets/Navbar'
 import Footer from '../../componets/Footer'
-import axios from '../services/ApiUrl'
+import api from '../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
@@ -23,7 +23,7 @@ function AddCategorie() {
         payload.append('shop_id', shop_id)
         e.preventDefault();
 
-        axios.post('/categories', payload).then((res) => {
+        api.post('/categories', payload).then((res) => {
             console.log(res, 'add');
             if (res.status !== false) {
                 navigate('/viewcategories');

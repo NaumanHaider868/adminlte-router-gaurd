@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useParams, Link } from 'react-router-dom'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 
 
 function ViewDeliveryMan() {
@@ -12,7 +12,7 @@ function ViewDeliveryMan() {
     const [delivery_man_meta, setDeliveryMenMeta] = useState()
 
     useEffect(() => {
-        axios.get(`/deliverymens/${param.id}`)
+        api.get(`/deliverymens/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.delivery_man)
                 setDeliveryMen(res.data.data.delivery_man);

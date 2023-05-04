@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
@@ -27,7 +27,7 @@ function Owner() {
         getOwner();
     }, [])
     const getSearch = (e) => {
-        axios.get(`/owners?keyword=${search}`, {
+        api.get(`/owners?keyword=${search}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }
@@ -41,7 +41,7 @@ function Owner() {
         navigate('/editowner/' + id)
     }
     const getOwner = () => {
-        axios.get(`/owners`)
+        api.get(`/owners`)
             .then((res) => {
                 console.log(res.data.data.owners, 'owner')
                 setOwner(res.data.data.owners.data)
@@ -50,7 +50,7 @@ function Owner() {
     }
     const handleChange = (page) => {
         setPage(page)
-        axios.get(`/owners?page=${page}`)
+        api.get(`/owners?page=${page}`)
             .then((res) => {
                 console.log(res.data.data.owners, 'owner')
                 setOwner(res.data.data.owners.data)
@@ -61,7 +61,7 @@ function Owner() {
     }
 
     const handleDelete = (id) => {
-        axios.delete(`/owners/${id}`)
+        api.delete(`/owners/${id}`)
             .then((res) => {
                 console.log(res)
                 getOwner();

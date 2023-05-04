@@ -3,7 +3,7 @@ import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../services/ApiUrl'
+import api from '../services/ApiUrl'
 import { Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 // import { getAdminCategorie, getAdminCategorieSearch } from '../services/ApiUrl'
@@ -16,7 +16,7 @@ function ViewCategories() {
     const [categorie, setCategorie] = useState([]);
     useEffect(() => {
 
-        axios.get(`categories?page=${page}`).then((res) => {
+        api.get(`categories?page=${page}`).then((res) => {
             console.log(res.data.data);
             setCategorie(res.data.data.categories.data)
             setTotalPage(res.data.data.categories.total)
@@ -24,7 +24,7 @@ function ViewCategories() {
     }, [page])
     const getSearch = (e) => {
         e.preventDefault();
-        axios.get(`https://foodapis.techenablers.info/api/admin/categories?keyword=${search}`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/categories?keyword=${search}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }

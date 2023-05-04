@@ -1,42 +1,3 @@
-// import axios from 'axios';
-// class ServiceClass {
-   
-
-//     getAPI(url) {
-//         return axios.get(url, {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('token')
-//             }
-//         }) 
-//     }
-//     getEditAPI(urls) {
-//         return axios.get(urls, {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('token'),'Content-type': 'application/json',
-//             }
-//         })
-//     }
-//     getPostAPI(postUrl, data) {
-//         return axios.post(postUrl, data, {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('token'),'Content-type': 'application/json',
-//             }
-//         })
-//     }
-//     getPutAPI(putUrl, data) {
-//         return axios.delete(putUrl, data, {
-//             headers: {
-//                 Authorization: 'Bearer ' + localStorage.getItem('token'),'Content-type': 'application/json',
-//             }
-            
-//         })
-        
-//     }
-// }
-
-// const apiService = new ServiceClass();
-// export default apiService;
-
 import axios from 'axios'
 
 const instance = axios.create({
@@ -47,5 +8,35 @@ const instance = axios.create({
         }
     
 })
+// Add a response interceptor
+instance.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response.status === 401) {
+            // Clear the token and redirect to the login page
+            localStorage.removeItem('token');
+            // localStorage.removeItem('login');
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
+    }
+);
+const api = {
 
-export default instance
+    // get url use 
+    get(url) {
+      return instance.get(url)
+    },
+    // post url use 
+    post(url,data) {
+      return instance.post(url, data)
+    },
+    // delete url use 
+    delete(url) {
+      return instance.delete(url)
+    }
+  };
+  export default api;
+// export default instance;

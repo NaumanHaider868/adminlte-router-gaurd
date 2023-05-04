@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useNavigate,useHistory } from 'react-router-dom'
-import { Outlet } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'
+// import { Outlet } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -99,7 +99,7 @@ function Login() {
                         </div>
 
                         <p className="mb-1">
-                            <a href="forgot-password.html">I forgot my password</a>
+                            <Link to='/forgetpassword'>I forgot my password</Link>
                         </p>
                         <p className="mb-0">
                             <Link to='/register' className="text-center">Register a new membership</Link>

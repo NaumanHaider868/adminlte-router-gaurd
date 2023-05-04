@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from '../services/ApiUrl'
+import api from '../services/ApiUrl'
 import { useNavigate, Link } from 'react-router-dom'
 import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
@@ -16,7 +16,7 @@ function ViewItems() {
     const [totalPage, setTotalPage] = useState();
 
     useEffect(() => {
-        axios.get(`https://foodapis.techenablers.info/api/admin/items`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/items`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }
@@ -29,14 +29,14 @@ function ViewItems() {
 
     const handelChange = (page) => {
         setPage(page)
-        axios.get(`/items?page=${page}`).then((res) => {
+        api.get(`/items?page=${page}`).then((res) => {
             console.log(res.data.data.items)
             setItems(res.data.data.items.data)
         })
     }
 
     const getSearch = () => {
-        axios.get(`https://foodapis.techenablers.info/api/admin/items?page=${search}`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/items?page=${search}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }

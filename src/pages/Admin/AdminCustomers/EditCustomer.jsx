@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
@@ -22,7 +22,7 @@ function EditCustomer() {
     const [alert, setAlert] = useState([]);
 
     useEffect(() => {
-        axios.get(`/customers/${param.id}`)
+        api.get(`/customers/${param.id}`)
             .then((res) => {
                 setEmail(res.data.data.customer.email);
                 setUserName(res.data.data.customer.username);
@@ -42,7 +42,7 @@ function EditCustomer() {
         formData.append('last_name', last_name);
         formData.append('phone', phone);
         formData.append('password', password)
-        axios.post(`/customers/${param.id}`, formData)
+        api.post(`/customers/${param.id}`, formData)
             .then((res) => {
                 setEmail();
                 setUserName();

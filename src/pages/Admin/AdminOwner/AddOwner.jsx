@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { Link,  useNavigate } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
@@ -35,7 +35,7 @@ function AddOwner() {
             phone: phone,
             status: status
         }
-        axios.post('/owners', payload)
+        api.post('/owners', payload)
             .then((res) => {
                 console.log(res)
                 if (res.status === 200) {

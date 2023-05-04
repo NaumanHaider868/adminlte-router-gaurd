@@ -35,6 +35,10 @@ import ViewShop from "./pages/Admin/AdminShops/ViewShop";
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ForgetPassword from "./pages/ForgetPassword";
+import ShopOrder from "./pages/Admin/AdminShops/ShopOrder";
+import ViewShopOrder from "./pages/Admin/AdminShops/ViewShopOrder";
+import EditShopOrder from "./pages/Admin/AdminShops/EditShopOrder";
 
 function App() {
   return (
@@ -45,6 +49,7 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/dashboard' element={<Protucted Component={Dashborad} />} />
+          <Route path="/forgetpassword" element={<ForgetPassword/>} />
 
 
           <Route path="/admin" element={<Admin />} />
@@ -62,6 +67,11 @@ function App() {
           <Route path="/editshop/:id" element={<EditShop />} />
           <Route path='/addshop' element={<AddShop />} />
           <Route path='/viewshop/:id' element={<ViewShop />} />
+          <Route path='/shoporder/:id' element={<ShopOrder />} />
+          <Route path='/viewshoporder/:id/:id1' element={<ViewShopOrder/>} />
+          <Route path='/editshoporder/:id/:id1' element={<EditShopOrder/>} />
+
+          
 
           <Route path='/owner' element={<Protucted Component={Owner} />} />
           <Route path='/editowner/:id' element={<Protucted Component={EditOwner} />}/>

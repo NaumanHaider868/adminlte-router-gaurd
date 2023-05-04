@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
@@ -32,7 +32,7 @@ function AddDeliveryMen() {
             username: username,
             status: status
         }
-        axios.post('/deliverymens', payload)
+        api.post('/deliverymens', payload)
             .then((res) => {
                 console.log(res, 'add deliveryman')
                 navigate('/deliveryman')

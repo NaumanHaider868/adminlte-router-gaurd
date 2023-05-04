@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../componets/Navbar'
 import SideBar from '../../componets/SideBar'
 import Footer from '../../componets/Footer'
-import axios from '../services/ApiUrl'
+import api from '../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { AddAdminItem } from '../services/ApiUrl'
@@ -52,7 +52,7 @@ function AddItem() {
         // formData.append('variations', JSON.stringify(payload));
         formData.append('active', active)
 
-        axios.post('/items', formData).then((res) => {
+        api.post('/items', formData).then((res) => {
             console.log(res.data);
             if (res.data.success === true) {
                 navigate('/viewitems')

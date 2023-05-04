@@ -2,7 +2,7 @@ import React from 'react'
 import SideBar from '../../../componets/SideBar'
 import Navbar from '../../../componets/Navbar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
@@ -31,7 +31,7 @@ function Orders() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        axios.get(`/orders?keyword=${search}`)
+        api.get(`/orders?keyword=${search}`)
             .then((res) => {
                 console.log(res)
                 setOrder(res.data.data.orders.data)
@@ -39,7 +39,7 @@ function Orders() {
     }
 
     const handleShow = (id) => {
-        axios.get(`/deliverymens`)
+        api.get(`/deliverymens`)
             .then((res) => {
                 console.log('deliverymens', res.data.data.deliveryMens.data);
                 setDeliveryMens(res.data.data.deliveryMens.data);
@@ -59,7 +59,7 @@ function Orders() {
     }
 
     const postOrder = () => {
-        axios.post(`/order/assign`, payload)
+        api.post(`/order/assign`, payload)
             .then((res) => {
                 console.log(res, 'deliver id');
                 // alert(res.data.errors)
@@ -75,7 +75,7 @@ function Orders() {
 
     const handelChange = (page) => {
         setPage(page);
-        axios.get(`/orders?page=${page}`)
+        api.get(`/orders?page=${page}`)
             .then((res) => {
                 // console.log('order', res.data.data.orders.data)
                 setOrder(res.data.data.orders.data)
@@ -88,7 +88,7 @@ function Orders() {
     const [order, setOrder] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get(`/orders`)
+        api.get(`/orders`)
             .then((res) => {
                 // console.log('order', res.data.data.orders.data)
                 setOrder(res.data.data.orders.data)

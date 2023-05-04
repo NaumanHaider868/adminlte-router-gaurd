@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import moment from "moment";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +24,7 @@ function Shops() {
 
     const handelChange = (page) => {
         setPage(page)
-        axios.get(`/shops?page=${page}`)
+        api.get(`/shops?page=${page}`)
             .then((resp) => {
                 console.log('shop data', resp);
                 setShops(resp.data.data.shops.data)
@@ -31,7 +32,7 @@ function Shops() {
     }
 
     const getShop = () => {
-        axios.get(`/shops?page=${page}`)
+        api.get(`/shops?page=${page}`)
             .then((resp) => {
                 console.log('shop data', resp);
                 setShops(resp.data.data.shops.data)
@@ -44,7 +45,7 @@ function Shops() {
     }
     const deleteProduct = (id) => {
         console.log(id);
-        axios.delete(`/shops/${id}`)
+        api.delete(`/shops/${id}`)
             .then((res) => {
                 getShop()
                 console.log('delete', res)
@@ -57,14 +58,14 @@ function Shops() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        axios.get(`/shops?keyword=${search}`)
+        api.get(`/shops?keyword=${search}`)
             .then((res) => {
                 // console.log(res,'search')
                 setShops(res.data.data.shops.data);
             })
     }
-    const viewProduct = (id) => {
-        navigate('/viewshop/' + id)
+    const shopOrder = (id) => {
+        navigate('/shoporder/' + id)
     }
     return (
         <div>
@@ -122,7 +123,7 @@ function Shops() {
                                                                 <td>{item.phone}</td>
                                                                 <td>{item.address}</td>
                                                                 <td>
-                                                                    <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => viewProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
+                                                                    <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <button class="btn" onClick={() => shopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer',background:'#3d84dd', color: '#fff' }}>shop order</button>
                                                                 </td>
                                                             </tr>
                                                         )

@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from 'axios'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 
@@ -37,7 +37,7 @@ function AddCoupon() {
             expires_at: expires_at
         }
         e.preventDefault();
-        axios.post('https://foodapis.techenablers.info/api/admin/coupons', payload, {
+        api.post('/coupons', payload, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token'),
                 "Content-Type": "multipart/form-data",

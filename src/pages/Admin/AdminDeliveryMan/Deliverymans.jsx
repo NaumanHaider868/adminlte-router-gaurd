@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
@@ -17,7 +17,7 @@ function Deliverymans() {
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState();
     useEffect(() => {
-        axios.get(`/deliverymens`)
+        api.get(`/deliverymens`)
             .then((res) => {
                 console.log(res.data.data.deliveryMens.data);
                 setDeliveryMens(res.data.data.deliveryMens.data);
@@ -28,7 +28,7 @@ function Deliverymans() {
 
     const handelChange = (page) => {
         setPage(page)
-        axios.get(`/deliverymens?page=${page}`)
+        api.get(`/deliverymens?page=${page}`)
             .then((res) => {
                 console.log(res.data.data.deliveryMens.data);
                 setDeliveryMens(res.data.data.deliveryMens.data);
@@ -39,7 +39,7 @@ function Deliverymans() {
         navigate('/editdeliveryman/' + id)
     }
     const deleteDeliveryMen = (id) => {
-        axios.delete(`/deliverymens/${id}`)
+        api.delete(`/deliverymens/${id}`)
             .then((res) => {
                 // alert(res.data.messages);
                 toast.success(res.data.messages[0])
@@ -52,7 +52,7 @@ function Deliverymans() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        axios.get(`https://foodapis.techenablers.info/api/admin/deliverymens?keyword=${search}`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/deliverymens?keyword=${search}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }

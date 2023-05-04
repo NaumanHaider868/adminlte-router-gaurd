@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 
@@ -24,7 +24,7 @@ function EditOwner() {
     const param = useParams();
     const navigate = useNavigate();
     useEffect(() => {
-        axios.get(`/owners/${param.id}`)
+        api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.shop);
                 setEmail(res.data.data.shop.email);
@@ -48,7 +48,7 @@ function EditOwner() {
         formData.append('email', email);
         formData.append('phone', ownerData);
         formData.append('password', password)
-        axios.post(`/owners/${param.id}`, formData)
+        api.post(`/owners/${param.id}`, formData)
             .then((res) => {
                 console.log(res)
                 if (res.success !== false) {

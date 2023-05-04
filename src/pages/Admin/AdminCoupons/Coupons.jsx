@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
@@ -19,7 +19,7 @@ function Coupons() {
         getCoupon();
     }, []);
     const getCoupon = () => {
-        axios.get(`https://foodapis.techenablers.info/api/admin/coupons`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/coupons`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }
@@ -32,7 +32,7 @@ function Coupons() {
 
     const handleChange = (page) => {
         setPage(page)
-        axios.get(`/coupons?page=${page}`).then((res) => {
+        api.get(`/coupons?page=${page}`).then((res) => {
             console.log(res.data.data.coupons.data)
             // setTotalPage(res.data.data.coupons.total)
             setCoupon(res.data.data.coupons.data)
@@ -42,7 +42,7 @@ function Coupons() {
         navigate('/editcoupon/' + id)
     }
     const deleteCoupon = (id) => {
-        axios.delete(`/coupons/${id}`)
+        api.delete(`/coupons/${id}`)
             .then((res) => {
                 getCoupon()
                 toast.success(res.data.messages[0])
@@ -56,7 +56,7 @@ function Coupons() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        axios.get(`https://foodapis.techenablers.info/api/admin/coupons?keyword=${search}`, {
+        api.get(`https://foodapis.techenablers.info/api/admin/coupons?keyword=${search}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }

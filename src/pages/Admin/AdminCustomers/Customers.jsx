@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
@@ -14,7 +14,7 @@ function Customers() {
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState();
     useEffect(() => {
-        axios.get(`/customers`)
+        api.get(`/customers`)
             .then((res) => {
                 console.log(res.data.data.customers.data)
                 setCustomer(res.data.data.customers.data)
@@ -23,7 +23,7 @@ function Customers() {
     }, [])
     const handelChange = (page) => {
         setPage(page)
-        axios.get(`/customers?page=${page}`)
+        api.get(`/customers?page=${page}`)
             .then((res) => {
                 console.log(res.data.data.customers.data)
                 setCustomer(res.data.data.customers.data)
@@ -32,7 +32,7 @@ function Customers() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        axios.get(`/customers?keyword=${search}`)
+        api.get(`/customers?keyword=${search}`)
             .then((res) => {
                 console.log(res)
                 setCustomer(res.data.data.customers.data)

@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
@@ -11,7 +11,7 @@ function ViewCustomer() {
     const param = useParams();
     const [customer, setCustomer] = useState([])
     useEffect(() => {
-        axios.get(`/customers/${param.id}`, {
+        api.get(`/customers/${param.id}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
             }

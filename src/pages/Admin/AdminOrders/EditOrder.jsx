@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -26,7 +26,7 @@ function EditOrder() {
     const [alert , setAlert] = useState([]);
 
     useEffect(() => {
-        axios.get(`/orders/${param.id}`)
+        api.get(`/orders/${param.id}`)
             .then((res) => {
                 console.log(res.data.data, 'edit')
                 setOrderItem(res.data.data.orderItems)
@@ -69,7 +69,7 @@ function EditOrder() {
             items: orderItem
 
         }
-        axios.post(`/orders/${param.id}`, payload)
+        api.post(`/orders/${param.id}`, payload)
             .then((res) => {
                 // alert(res.data.messages)
                 setCustomerName('');

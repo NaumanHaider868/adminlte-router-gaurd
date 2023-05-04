@@ -4,7 +4,7 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 
 import { toast } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
@@ -25,7 +25,7 @@ function EditShop() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`/shops/${param.id}`)
+        api.get(`/shops/${param.id}`)
             .then((resp) => {
                 console.log(resp)
                 setName(resp.data.data.shop.name);
@@ -54,7 +54,7 @@ function EditShop() {
         formatData.append('latitude', latitude)
         formatData.append('image', image)
 
-        axios.post(`/shops/${param.id}`, formatData)
+        api.post(`/shops/${param.id}`, formatData)
             .then((res) => {
                 setName('');
                 setAddress('');
@@ -75,9 +75,13 @@ function EditShop() {
             .catch(res => {
                 setAlert(res.response.data.errors);
                 document.querySelector('#alert-message').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('#alert-message').style.display = 'none';
-                }, 3000);
+                const alertMessage = document.querySelector('#alert-message');
+                if (alertMessage) {
+                    alertMessage.style.display = 'block';
+                    setTimeout(() => {
+                        alertMessage.style.display = 'none';
+                    }, 3000);
+                }
             })
             
     }

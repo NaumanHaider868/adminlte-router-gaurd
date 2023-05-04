@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useNavigate, useParams, Link} from 'react-router-dom'
 
 function ViewCoupon() {
@@ -12,7 +12,7 @@ function ViewCoupon() {
     const param = useParams();
 
     useEffect(() => {
-        axios.get(`/coupons/${param.id}`).then((res) => {
+        api.get(`/coupons/${param.id}`).then((res) => {
             console.log(res.data.data.coupon, 'coupn view')
             setCoupon(res.data.data.coupon)
         })

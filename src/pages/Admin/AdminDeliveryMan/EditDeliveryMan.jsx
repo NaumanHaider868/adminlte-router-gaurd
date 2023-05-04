@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
@@ -22,7 +22,7 @@ function EditDeliveryMan() {
     const navigate = useNavigate();
     const param = useParams();
     useEffect(() => {
-        axios.get(`/deliverymens/${param.id}`)
+        api.get(`/deliverymens/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.delivery_man)
                 setEmail(res.data.data.delivery_man.email);
@@ -42,7 +42,7 @@ function EditDeliveryMan() {
             phone: phone,
             status: status
         }
-        axios.post(`/deliverymens/${param.id}`, payload)
+        api.post(`/deliverymens/${param.id}`, payload)
             .then((res) => {
                 setEmail();
                 setFirstName();

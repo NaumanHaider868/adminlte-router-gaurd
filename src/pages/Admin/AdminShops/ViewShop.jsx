@@ -2,7 +2,7 @@ import React from 'react'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import Navbar from '../../../componets/Navbar'
-import axios from '../../services/ApiUrl'
+import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ function ViewShop() {
     const [address, setAddress] = useState();
     // const [price,setPrice] = useState();
     useEffect(() => {
-        axios.get(`/shops/${param.id}`)
+        api.get(`/shops/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.shop, 'shop views');
                 setName(res.data.data.shop.name);
