@@ -52,6 +52,7 @@ function AddDeliveryMen() {
         <div className='wrapper'>
             <Navbar />
             <SideBar />
+            <div className='wrapper'>
             <div className="content-wrapper">
                 <section className="content-header">
                     <div className="container-fluid">
@@ -151,6 +152,7 @@ function AddDeliveryMen() {
                     </div>
                 </section>
 
+            </div>
             </div>
             <Footer />
         </div>

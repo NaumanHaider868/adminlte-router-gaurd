@@ -12,14 +12,14 @@ function Login() {
     const navigate = useNavigate();
     // const history = useHistory();
 
-    useEffect(() => {
-        let login = localStorage.getItem('login');
-        if (login) {
-            navigate('/dashboard')
-        }
-    });
+    // useEffect(() => {
+    //     let login = localStorage.getItem('login');
+    //     if (login) {
+    //         navigate('/admin')
+    //     }
+    // });
 
-
+    // toast.configure();
     const submit = () => {
         const payload = {
             email: email,
@@ -29,13 +29,16 @@ function Login() {
         axios.post('https://foodapis.techenablers.info/api/login', payload)
             .then((res) => {
                 console.log(res);
+                
                 toast.success(res.data.messages[0])
                 localStorage.setItem('token', res.data.data.token);
                 localStorage.setItem('login',true)
-                if (res.data.data.token !== null) {
-                    navigate('/dashboard')
+                navigate('/admin')
+                // if (res.data.data.token !== null) {
+                    // localStorage.setItem('token', res.data.data.token);
+                    // navigate('/dashboard')
                     // history.push('/dashboard');
-                }
+                // }
             }).catch((error) => {
                 console.log(error)
                 if (error.response.status === 401 || error.response.status === 400) {

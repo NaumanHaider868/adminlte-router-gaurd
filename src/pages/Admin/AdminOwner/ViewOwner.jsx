@@ -39,7 +39,7 @@ function ViewOwner() {
                     <div className="card">
                         <div className="card-body">
                             <Link to='/owner'>
-                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Orders</p>
+                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Owner</p>
                             </Link>
 
                             <>

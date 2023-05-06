@@ -102,7 +102,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/deliveryman' className={"nav-link" + (location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") || location.pathname === '/adddeliverymen' ? 'active' : '')}>
+                                <NavLink to='/deliveryman' className={"nav-link" + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/")  ? 'active' : '')}>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
                                     <i class="nav-icon fab fa-first-order"></i>
                                     <p>

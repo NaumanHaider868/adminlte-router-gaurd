@@ -37,7 +37,7 @@ function ViewDeliveryMan() {
                     <div className="card">
                         <div className="card-body">
                             <Link to='/deliveryman'>
-                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Customers</p>
+                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Delivery Man</p>
                             </Link>
 
                             <>

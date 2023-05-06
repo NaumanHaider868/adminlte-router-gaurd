@@ -8,6 +8,7 @@ import moment from 'moment'
 
 function ShopOrder() {
     const [page, setPage] = useState(1)
+    const [search, setSearch] = useState([])
     const [orders, setOrders] = useState([]);
     const [alert, setAlert] = useState()
     const param = useParams();
@@ -20,10 +21,7 @@ function ShopOrder() {
                 console.log(res.data.data.shopOrderList.data, 'shop order')
                 setOrders(res.data.data.shopOrderList.data)
                 setShowMessage(false);
-                // setTimeout(() => {
-                //     setShowMessage(false);
-                //     document.getElementById('alert-message').style.display = 'none';
-                // }, 5000);
+
             })
             .catch((error) => {
                 console.log(error.response.data.messages)
@@ -37,6 +35,16 @@ function ShopOrder() {
                 }
             })
     }, [page])
+
+    const getSearch = (e) => {
+        // setSearch(e.target.value)
+        e.preventDefault();
+        api.get(`/shops/${param.id}/orders?keyword=${search}`)
+            .then((res) => {
+                // console.log(res,'search')
+                setOrders(res.data.data.shopOrderList.data)
+            })
+    }
     const viewShopOrder = (id1) => {
         navigate(`/viewshoporder/${param.id}/${id1}`)
     }
@@ -80,9 +88,9 @@ function ShopOrder() {
                         <div className="card">
                             <div className="card-body">
                                 <div className="input-group">
-                                    <input type="search" className="form-control form-control-lg" placeholder="Type your keywords here" />
+                                    <input type="search" className="form-control form-control-lg" onChange={(e) => setSearch(e.target.value)} placeholder="Type your keywords here" />
                                     <div className="input-group-append">
-                                        <button type="submit" className="btn btn-lg btn-success" >
+                                        <button type="submit" className="btn btn-lg btn-success" onClick={getSearch}>
                                             <i className="fa fa-search"></i>
                                         </button>
                                     </div>

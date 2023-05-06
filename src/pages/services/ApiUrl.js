@@ -2,10 +2,14 @@ import axios from 'axios'
 
 const instance = axios.create({
     baseURL: 'https://foodapis.techenablers.info/api/admin',
+        // headers:{
+        //     Authorization : `Bearer` + localStorage.getItem('token'),
+        //     "Content-Type": "multipart/form-data",
+        // }
         headers:{
-            Authorization : `Bearer` + localStorage.getItem('token'),
-            "Content-Type": "multipart/form-data",
-        }
+          Authorization : `Bearer ${localStorage.getItem('token')}`,
+          "Content-Type": "application/json"
+       }
     
 })
 // Add a response interceptor

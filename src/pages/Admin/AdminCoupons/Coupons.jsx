@@ -19,11 +19,8 @@ function Coupons() {
         getCoupon();
     }, []);
     const getCoupon = () => {
-        api.get(`https://foodapis.techenablers.info/api/admin/coupons`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        }).then((res) => {
+        api.get(`/coupons`)
+        .then((res) => {
             console.log(res.data.data.coupons.data)
             setTotalPage(res.data.data.coupons.total)
             setCoupon(res.data.data.coupons.data)
@@ -56,11 +53,7 @@ function Coupons() {
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
-        api.get(`https://foodapis.techenablers.info/api/admin/coupons?keyword=${search}`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        })
+        api.get(`/coupons?keyword=${search}`)
             .then((res) => {
                 console.log(res, 'search coupons')
                 setCoupon(res.data.data.coupons.data)
