@@ -34,32 +34,32 @@
 // export default Protected
 
 
-import React, { useEffect, useState } from "react";
-import { Route, useNavigate } from "react-router-dom";
-const Protected = (props) => {
-    const {Component} = props;
-    const navigate = useNavigate();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+// import React, { useEffect, useState } from "react";
+// import { Route, useNavigate } from "react-router-dom";
+// const Protected = (props) => {
+//     const {Component} = props;
+//     const navigate = useNavigate();
+//     const [isLoggedIn, setIsLoggedIn] = useState(false);
     
 
-    const checkExpireToken = () => {
-        const userExpireToken = localStorage.getItem('token');
-        if (!userExpireToken || userExpireToken === 'undefined') {
-            setIsLoggedIn(false);
-            return navigate('/');
-        }
-        setIsLoggedIn(true);
-    }
+//     const checkExpireToken = () => {
+//         const userExpireToken = localStorage.getItem('token');
+//         if (!userExpireToken || userExpireToken === 'undefined') {
+//             setIsLoggedIn(false);
+//             return navigate('/');
+//         }
+//         setIsLoggedIn(true);
+//     }
 
 
 
-    useEffect(() => {
-            checkExpireToken();
-        }, [isLoggedIn]);
-    return (
-        <>
-            <Component />
-        </>
-    );
-}
-export default Protected;
+//     useEffect(() => {
+//             checkExpireToken();
+//         }, [isLoggedIn]);
+//     return (
+//         <>
+//             <Component />
+//         </>
+//     );
+// }
+// export default Protected;

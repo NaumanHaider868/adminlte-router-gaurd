@@ -88,14 +88,16 @@ function Orders() {
     const [order, setOrder] = useState([]);
     const navigate = useNavigate();
     useEffect(() => {
+       if(localStorage.getItem('token')){
         api.get(`/orders`)
-            .then((res) => {
-                // console.log('order', res.data.data.orders.data)
-                setOrder(res.data.data.orders.data)
-                setTotalPage(res.data.data.orders.total)
-                // setOrder(res.data.data.order)
+        .then((res) => {
+            // console.log('order', res.data.data.orders.data)
+            setOrder(res.data.data.orders.data)
+            setTotalPage(res.data.data.orders.total)
+            // setOrder(res.data.data.order)
 
-            })
+        })
+       }
     }, [])
     const editOrder = (id) => {
         navigate('/editorder/' + id)

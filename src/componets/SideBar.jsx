@@ -69,7 +69,7 @@ function SideBar() {
                             </li>
 
                             <li className="nav-item">
-                                <NavLink to='/shops' className={"nav-link " + (location.pathname.startsWith("/editshop/") || location.pathname.startsWith("/shoporder/") || location.pathname === '/addshop' || location.pathname.startsWith("/viewshoporder/") || location.pathname.startsWith("/editshoporder/") ? 'active' : '') }>
+                                <NavLink to='/shops' className={"nav-link " + (location.pathname.startsWith("/editshop/") || location.pathname.startsWith("/shoporder/") || location.pathname === '/addshop' || location.pathname.startsWith("/viewshoporder/") || location.pathname.startsWith("/editshoporder/") ? 'active' : '')}>
                                     <i className="nav-icon fas fa-address-card"></i>
                                     <p>
                                         Shops
@@ -102,11 +102,20 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/deliveryman' className={"nav-link" + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/")  ? 'active' : '')}>
+                                <NavLink to='/deliveryman' className={"nav-link" + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") ? 'active' : '')}>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
                                     <i class="nav-icon fab fa-first-order"></i>
                                     <p>
                                         Deliverymans
+                                    </p>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to='/profile' className='nav-link'>
+                                    {/* <i class="nav-icon fas fa-phone-alt"></i> */}
+                                    <i class="nav-icon fa fa-user"></i>
+                                    <p>
+                                        Profile
                                     </p>
                                 </NavLink>
                             </li>

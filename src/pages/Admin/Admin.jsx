@@ -16,20 +16,30 @@ function Admin() {
     
 
     useEffect(() => {
-        // let url = 'https://foodapis.techenablers.info/api/admin/dashboard';
-        // apiService.getAPI(url)
-        // api('https://foodapis.techenablers.info/api/admin/dashboard').then((res) => {
-        //     console.log(res.data.data)
-        //     setCategories(res.data.data.categories);
-        //     setShops(res.data.data.shops);
-        //     setItems(res.data.data.items)
-        // })
+        // const token=  localStorage.getItem('token');
+        
+        // if(token) {
+        //     api.get('/dashboard').then((res) => {
+        //         console.log(res.data.data)
+        //         setCategories(res.data.data.categories);
+        //         setShops(res.data.data.shops);
+        //         setItems(res.data.data.items)
+        //     }) 
+        // }
+        // setTimeout(() => {
+        //     api.get('/dashboard').then((res) => {
+        //         console.log(res.data.data)
+        //         setCategories(res.data.data.categories);
+        //         setShops(res.data.data.shops);
+        //         setItems(res.data.data.items)
+        //     })
+        //   }, 2000)  
         api.get('/dashboard').then((res) => {
             console.log(res.data.data)
             setCategories(res.data.data.categories);
             setShops(res.data.data.shops);
             setItems(res.data.data.items)
-        })
+        })       
     }, [])
 
     return (

@@ -4,22 +4,31 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CSSProperties } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
     // const history = useHistory();
 
     // useEffect(() => {
-    //     let login = localStorage.getItem('login');
+    //     let login = localStorage.getItem('token');
     //     if (login) {
     //         navigate('/admin')
     //     }
     // });
 
     // toast.configure();
+    useEffect(() => {
+        setLoading(false)
+        setTimeout(() => {
+            setLoading(false)
+        }, 5000)
+    }, [])
     const submit = () => {
         const payload = {
             email: email,
@@ -29,15 +38,17 @@ function Login() {
         axios.post('https://foodapis.techenablers.info/api/login', payload)
             .then((res) => {
                 console.log(res);
-                
+
                 toast.success(res.data.messages[0])
                 localStorage.setItem('token', res.data.data.token);
-                localStorage.setItem('login',true)
+                // localStorage.setItem('login', true)
                 navigate('/admin')
+
                 // if (res.data.data.token !== null) {
-                    // localStorage.setItem('token', res.data.data.token);
-                    // navigate('/dashboard')
-                    // history.push('/dashboard');
+                // localStorage.setItem('token', res.data.data.token);
+                // navigate('/admin')
+                // // navigate('/dashboard')
+                // // history.push('/dashboard');
                 // }
             }).catch((error) => {
                 console.log(error)
@@ -91,14 +102,32 @@ function Login() {
                                 </div>
                             </div>
                             <div className="col-4">
-                                <button className="btn btn-primary btn-block" onClick={submit}>
-                                    Login
-                                </button>
+                                {loading ?
+                                    <button className="btn btn-primary btn-block" onClick={submit}>
+                                        <ClipLoader
+                                            loading={loading}
+                                            size={150}
+                                            aria-label="Loading Spinner"
+                                            data-testid="loader"
+                                        /> Login
+                                    </button> :
+                                    <button className="btn btn-primary btn-block" onClick={submit}>
+                                        Login
+                                    </button>
+                                }
+                                {/* <button className="btn btn-primary btn-block" onClick={submit}>
+                                    <ClipLoader
+                                        loading={loading}
+                                        size={150}
+                                        aria-label="Loading Spinner"
+                                        data-testid="loader"
+                                    /> Login
+                                </button> */}
                             </div>
                         </div>
 
                         <div className="social-auth-links text-center mb-3">
-                            
+
                         </div>
 
                         <p className="mb-1">

@@ -39,6 +39,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import ShopOrder from "./pages/Admin/AdminShops/ShopOrder";
 import ViewShopOrder from "./pages/Admin/AdminShops/ViewShopOrder";
 import EditShopOrder from "./pages/Admin/AdminShops/EditShopOrder";
+import AdminProfile from "./pages/Admin/AdminProfile";
 
 function App() {
   return (
@@ -57,6 +58,7 @@ function App() {
           <Route path="/addcategorie" element={<AddCategorie />} />
           <Route path="/viewitems" element={<ViewItems />} />
           <Route path='/additem' element={<AddItem />} />
+          <Route path="/profile" element={<AdminProfile/>} />
 
           <Route path="/orders" element={<Protucted Component={Orders} />} />
           <Route path="/editorder/:id" element={<Protucted Component={EditOrder} />} />
