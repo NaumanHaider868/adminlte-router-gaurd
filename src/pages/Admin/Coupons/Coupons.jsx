@@ -9,52 +9,32 @@ import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'; 
 import { useDispatch, useSelector } from 'react-redux'
 
 function Coupons() {
     const navigate = useNavigate();
-    // const [coupon, setCoupon] = useState([]);
     const [page, setPage] = useState(1);
-    const [totalPage, setTotalPage] = useState();
+    // const [totalPage, setTotalPage] = useState();
     const [totalCoupons, setTotalCoupons] = useState()
-    // console.log(totalCoupons)
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
-    const [localData, setLocalData] = useState([]);
-    // const state = useSelector((state)=>state);
-    // console.log('state',state)
     const coupon = useSelector((state) => state.user.coupon?.data?.coupons?.data || []);
-    const singleData = useSelector((state) => state.user.data);
-
-    // const totalPage = useSelector((state)=> state.user.coupon.data.coupons.total)
-    console.log(coupon, 'coupons')
+    const totalPage = useSelector((state) => state.user.coupon?.data?.coupons?.total || state.user.coupon?.data?.coupons?.total);
 
     useEffect(() => {
         getCoupon()
-        // dispatch(fetchTodos());
     }, []);
-    // const getCoupon = () => {
-    //     api.get(`/coupons`)
-    //         .then((res) => {
-    //             console.log(res.data.data.coupons.total)
-    //             setTotalCoupons(res.data.data.coupons)
-    //             setTotalPage(res.data.data.coupons.total)
-    //             // setCoupon(res.data.data.coupons.data)
-    //         })
-    // }
+    
     const getCoupon = () => {
         dispatch(fetchTodos());
     }
 
     const handleChange = (page) => {
         setPage(page)
-        api.get(`/coupons?page=${page}`).then((res) => {
-            console.log(res.data.data.coupons.data)
-            setTotalPage(res.data.data.coupons.total)
-            // setCoupon(res.data.data.coupons.data)
-        })
+        dispatch(fetchTodos(page))
     }
+    
     const editCoupon = (id) => {
         navigate('/editcoupon/' + id)
     }
@@ -62,13 +42,7 @@ function Coupons() {
     const deleteCoupon = (id, page) => {
         dispatch(deleteTodo(id))
             .then((action) => {
-                // const deletedItemId = action.meta.arg;
-                // console.log("Deleted Item ID:", deletedItemId);
                 getCoupon()
-
-                // Update the local data in the component's state
-                // setLocalData(localData.filter(todo => todo.id !== deletedItemId));
-
                 toast.success(action.payload.messages[0]);
             })
             .catch((error) => {
@@ -85,7 +59,7 @@ function Coupons() {
             .then((res) => {
                 console.log(res, 'search coupons')
                 // setCoupon(res.data.data.coupons.data);
-                setTotalPage(res.data.data.coupons.total);
+                // setTotalPage(res.data.data.coupons.total);
                 setTotalCoupons(res.data.data.coupons);
             })
     }
@@ -94,7 +68,7 @@ function Coupons() {
         api.get(`/coupons?keyword=${[]}`)
             .then((res) => {
                 // setCoupon(res.data.data.coupons.data)
-                setTotalPage(res.data.data.coupons.total)
+                // setTotalPage(res.data.data.coupons.total)
             }).finally(() => {
                 setSearch('');
             });

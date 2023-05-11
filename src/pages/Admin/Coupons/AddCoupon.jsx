@@ -5,7 +5,8 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-
+import { postTodo } from '../../../redux/slice/userSlice'
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -19,15 +20,8 @@ function AddCoupon() {
     const [expires_at, setExpires] = useState('');
 
     const [alert, setAlert] = useState([])
-
+    const dispatch = useDispatch();
     const handleSubmit = (e) => {
-        const formatData = new FormData();
-        // formatData.append('code', code)
-        // formatData.append('description', description)
-        // formatData.append('discount', discount)
-        // formatData.append('discount_type', discount_type)
-        // formatData.append('general', general)
-        // formatData.append('expires_at', expires_at)
         let payload = {
             code: code,
             description: description,
@@ -37,26 +31,21 @@ function AddCoupon() {
             expires_at: expires_at
         }
         e.preventDefault();
-        api.post('/coupons', payload, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token'),
-                "Content-Type": "multipart/form-data",
-            }
-        })
-            .then((resp) => {
-                console.log(resp, 'add shop')
-                if (resp.data.data.success !== false) {
-                    navigate('/coupons');
-                    alert(resp.data.messages)
-                    toast.success(resp.data.messages[0])
-                }
-            }).catch((error) => {
-                setAlert(error.response.data.errors)
-                document.querySelector('#alert-message').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('#alert-message').style.display = 'none';
-                }, 3000);
+        dispatch(postTodo(payload))
+            .then((action) => {
+                // if (action.data.data.success !== false) {
+                //     navigate('/coupons');
+                // }
+                navigate('/coupons')
+                // console.log(action)
             })
+            // .catch((error) => {
+            //     setAlert(error.response.data.errors)
+            //     document.querySelector('#alert-message').style.display = 'block';
+            //     setTimeout(() => {
+            //         document.querySelector('#alert-message').style.display = 'none';
+            //     }, 3000);
+            // })
     }
     return (
         <div className='wrapper'>

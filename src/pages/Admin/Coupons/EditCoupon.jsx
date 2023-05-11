@@ -6,8 +6,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../services/ApiUrl'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { editTodo, getForPost } from '../../../redux/slice/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 function EditCoupon() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const param = useParams();
     const [code, setCode] = useState();
@@ -19,45 +22,47 @@ function EditCoupon() {
 
     const [alert, setAlert] = useState([]);
 
+    const coupon = useSelector((state) => state.user.viewCoupon);
+    // console.log(coupon,'for edit')
     useEffect(() => {
-        api.get(`/coupons/${param.id}`).then((res) => {
-            setCode(res.data.data.coupon.code);
-            setDescription(res.data.data.coupon.description);
-            setDiscount(res.data.data.coupon.discount);
-            setDiscountType(res.data.data.coupon.discount_type);
-            setGeneral(res.data.data.coupon.general)
-            setExpires(res.data.data.coupon.expires_at)
-        })
-    }, []);
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('code', code);
-        formData.append('description', description);
-        formData.append('discount', discount);
-        formData.append('discount_type', discount_type);
-        formData.append('general', general);
-        formData.append('expires_at', expires);
-
-        api.post(`/coupons/${param.id}`, formData)
-            .then((res) => {
-                console.log(res.data.messages[0])
-                setCode();
-                setDescription();
-                setDiscount();
-                setDiscountType();
-                setGeneral();
-                if (res.status !== false) {
-                    navigate('/coupons')
-                }
-                toast.success(res.data.messages[0])
-            }).catch((error) => {
-                setAlert(error.response.data.errors)
-                document.querySelector('#alert-message').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('#alert-message').style.display = 'none';
-                }, 3000);
+        const id = param.id;
+        dispatch(getForPost(id))
+            .then((action) => {
+                console.log(action.payload, 'i get from')
+                setCode(action.payload.code);
+                setDescription(action.payload.description);
+                setDiscount(action.payload.discount);
+                setDiscountType(action.payload.discount_type);
+                setGeneral(action.payload.general)
+                setExpires(action.payload.expires_at)
             })
+    }, [dispatch]);
+    const formData = new FormData();
+    formData.append('code', code);
+    formData.append('description', description);
+    formData.append('discount', discount);
+    formData.append('discount_type', discount_type);
+    formData.append('general', general);
+    formData.append('expires_at', expires);
+    // const id = param.id;
+
+    const handleSubmit = (e,formData) => {
+        e.preventDefault();
+        const id = param.id;
+        dispatch(editTodo({id, formData}))
+        // api.post(`/coupons/${id}`, formData)
+        //     .then((res) => {
+        //         if (res.status !== false) {
+        //             navigate('/coupons')
+        //         }
+        //         // toast.success(res.data.messages[0])
+        //     }).catch((error) => {
+        //         setAlert(error.response.data.errors)
+        //         document.querySelector('#alert-message').style.display = 'block';
+        //         setTimeout(() => {
+        //             document.querySelector('#alert-message').style.display = 'none';
+        //         }, 3000);
+        //     })
     }
     return (
         <div className='wrapper'>

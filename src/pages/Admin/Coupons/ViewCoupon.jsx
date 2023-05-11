@@ -4,18 +4,20 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
+import { viewTodo } from '../../../redux/slice/userSlice'
 import { useNavigate, useParams, Link} from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
 function ViewCoupon() {
-    const [coupon, setCoupon] = useState([])
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const param = useParams();
+    const coupon = useSelector((state) => state.user.coupon);
+    console.log(coupon,'viewcoupon')
 
     useEffect(() => {
-        api.get(`/coupons/${param.id}`).then((res) => {
-            console.log(res.data.data.coupon, 'coupn view')
-            setCoupon(res.data.data.coupon)
-        })
+        const id = param.id;
+        dispatch(viewTodo(id))
+        
     }, [])
     return (
         <div className='wrapper'>
