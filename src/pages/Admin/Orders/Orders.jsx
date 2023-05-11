@@ -21,6 +21,8 @@ function Orders() {
     const [show, setShow] = useState(false);
     const [deliveryMens, setDeliveryMens] = useState([]);
     const [deliveryMen, setDeliveryMen] = useState();
+    const [order, setOrder] = useState([]);
+    const [totalOrder,setTotalOrder] = useState()
     const handleClose = () => setShow(false);
 
     // Pagination
@@ -28,6 +30,25 @@ function Orders() {
     const [totalPage, setTotalPage] = useState();
     // Search
     const [search, setSearch] = useState([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // if (localStorage.getItem('token')) {
+            getOrder()
+        // }
+    }, [])
+    const getOrder = () => {
+        api.get(`/orders`)
+        .then((res) => {
+            // console.log('order', res.data.data.orders.data)
+            setOrder(res.data.data.orders.data)
+            setTotalPage(res.data.data.orders.total)
+            setTotalOrder(res.data.data.orders)
+            // setOrder(res.data.data.order)
+
+        })
+    }
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
@@ -35,9 +56,21 @@ function Orders() {
             .then((res) => {
                 console.log(res)
                 setOrder(res.data.data.orders.data)
+                setTotalPage(res.data.data.orders.total)
+                setTotalOrder(res.data.data.orders)
             })
     }
-
+    const closeSearch = (e) => {
+        // e.preventDefault();
+        api.get(`/orders?keyword=${[]}`)
+            .then((res) => {
+                setOrder(res.data.data.orders.data)
+                setTotalPage(res.data.data.orders.total)
+                setTotalOrder(res.data.data.orders)
+            }).finally(() => {
+                setSearch('');
+            });
+    }
     const handleShow = (id) => {
         api.get(`/deliverymens`)
             .then((res) => {
@@ -64,41 +97,29 @@ function Orders() {
                 console.log(res, 'deliver id');
                 // alert(res.data.errors)
                 // toast.success(res.data.errors)
-                
+
             }).catch((error) => {
                 console.log(error.response.data.errors[0])
-                toast.error(error.response.data.errors[0],{
-                    position:'top-center'
+                toast.error(error.response.data.errors[0], {
+                    position: 'top-center'
                 })
             })
     }
 
-    const handelChange = (page) => {
+    const handleChange = (page) => {
         setPage(page);
         api.get(`/orders?page=${page}`)
             .then((res) => {
                 // console.log('order', res.data.data.orders.data)
                 setOrder(res.data.data.orders.data)
-                // setTotalPage(res.data.data.orders.total)
+                setTotalPage(res.data.data.orders.total)
+                setTotalOrder(res.data.data.orders)
                 // setOrder(res.data.data.order)
 
             })
     }
 
-    const [order, setOrder] = useState([]);
-    const navigate = useNavigate();
-    useEffect(() => {
-       if(localStorage.getItem('token')){
-        api.get(`/orders`)
-        .then((res) => {
-            // console.log('order', res.data.data.orders.data)
-            setOrder(res.data.data.orders.data)
-            setTotalPage(res.data.data.orders.total)
-            // setOrder(res.data.data.order)
 
-        })
-       }
-    }, [])
     const editOrder = (id) => {
         navigate('/editorder/' + id)
     }
@@ -149,7 +170,7 @@ function Orders() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Admin Orders</h1>
+                                <h1>Orders</h1>
                             </div>
                             {/* <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
@@ -169,14 +190,16 @@ function Orders() {
 
                                     <div className="card-body">
                                         <div className="input-group">
-                                            <input type="search" className="form-control search-bar form-control-lg" placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
+                                            <input type="text" className="form-control form-control-lg" value={search} placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
                                             <div className="input-group-append">
-                                                <button type="submit" className="btn btn-lg btn-success" onClick={getSearch}>
+                                                <button type="submit" className="btn btn-lg btn-success" onClick={getSearch} >
                                                     <i className="fa fa-search"></i>
                                                 </button>
+                                                <button type="submit" className="btn btn-lg btn-danger" onClick={closeSearch}>
+                                                    <i className="fa fa-times"></i>
+                                                </button>
                                             </div>
-                                        </div>
-                                        <br />
+                                        </div><br />
                                         <table className="table" style={{ marginBottom: '30px' }}>
                                             <thead>
                                                 <tr>
@@ -209,16 +232,19 @@ function Orders() {
                                                 })}
                                             </tbody>
                                         </table>
-                                        <PaginationControl
-                                            page={page}
-                                            total={totalPage}
-                                            limit={10}
-                                            changePage={(page) => {
-                                                // setPage(page);
-                                                handelChange(page)
-                                            }}
-                                            ellipsis={1}
-                                        />
+                                        {totalOrder && totalOrder.total <= 10 ? 
+                                               '' :
+                                                <PaginationControl
+                                                page={page}
+                                                total={totalPage}
+                                                limit={10}
+                                                changePage={(page) => {
+                                                    // setPage(page);
+                                                    handleChange(page)
+                                                }}
+                                            />
+                                            // <h1>Ho</h1>
+                                            }
                                     </div>
 
                                 </div>

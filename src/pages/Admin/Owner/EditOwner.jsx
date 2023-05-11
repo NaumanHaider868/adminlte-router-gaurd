@@ -10,13 +10,14 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function EditOwner() {
-    const [email, setEmail] = useState();
-    const [username, setUserName] = useState();
-    const [first_name, setFirstName] = useState();
-    const [last_name, setLastName] = useState();
-    const [status, setStatus] = useState();
-    const [password, setPassword] = useState();
-    const [ownerData, setOwnerData] = useState();
+    const [phone, setPhone] = useState('');
+    const [username, setUserName] = useState('');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [status, setStatus] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirm_password,setConfimPassword] = useState('')
+    const [ownerData, setOwnerData] = useState([]);
 
     const [alert, setAlert] = useState([]);
 
@@ -27,12 +28,13 @@ function EditOwner() {
         api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.shop);
-                setEmail(res.data.data.shop.email);
+                setPassword(res.data.data.shop.password);
                 setFirstName(res.data.data.shop.first_name);
                 setLastName(res.data.data.shop.last_name);
                 setStatus(res.data.data.shop.status)
                 setUserName(res.data.data.shop.username)
                 setOwnerData(res.data.data.shop.user_meta.phone);
+                setPhone(res.data.data.shop.user_meta.phone)
             })
     }, []);
 
@@ -40,14 +42,16 @@ function EditOwner() {
     const handleSubmit = (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('email', email);
+        // formData.append('email', email);
         formData.append('first_name', first_name);
         formData.append('last_name', last_name);
         formData.append('status', status);
         formData.append('username', username);
-        formData.append('email', email);
-        formData.append('phone', ownerData);
-        formData.append('password', password)
+        formData.append('password', password);
+        formData.append('password_confirmation',confirm_password)
+        // formData.append('phone', ownerData);
+        formData.append('password', password);
+        formData.append('phone',phone)
         api.post(`/owners/${param.id}`, formData)
             .then((res) => {
                 console.log(res)
@@ -106,12 +110,7 @@ function EditOwner() {
                             <form onSubmit={handleSubmit}>
                                 <div className="card-body">
                                     <div className='row'>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Email</label>
-                                                <input type="text" className="form-control" value={email} placeholder="Customer Name" onChange={(e) => setEmail(e.target.value)} />
-                                            </div>
-                                        </div>
+                                        
                                         <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>User Name</label>
@@ -132,6 +131,18 @@ function EditOwner() {
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
+                                                <label>Password</label>
+                                                <input type="text" className="form-control" value={password} placeholder="Customer Name" onChange={(e) => setPassword(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Confirm Password</label>
+                                                <input type="text" className="form-control" value={confirm_password} placeholder="Customer Name" onChange={(e) => setConfimPassword(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
                                                 <label>Status</label>
                                                 <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
                                                     <option value="0">0</option>
@@ -139,15 +150,20 @@ function EditOwner() {
                                                 </select>
                                             </div>
                                         </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Phone</label>
+                                                <input type="text" className="form-control" value={phone} placeholder="Customer Phone" onChange={(e) => setPhone(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        
                                     </div>
 
 
-                                    <div className="row">
+                                    {/* <div className="row">
                                         <div className="col-12">
                                             <div className="card">
-                                                {/* <div className='car-header'>
-                                                    <h1 className='card-title'>Order Items</h1>
-                                                </div> */}
+                                                
                                                 <div className="card-body">
 
                                                     <table className="table">
@@ -168,7 +184,7 @@ function EditOwner() {
 
                                         </div>
 
-                                    </div>
+                                    </div> */}
 
 
 

@@ -3,45 +3,61 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
+import { fetchTodos } from '../../../redux/slice/userSlice'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux'
 
 function Coupons() {
     const navigate = useNavigate();
-    const [coupon, setCoupon] = useState([]);
+    // const [coupon, setCoupon] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
+    const [totalCoupons,setTotalCoupons] = useState()
+    // console.log(totalCoupons)
+    const dispatch = useDispatch();
+    const [search, setSearch] = useState([]);
+
+    // const state = useSelector((state)=>state);
+    // console.log('state',state)
+    const coupon = useSelector((state) => state.user.coupon.data.coupons.data);
+    console.log(coupon, 'coupons')
+
     useEffect(() => {
-        getCoupon();
+        
+        dispatch(fetchTodos());
     }, []);
-    const getCoupon = () => {
-        api.get(`/coupons`)
-        .then((res) => {
-            console.log(res.data.data.coupons.data)
-            setTotalPage(res.data.data.coupons.total)
-            setCoupon(res.data.data.coupons.data)
-        })
-    }
+    // const getCoupon = () => {
+    //     api.get(`/coupons`)
+    //         .then((res) => {
+    //             console.log(res.data.data.coupons.total)
+    //             setTotalCoupons(res.data.data.coupons)
+    //             setTotalPage(res.data.data.coupons.total)
+    //             // setCoupon(res.data.data.coupons.data)
+    //         })
+    // }
 
     const handleChange = (page) => {
         setPage(page)
         api.get(`/coupons?page=${page}`).then((res) => {
             console.log(res.data.data.coupons.data)
             // setTotalPage(res.data.data.coupons.total)
-            setCoupon(res.data.data.coupons.data)
+            // setCoupon(res.data.data.coupons.data)
         })
     }
     const editCoupon = (id) => {
         navigate('/editcoupon/' + id)
     }
-    const deleteCoupon = (id) => {
+    const deleteCoupon = (id,page) => {
         api.delete(`/coupons/${id}`)
             .then((res) => {
                 getCoupon()
+                // handleChange();
+                // setPage(page)
                 toast.success(res.data.messages[0])
             })
     }
@@ -49,15 +65,26 @@ function Coupons() {
         navigate('/viewcoupon/' + id)
     }
 
-    const [search, setSearch] = useState([]);
     const getSearch = (e) => {
         // setSearch(e.target.value)
         e.preventDefault();
         api.get(`/coupons?keyword=${search}`)
             .then((res) => {
                 console.log(res, 'search coupons')
-                setCoupon(res.data.data.coupons.data)
+                // setCoupon(res.data.data.coupons.data);
+                setTotalPage(res.data.data.coupons.total);
+                setTotalCoupons(res.data.data.coupons);
             })
+    }
+    const closeSearch = (e) => {
+        // e.preventDefault();
+        api.get(`/coupons?keyword=${[]}`)
+            .then((res) => {
+                // setCoupon(res.data.data.coupons.data)
+                setTotalPage(res.data.data.coupons.total)
+            }).finally(() => {
+                setSearch('');
+              });
     }
     return (
         <div className='wrapper'>
@@ -86,10 +113,13 @@ function Coupons() {
                                             <Link to='/addcoupon'><button className='btn btn-success'>Add Coupon</button></Link>
                                             <br /><br />
                                             <div className="input-group">
-                                                <input type="search" className="form-control form-control-lg" placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
+                                                <input type="text" className="form-control form-control-lg" value={search} placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
                                                 <div className="input-group-append">
                                                     <button type="submit" className="btn btn-lg btn-success" onClick={getSearch} >
                                                         <i className="fa fa-search"></i>
+                                                    </button>
+                                                    <button type="submit" className="btn btn-lg btn-danger" onClick={closeSearch}>
+                                                        <i className="fa fa-times"></i>
                                                     </button>
                                                 </div>
                                             </div><br />
@@ -121,7 +151,9 @@ function Coupons() {
                                                     })}
                                                 </tbody>
                                             </table>
-                                            <PaginationControl
+                                            {totalCoupons && totalCoupons.total <= 10 ? 
+                                               '' :
+                                                <PaginationControl
                                                 page={page}
                                                 total={totalPage}
                                                 limit={10}
@@ -131,6 +163,8 @@ function Coupons() {
                                                 }}
                                                 ellipsis={1}
                                             />
+                                            // <h1>Ho</h1>
+                                            }
                                         </div>
 
                                     </div>

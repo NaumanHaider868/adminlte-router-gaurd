@@ -74,10 +74,6 @@ function EditShopOrder() {
         api.post(`/orders/${param.id1}`, payload)
             .then((res) => {
                 console.log(res, 'post')
-                setCustomerName('');
-                setLocation('');
-                setStatus('');
-                setTotal('');
                 navigate(`/shoporder/${param.id}`)
                 toast.success(res.data.messages[0])
             }).catch(res => {
@@ -110,7 +106,7 @@ function EditShopOrder() {
                                 </div>
                                 <div className="col-sm-6">
                                     <ol className="breadcrumb float-sm-right">
-                                        <li onClick={handleBack} className="breadcrumb-item"><a href="#">Admin Shop Order</a></li>
+                                        <li onClick={handleBack} className="breadcrumb-item"><a href="#">Shop Order</a></li>
                                         <li className="breadcrumb-item active">Edit Shop Order</li>
                                     </ol>
                                 </div>

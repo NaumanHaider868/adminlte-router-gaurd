@@ -1,52 +1,64 @@
-import React, { useState, useEffect } from 'react'
-import api from '../services/ApiUrl'
-import { useNavigate, Link } from 'react-router-dom'
-import Navbar from '../../componets/Navbar'
-import SideBar from '../../componets/SideBar'
-import Footer from '../../componets/Footer'
+import React from 'react'
+import Navbar from './../../../componets/Navbar'
+import SideBar from './../../../componets/SideBar'
+import Footer from './../../../componets/Footer'
+import { useState, useEffect } from 'react'
+import api from '../../services/ApiUrl'
+import { Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
-import moment from "moment";
+// import { getAdminCategorie, getAdminCategorieSearch } from '../services/ApiUrl'
 
-
-
-function ViewItems() {
-    const [items, setItems] = useState([]);
-    const [search, setSearch] = useState([]);
+function ViewCategories() {
+    const [search, setSearch] = useState([])
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
 
+    const [categorie, setCategorie] = useState([]);
+    const [totalCategorie, setTotalCategorie] = useState()
     useEffect(() => {
-        api.get(`https://foodapis.techenablers.info/api/admin/items`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        }).then((res) => {
-            console.log(res.data.data.items)
-            setItems(res.data.data.items.data)
-            setTotalPage(res.data.data.items.total)
-        })
-    }, [])
 
-    const handelChange = (page) => {
-        setPage(page)
-        api.get(`/items?page=${page}`).then((res) => {
-            console.log(res.data.data.items)
-            setItems(res.data.data.items.data)
-        })
+        api.get(`categories?page=${page}`)
+            .then((res) => {
+                console.log(res.data.data);
+                setCategorie(res.data.data.categories.data)
+                setTotalPage(res.data.data.categories.total)
+                setTotalCategorie(res.data.data.categories)
+            })
+    }, [page])
+    const getSearch = (e) => {
+        e.preventDefault();
+        api.get(`/categories?keyword=${search}`)
+            .then((res) => {
+                console.log(res.data.data.categories.data);
+                setCategorie(res.data.data.categories.data)
+                setTotalPage(res.data.data.categories.total)
+                setTotalCategorie(res.data.data.categories)
+            })
     }
-
-    const getSearch = () => {
-        api.get(`https://foodapis.techenablers.info/api/admin/items?page=${search}`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        }).then((res) => {
-            console.log(res, 'search items')
-        })
+    const closeSearch = (e) => {
+        // e.preventDefault();
+        api.get(`/categories?keyword=${[]}`)
+            .then((res) => {
+                setCategorie(res.data.data.categories.data);
+                setTotalPage(res.data.data.categories.total)
+                setTotalCategorie(res.data.data.categories)
+                
+            }).finally(() => {
+                setSearch('');
+            });
     }
+    const handleChange = (page) => {
+        setPage(page);
+        api.get(`/categories?page=${page}`)
+            .then((res) => {
+                // console.log('order', res.data.data.orders.data)
+                setCategorie(res.data.data.categories.data);
+                setTotalPage(res.data.data.categories.total)
+                setTotalCategorie(res.data.data.categories)
+                // setOrder(res.data.data.order)
 
-    // const hourMinuteFormat = "HH:mm";
-
+            })
+    }
     return (
         <div className='wrapper'>
             <Navbar />
@@ -57,14 +69,9 @@ function ViewItems() {
                         <div className="container-fluid">
                             <div className="row mb-2">
                                 <div className="col-sm-6">
-                                    <h1>Admin Items</h1>
+                                    <h1>Categories</h1>
                                 </div>
-                                <div className="col-sm-6">
-                                    <ol className="breadcrumb float-sm-right">
-                                        <Link to='/admin' className="breadcrumb-item"><a href="#">Admin Dashboard</a></Link>
-                                        <li className="breadcrumb-item active">Items</li>
-                                    </ol>
-                                </div>
+
                             </div>
                         </div>
                     </section>
@@ -76,13 +83,16 @@ function ViewItems() {
                                     <div className="card">
 
                                         <div className="card-body">
-                                            <Link to='/additem'><button className='btn btn-success'>Add Item</button></Link>
+                                            <Link to='/addcategories'><button className='btn btn-success'>Add Categorie</button></Link>
                                             <br /><br />
                                             <div className="input-group">
-                                                <input type="search" className="form-control form-control-lg" placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
+                                                <input type="text" className="form-control form-control-lg" value={search} placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
                                                 <div className="input-group-append">
                                                     <button type="submit" className="btn btn-lg btn-success" onClick={getSearch} >
                                                         <i className="fa fa-search"></i>
+                                                    </button>
+                                                    <button type="submit" className="btn btn-lg btn-danger" onClick={closeSearch}>
+                                                        <i className="fa fa-times"></i>
                                                     </button>
                                                 </div>
                                             </div><br />
@@ -91,22 +101,16 @@ function ViewItems() {
                                                     <tr>
                                                         <th scope="col">Sr.#</th>
                                                         <th scope="col">Name</th>
-                                                        <th scope="col">Description</th>
-                                                        <th scope='col'>Cook Time</th>
-                                                        <th scope='col'>Price</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
 
-                                                    {items.map((item, i) => {
+                                                    {categorie.map((item, i) => {
                                                         return (
                                                             <>
                                                                 <tr key={i}>
                                                                     <td>{((page - 1) * 10) + i + 1}</td>
                                                                     <td>{item.name}</td>
-                                                                    <td>{item.description}</td>
-                                                                    <td>{moment(item.cook_time, 'HH:mm:ss').format("HH:mm")}</td>
-                                                                    <td>{item.price}</td>
                                                                 </tr>
 
                                                             </>
@@ -115,16 +119,19 @@ function ViewItems() {
 
                                                 </tbody>
                                             </table>
+                                            {totalCategorie && totalCategorie.total <= 10 ? 
+                                            '' : 
                                             <PaginationControl
                                                 page={page}
                                                 total={totalPage}
                                                 limit={10}
                                                 changePage={(page) => {
-                                                    // setPage(page);
-                                                    handelChange(page)
+                                                    handleChange(page);
                                                 }}
                                                 ellipsis={1}
                                             />
+                                            }
+                                            
                                         </div>
 
                                     </div>
@@ -139,4 +146,4 @@ function ViewItems() {
     )
 }
 
-export default ViewItems
+export default ViewCategories

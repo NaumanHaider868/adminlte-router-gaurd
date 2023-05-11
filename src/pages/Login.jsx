@@ -12,6 +12,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false)
+    const [alert, setAlert] = useState([]);
     const navigate = useNavigate();
     // const history = useHistory();
 
@@ -50,12 +51,32 @@ function Login() {
                 // // navigate('/dashboard')
                 // // history.push('/dashboard');
                 // }
-            }).catch((error) => {
-                console.log(error)
-                if (error.response.status === 401 || error.response.status === 400) {
-                    alert(error.response.data.errors);
+            })
+            .catch((error)=>{
+                const alertMessage = document.querySelector('#alert-message');
+                setAlert(error.response.data.errors);
+                if(alertMessage){
+                    alertMessage.style.display = 'block';
+
+                    setTimeout(() => {
+                        alertMessage.style.display = 'none';
+                      }, 2000);
+
                 }
-            });
+         })
+            // .catch((error) => {
+            //     console.log(error)
+            //     // if (error.response.status === 401 || error.response.status === 400) {
+            //         setAlert(error.response.data.errors);
+            //         const alertMessage = document.querySelector('#alert-message');
+            //         if (alertMessage) {
+            //             alertMessage.style.display = 'block';
+            //             setTimeout(() => {
+            //                 alertMessage.style.display = 'none';
+            //             }, 2000);
+            //         }
+            //     // }
+            // });
 
     }
 
@@ -69,12 +90,22 @@ function Login() {
     return (
         <div className='hold-transition login-page'>
             <div className="login-box">
+
                 <div className="login-logo">
                     <a><b>Admin</b>LTE</a>
                 </div>
                 <div className="card">
                     <div className="card-body login-card-body">
                         <p className="login-box-msg">Sign in to start your session</p>
+                        {
+                            alert.map((err, index) => {
+                                return (
+                                    <div className='valid'>
+                                        <p className='valid-p alert-danger' key={index}>{err}</p>
+                                    </div>
+                                )
+                            })
+                        }
 
                         <div className="input-group mb-3">
                             <input type="email" className="form-control" placeholder="Email" name='email' value={email} onChange={handleEmail} />

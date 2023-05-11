@@ -126,10 +126,13 @@ function EditCoupon() {
                                                 <input type="text" className="form-control" value={discount_type} onChange={(e) => setDiscountType(e.target.value)} />
                                             </div>
                                         </div>
-                                        <div className='col-sm-6'>
+                                        <div className='col-sm-1'>
                                             <div className="form-group">
-                                                <label>General</label>
-                                                <input type="text" className="form-control" value={general} onChange={(e) => setGeneral(e.target.value)} />
+                                                <label for="inputState">General</label>
+                                                <select className='form-control' id="inputState" value={general} onChange={(e) => setGeneral(e.target.value)}>
+                                                    <option value="0">0</option>
+                                                    <option value="1">1</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>

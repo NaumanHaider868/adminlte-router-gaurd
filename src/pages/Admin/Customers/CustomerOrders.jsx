@@ -1,0 +1,150 @@
+import React, { useState, useEffect } from 'react'
+import api from '../../services/ApiUrl'
+import { useParams, Link } from 'react-router-dom'
+import Navbar from '../../../componets/Navbar';
+import SideBar from '../../../componets/SideBar';
+import Footer from '../../../componets/Footer';
+import { PaginationControl } from 'react-bootstrap-pagination-control';
+
+function CustomerOrders() {
+    const [orders, setOrders] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPage, setTotalPage] = useState();
+    const [search, setSearch] = useState([])
+
+    const param = useParams();
+    useEffect(() => {
+        api.get(`/customers/${param.id}/orders`)
+            .then((res) => {
+                console.log(res)
+                setOrders(res.data.data.order)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+    const handelChange = () => {
+
+    }
+    const getSearch = (e) => {
+        // setSearch(e.target.value)
+        e.preventDefault();
+        api.get(`/customers/${param.id}/orders?keyword=${search}`)
+            .then((res) => {
+                setOrders(res.data.data.order)
+                // setTotalPage(res.data.data.order.total)
+            })
+    }
+
+    const closeSearch = (e) => {
+        // e.preventDefault();
+        api.get(`/customers/${param.id}/orders?keyword=${[]}`)
+            .then((res) => {
+                setOrders(res.data.data.order)
+                // setTotalPage(res.data.data.order.total)
+            }).finally(() => {
+                setSearch('');
+            });
+    }
+    return (
+        <div className='wrapper'>
+            <Navbar />
+            <SideBar />
+            <div className='wrapper'>
+                <div className="content-wrapper">
+                    <section className="content-header">
+                        <div className="container-fluid">
+                            <div className="row mb-2">
+                                <div className="col-sm-6">
+                                    <h1>Customer Orders</h1>
+                                </div>
+
+                                <div className="col-sm-6">
+                                    <ol className="breadcrumb float-sm-right">
+                                        <Link to='/customer' className="breadcrumb-item"><a href="#">Customer</a></Link>
+                                        <li className="breadcrumb-item active">Customer Orders</li>
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="content">
+                        <div className="container-fluid">
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="card">
+
+                                        <div className="card-body">
+
+                                            <div className="input-group">
+                                                <input type="text" className="form-control form-control-lg" value={search} placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
+                                                <div className="input-group-append">
+                                                    <button type="submit" className="btn btn-lg btn-success" onClick={getSearch} >
+                                                        <i className="fa fa-search"></i>
+                                                    </button>
+                                                    <button type="submit" className="btn btn-lg btn-danger" onClick={closeSearch}>
+                                                        <i className="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div><br />
+                                            <table className="table" style={{ marginBottom: '30px' }}>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Sr.#</th>
+                                                        <th scope="col">Customer Name</th>
+                                                        <th scope="col">Customer Phone</th>
+                                                        <th scope="col">Delivery Charges</th>
+                                                        <th scope="col">Location</th>
+                                                        <th scope="col">Status</th>
+                                                        <th scope="col">Sub Total</th>
+                                                        <th scope="col">Tax</th>
+                                                        <th scope="col">Total</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {orders.map((item, i) => {
+                                                        return (
+                                                            <tr key={i}>
+                                                                <td>{((page - 1) * 10) + i + 1}</td>
+                                                                <td>{item.customer_name}</td>
+                                                                <td>{item.customer_phone}</td>
+                                                                <td>{item.delivery_charges}</td>
+                                                                <td>{item.location}</td>
+                                                                <td>{item.status}</td>
+                                                                <td>{item.sub_total}</td>
+                                                                <td>{item.tax}</td>
+                                                                <td>{item.total}</td>
+
+                                                            </tr>
+                                                        )
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                            <PaginationControl
+                                                page={page}
+                                                total={totalPage}
+                                                limit={10}
+                                                changePage={(page) => {
+                                                    // setPage(page);
+                                                    handelChange(page)
+                                                }}
+                                                ellipsis={1}
+                                            />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <Footer />
+        </div>
+    )
+}
+
+export default CustomerOrders

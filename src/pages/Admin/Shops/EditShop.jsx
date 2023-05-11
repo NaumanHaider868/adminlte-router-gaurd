@@ -56,13 +56,6 @@ function EditShop() {
 
         api.post(`/shops/${param.id}`, formatData)
             .then((res) => {
-                setName('');
-                setAddress('');
-                setCloseHour();
-                setOpenHour();
-                setLatitude();
-                setLongtitude();
-                setPhone();
                 console.log(res.data.messages[0])
                 toast.success(res.data.messages[0])
                 if (res.success !== false) {
@@ -98,7 +91,7 @@ function EditShop() {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <Link to='/shops' className="breadcrumb-item"><a href="#">Admin Shop</a></Link>
+                                    <Link to='/shops' className="breadcrumb-item"><a href="#">Shop</a></Link>
                                     <li className="breadcrumb-item active">Edit Shop</li>
                                 </ol>
                             </div>
@@ -149,7 +142,7 @@ function EditShop() {
                                         <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Open Hours</label>
-                                                <input type="text" value={open_hours} className="form-control" onChange={(e) => setOpenHour(e.target.value)} />
+                                                <input type="time" value={open_hours} className="form-control" onChange={(e) => setOpenHour(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
@@ -161,7 +154,19 @@ function EditShop() {
                                         <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Close Hours</label>
-                                                <input type="text" className="form-control" value={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                                <input type="time" className="form-control" value={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Longitude</label>
+                                                <input type="text" className="form-control" value={longitude} onChange={(e) => setLongtitude(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Latitude</label>
+                                                <input type="text" className="form-control" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>

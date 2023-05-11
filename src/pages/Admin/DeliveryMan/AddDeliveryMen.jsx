@@ -16,6 +16,7 @@ function AddDeliveryMen() {
     const [status, setStatus] = useState();
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
+    const [other,setOther] = useState('');
     const [phone, setPhone] = useState();
     const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ function AddDeliveryMen() {
             first_name: first_name,
             last_name: last_name,
             password: password,
+            other_details:other,
             username: username,
             status: status
         }
@@ -136,6 +138,14 @@ function AddDeliveryMen() {
                                                 <input type="text" className="form-control" name={password} onChange={(e) => setPassword(e.target.value)} />
                                             </div>
                                         </div>
+
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Other Details</label>
+                                                <textarea  className="form-control" name={other} onChange={(e) => setOther(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        
                                         <div className="card-footer" style={{ background: '#fff' }}>
                                             <button type="submit" className="btn btn-success">Add Delivery Man</button>
                                         </div>

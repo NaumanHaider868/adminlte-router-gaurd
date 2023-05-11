@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import axios from 'axios'
 import { Link, useNavigate, NavLink, useLocation, useRouteMatch } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -7,6 +7,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function SideBar() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [userName,setUserName] = useState('');
+    const [image,setImage] = useState()
     // const match = useRouteMatch('/viewshoporder/:id1/:id2');
     // const id1 = match?.params.id1;
     // const id2 = match?.params.id2;
@@ -22,6 +24,20 @@ function SideBar() {
                 toast.success(res.data.messages[0])
             })
     }
+    useEffect(()=>{
+        axios.get('https://foodapis.techenablers.info/api/user/profile', {
+            headers: {
+                Authorization: `Bearer` + localStorage.getItem('token'),
+                "Content-Type": "multipart/form-data",
+            }
+        })
+        .then((res)=>{
+            console.log(res.data.data.usermeta.image,'sidebarimage')
+            // console.log
+            setUserName(res.data.data.user.username)
+            setImage(res.data.data.usermeta.image)
+        })
+    },[])
     return (
         <div>
             <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -33,14 +49,14 @@ function SideBar() {
                 <div className="sidebar">
                     <div className="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div className="image">
-                            <img src="../../dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image" />
+                            <img src={image} className="img-circle elevation-2" alt="User Image" />
                         </div>
                         <div className="info">
-                            <a href="#" className="d-block">Alexander Pierce</a>
+                            <a href="#" className="d-block">{userName}</a>
                         </div>
                     </div>
 
-                    <div className="form-inline">
+                    {/* <div className="form-inline">
                         <div className="input-group" data-widget="sidebar-search">
                             <input className="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search" />
                             <div className="input-group-append">
@@ -49,7 +65,7 @@ function SideBar() {
                                 </button>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <nav className="mt-2">
                         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -85,7 +101,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/customer' className={"nav-link " + (location.pathname.startsWith("/editcustomer/") || location.pathname.startsWith("/viewcustomer/") ? 'active' : '')}>
+                                <NavLink to='/customer' className={"nav-link " + (location.pathname.startsWith("/editcustomer/") || location.pathname.startsWith("/viewcustomer/") || location.pathname.startsWith("/customerorders/")  ? 'active' : '')}>
                                     <i className="nav-icon fas fa-users"></i>
                                     <p>
                                         Customers
@@ -102,7 +118,27 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/deliveryman' className={"nav-link" + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") ? 'active' : '')}>
+                                <NavLink to='/categorie' className={'nav-link ' + (location.pathname === '/addcategories' ? 'active' : '')}>
+                                    {/* <i class="nav-icon fas fa-phone-alt"></i> */}
+                                    <i className="nav-icon fa fa-asterisk"></i>
+                                    <p>
+                                        Categories
+                                    </p>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                {/* <NavLink to='/item' className={"nav-link " + (location.pathname === '/additems') ? 'active' : ''}> */}
+                                <NavLink to='/item' className={"nav-link " + (location.pathname === '/additems' ? 'active' : '')}>
+
+                                    {/* <i class="nav-icon fas fa-phone-alt"></i> */}
+                                    <i className="nav-icon fa fa-sitemap"></i>
+                                    <p>
+                                        Items
+                                    </p>
+                                </NavLink>
+                            </li>
+                            <li className="nav-item">
+                                <NavLink to='/deliveryman' className={"nav-link " + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") || location.pathname.startsWith("/deliverymanorders/") ? 'active' : '')}>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
                                     <i class="nav-icon fab fa-first-order"></i>
                                     <p>
@@ -113,7 +149,7 @@ function SideBar() {
                             <li className="nav-item">
                                 <NavLink to='/profile' className='nav-link'>
                                     {/* <i class="nav-icon fas fa-phone-alt"></i> */}
-                                    <i class="nav-icon fa fa-user"></i>
+                                    <i class="nav-icon fa fa-user-circle"></i>
                                     <p>
                                         Profile
                                     </p>
@@ -121,7 +157,7 @@ function SideBar() {
                             </li>
                             <li className="nav-item" onClick={handleLogOut} style={{ cursor: 'pointer' }}>
                                 <a className="nav-link">
-                                    <i class="nav-icon fa-solid fa-arrow-right"></i>
+                                    <i class="nav-icon fa fa-sign-out"></i>
                                     <p>
                                         Logout
                                     </p>

@@ -4,7 +4,7 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 
 import { toast } from 'react-toastify';
@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Owner() {
     const [owner, setOwner] = useState([]);
+    const [totalOwner,setTotalOwner] = useState();
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState()
     const [search, setSearch] = useState();
@@ -27,16 +28,28 @@ function Owner() {
         getOwner();
     }, [])
     const getSearch = (e) => {
-        api.get(`/owners?keyword=${search}`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        })
+        api.get(`/owners?keyword=${search}`)
             .then((res) => {
                 // console.log(res,'search owenr')
+                setTotalPage(res.data.data.owners.total)
+                setTotalOwner(res.data.data.owners)
+                // setTotalOwner(res.data.data.owners)
                 setOwner(res.data.data.owners.data)
             })
     }
+
+    const closeSearch = (e) => {
+        // e.preventDefault();
+        api.get(`/owners?keyword=${[]}`)
+            .then((res) => {
+                setTotalPage(res.data.data.owners.total)
+                setOwner(res.data.data.owners.data)
+                setTotalOwner(res.data.data.owners)
+            }).finally(() => {
+                setSearch('');
+              });
+    }
+
     const editOwner = (id) => {
         navigate('/editowner/' + id)
     }
@@ -45,6 +58,7 @@ function Owner() {
             .then((res) => {
                 console.log(res.data.data.owners, 'owner')
                 setOwner(res.data.data.owners.data)
+                setTotalOwner(res.data.data.owners)
                 setTotalPage(res.data.data.owners.total)
             })
     }
@@ -52,8 +66,10 @@ function Owner() {
         setPage(page)
         api.get(`/owners?page=${page}`)
             .then((res) => {
+                getOwner()
                 console.log(res.data.data.owners, 'owner')
                 setOwner(res.data.data.owners.data)
+                setTotalOwner(res.data.data.owners)
             })
     }
     const viewOwner = (id) => {
@@ -67,6 +83,7 @@ function Owner() {
                 getOwner();
                 // alert(res.data.messages)
                 toast.success(res.data.messages[0])
+                setTotalOwner(res.data.data.owners)
             })
     }
     return (
@@ -79,7 +96,7 @@ function Owner() {
                     <div className="container-fluid">
                         <div className="row mb-2">
                             <div className="col-sm-6">
-                                <h1>Admin Owner</h1>
+                                <h1>Owner</h1>
                             </div>
 
                         </div>
@@ -93,16 +110,19 @@ function Owner() {
                                 <div className="card">
 
                                     <div className="card-body">
-                                        <Link to='/addowner'><button className='btn btn-success'>Add Owner</button></Link>
-                                        <br /><br />
+                                        {/* <Link to='/addowner'><button className='btn btn-success'>Add Owner</button></Link> */}
+                                        {/* <br /><br /> */}
                                         <div className="input-group">
-                                            <input type="search" className="form-control form-control-lg" placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
-                                            <div className="input-group-append">
-                                                <button type="submit" className="btn btn-lg btn-success" onClick={getSearch}>
-                                                    <i className="fa fa-search"></i>
-                                                </button>
-                                            </div>
-                                        </div><br />
+                                                <input type="text" className="form-control form-control-lg" value={search} placeholder="Type your keywords here" onChange={(e) => setSearch(e.target.value)} />
+                                                <div className="input-group-append">
+                                                    <button type="submit" className="btn btn-lg btn-success" onClick={getSearch} >
+                                                        <i className="fa fa-search"></i>
+                                                    </button>
+                                                    <button type="submit" className="btn btn-lg btn-danger" onClick={closeSearch}>
+                                                        <i className="fa fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            </div><br />
                                         <table className="table" style={{ marginBottom: '32px' }}>
                                             <thead>
                                                 <tr>
@@ -133,16 +153,18 @@ function Owner() {
                                                 })}
                                             </tbody>
                                         </table>
-                                        <PaginationControl
-                                            page={page}
-                                            total={totalPage}
-                                            limit={10}
-                                            changePage={(page) => {
-                                                // setPage(page);
-                                                handleChange(page)
-                                            }}
-                                            ellipsis={1}
-                                        />
+                                        {totalOwner && totalOwner.total <= 10 ? 
+                                               '' :
+                                                <PaginationControl
+                                                page={page}
+                                                total={totalPage}
+                                                limit={10}
+                                                changePage={(page) => {
+                                                    handleChange(page)
+                                                }}
+                                                ellipsis={1}
+                                            />
+                                            }
                                     </div>
 
                                 </div>

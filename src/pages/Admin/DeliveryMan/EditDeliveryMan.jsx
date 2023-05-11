@@ -16,6 +16,8 @@ function EditDeliveryMan() {
     const [status, setStatus] = useState();
     const [last_login, setLastLogin] = useState();
     const [phone, setPhone] = useState();
+    const [password,setPassword] = useState('');
+    const [confirm_password,setConfirmPassword] = useState('');
 
     const [alert, setAlert] = useState([]);
 
@@ -24,7 +26,7 @@ function EditDeliveryMan() {
     useEffect(() => {
         api.get(`/deliverymens/${param.id}`)
             .then((res) => {
-                console.log(res.data.data.delivery_man)
+                console.log(res.data.data)
                 setEmail(res.data.data.delivery_man.email);
                 setFirstName(res.data.data.delivery_man.first_name);
                 setLastName(res.data.data.delivery_man.last_name);
@@ -40,14 +42,12 @@ function EditDeliveryMan() {
             first_name: first_name,
             last_name: last_name,
             phone: phone,
-            status: status
+            status: status,
+            password:password,
+            password_confirmation: confirm_password
         }
         api.post(`/deliverymens/${param.id}`, payload)
             .then((res) => {
-                setEmail();
-                setFirstName();
-                setLastLogin();
-                setLastName();
                 navigate('/deliveryman')
                 toast.success(res.data.messages[0])
             })
@@ -117,6 +117,24 @@ function EditDeliveryMan() {
                                             <div className="form-group">
                                                 <label>Last Name</label>
                                                 <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Password</label>
+                                                <input type="text" className="form-control" value={password} name={password} onChange={(e) => setPassword(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Confirm Password</label>
+                                                <input type="text" className="form-control" value={confirm_password} name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <div className='col-sm-6'>
+                                            <div className="form-group">
+                                                <label>Phone</label>
+                                                <input type="text" className="form-control" value={phone} name={phone} onChange={(e) => setPhone(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>
