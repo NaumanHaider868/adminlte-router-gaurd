@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
-import { fetchTodos } from '../../../redux/slice/userSlice'
+import { fetchTodos, deleteTodo } from '../../../redux/slice/userSlice'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
@@ -17,19 +17,22 @@ function Coupons() {
     // const [coupon, setCoupon] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
-    const [totalCoupons,setTotalCoupons] = useState()
+    const [totalCoupons, setTotalCoupons] = useState()
     // console.log(totalCoupons)
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
-
+    const [localData, setLocalData] = useState([]);
     // const state = useSelector((state)=>state);
     // console.log('state',state)
-    const coupon = useSelector((state) => state.user.coupon.data.coupons.data);
+    const coupon = useSelector((state) => state.user.coupon?.data?.coupons?.data || []);
+    const singleData = useSelector((state) => state.user.data);
+
+    // const totalPage = useSelector((state)=> state.user.coupon.data.coupons.total)
     console.log(coupon, 'coupons')
 
     useEffect(() => {
-        
-        dispatch(fetchTodos());
+        getCoupon()
+        // dispatch(fetchTodos());
     }, []);
     // const getCoupon = () => {
     //     api.get(`/coupons`)
@@ -40,33 +43,43 @@ function Coupons() {
     //             // setCoupon(res.data.data.coupons.data)
     //         })
     // }
+    const getCoupon = () => {
+        dispatch(fetchTodos());
+    }
 
     const handleChange = (page) => {
         setPage(page)
         api.get(`/coupons?page=${page}`).then((res) => {
             console.log(res.data.data.coupons.data)
-            // setTotalPage(res.data.data.coupons.total)
+            setTotalPage(res.data.data.coupons.total)
             // setCoupon(res.data.data.coupons.data)
         })
     }
     const editCoupon = (id) => {
         navigate('/editcoupon/' + id)
     }
-    const deleteCoupon = (id,page) => {
-        api.delete(`/coupons/${id}`)
-            .then((res) => {
+
+    const deleteCoupon = (id, page) => {
+        dispatch(deleteTodo(id))
+            .then((action) => {
+                // const deletedItemId = action.meta.arg;
+                // console.log("Deleted Item ID:", deletedItemId);
                 getCoupon()
-                // handleChange();
-                // setPage(page)
-                toast.success(res.data.messages[0])
+
+                // Update the local data in the component's state
+                // setLocalData(localData.filter(todo => todo.id !== deletedItemId));
+
+                toast.success(action.payload.messages[0]);
             })
+            .catch((error) => {
+                // Handle error if necessary
+            });
     }
     const ViewCoupon = (id) => {
         navigate('/viewcoupon/' + id)
     }
 
     const getSearch = (e) => {
-        // setSearch(e.target.value)
         e.preventDefault();
         api.get(`/coupons?keyword=${search}`)
             .then((res) => {
@@ -84,7 +97,7 @@ function Coupons() {
                 setTotalPage(res.data.data.coupons.total)
             }).finally(() => {
                 setSearch('');
-              });
+            });
     }
     return (
         <div className='wrapper'>
@@ -96,7 +109,7 @@ function Coupons() {
                         <div className="container-fluid">
                             <div className="row mb-2">
                                 <div className="col-sm-6">
-                                    <h1>Admin Coupons</h1>
+                                    <h1>Coupons</h1>
                                 </div>
 
                             </div>
@@ -151,19 +164,19 @@ function Coupons() {
                                                     })}
                                                 </tbody>
                                             </table>
-                                            {totalCoupons && totalCoupons.total <= 10 ? 
-                                               '' :
+                                            {totalCoupons && totalCoupons.total <= 10 ?
+                                                '' :
                                                 <PaginationControl
-                                                page={page}
-                                                total={totalPage}
-                                                limit={10}
-                                                changePage={(page) => {
-                                                    // setPage(page);
-                                                    handleChange(page)
-                                                }}
-                                                ellipsis={1}
-                                            />
-                                            // <h1>Ho</h1>
+                                                    page={page}
+                                                    total={totalPage}
+                                                    limit={10}
+                                                    changePage={(page) => {
+                                                        // setPage(page);
+                                                        handleChange(page)
+                                                    }}
+                                                    ellipsis={1}
+                                                />
+                                                // <h1>Ho</h1>
                                             }
                                         </div>
 
