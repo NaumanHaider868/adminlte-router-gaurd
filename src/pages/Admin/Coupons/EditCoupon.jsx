@@ -6,7 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../services/ApiUrl'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { editTodo, getForPost } from '../../../redux/slice/userSlice'
+import { editCoupon, getCouponForPost } from '../../../redux/slice/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
 function EditCoupon() {
@@ -17,18 +17,20 @@ function EditCoupon() {
     const [description, setDescription] = useState();
     const [discount, setDiscount] = useState();
     const [discount_type, setDiscountType] = useState();
-    const [general, setGeneral] = useState();
+    const [general, setGeneral] = useState(0);
     const [expires, setExpires] = useState();
 
     const [alert, setAlert] = useState([]);
 
-    const coupon = useSelector((state) => state.user.viewCoupon);
+    const couponError = useSelector((state) => state.user);
+    // setAlert(couponError)
+    console.log(couponError, 'from editcopoun')
     // console.log(coupon,'for edit')
     useEffect(() => {
         const id = param.id;
-        dispatch(getForPost(id))
+        dispatch(getCouponForPost(id))
             .then((action) => {
-                console.log(action.payload, 'i get from')
+                // console.log(action.payload, 'i get from')
                 setCode(action.payload.code);
                 setDescription(action.payload.description);
                 setDiscount(action.payload.discount);
@@ -37,19 +39,42 @@ function EditCoupon() {
                 setExpires(action.payload.expires_at)
             })
     }, [dispatch]);
-    const formData = new FormData();
-    formData.append('code', code);
-    formData.append('description', description);
-    formData.append('discount', discount);
-    formData.append('discount_type', discount_type);
-    formData.append('general', general);
-    formData.append('expires_at', expires);
+
     // const id = param.id;
 
-    const handleSubmit = (e,formData) => {
+    const handleSubmit = (e) => {
+        const formData = new FormData();
+        formData.append('code', code);
+        formData.append('description', description);
+        formData.append('discount', discount);
+        formData.append('discount_type', discount_type);
+        formData.append('general', general);
+        formData.append('expires_at', expires);
         e.preventDefault();
         const id = param.id;
-        dispatch(editTodo({id, formData}))
+        dispatch(editCoupon({ id, formData }))
+            .then((action) => {
+
+                // console.log('test 58',action.payload)
+                // setAlert(action.payload.response.data.errors)
+                if (action.payload.data.success !== false) {
+                    toast.success(action.payload.data.messages[0])
+                    navigate('/coupons')
+                }
+
+                // if(action.payload.data.response.data.success === false){
+                //     console.log(action.payload.response.data.errors,'error')
+                //     console.log(action.payload.response.data.errors)
+                // setAlert(action.payload.response.data.errors)
+                // }
+            })
+
+        // setAlert(error)
+        // document.querySelector('#alert-message').style.display = 'block';
+        // setTimeout(() => {
+        //     document.querySelector('#alert-message').style.display = 'none';
+        // }, 3000);
+
         // api.post(`/coupons/${id}`, formData)
         //     .then((res) => {
         //         if (res.status !== false) {
@@ -64,6 +89,14 @@ function EditCoupon() {
         //         }, 3000);
         //     })
     }
+    // genearl
+
+    const handleGeneralChange = (e) => {
+        const isChecked = e.target.checked;
+        const value = isChecked ? 1 : 0;
+        setGeneral(value);
+    };
+
     return (
         <div className='wrapper'>
             <Navbar />
@@ -71,22 +104,27 @@ function EditCoupon() {
             <div className="content-wrapper">
                 <section className="content-header">
                     <div className="container-fluid">
+                        <div className='alert alert-danger' id='alert-message'>
+
+
+                            {/* {
+                                alert.map((err, index) => {
+                                    return (
+                                        <div className='valid'>
+                                            <p className='valid-p alert-danger' key={index}>{err}</p>
+                                        </div>
+                                    )
+                                })
+                            } */}
+
+
+                        </div>
                         <div className="row mb-2">
                             <div className="col-sm-6">
                                 <h1 className='pl-1'>Edit Coupon</h1>
                             </div>
 
-                            <div className='alert alert-danger' id='alert-message'>
-                                {
-                                    alert.map((err, index) => {
-                                        return (
-                                            <div className='valid'>
-                                                <p className='valid-p alert-danger' key={index}>{err}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
+
 
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
@@ -127,17 +165,22 @@ function EditCoupon() {
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
+                                                {/* <label>Discount Type</label>
+                                                <input type="text" className="form-control" value={discount_type} onChange={(e) => setDiscountType(e.target.value)} /> */}
                                                 <label>Discount Type</label>
-                                                <input type="text" className="form-control" value={discount_type} onChange={(e) => setDiscountType(e.target.value)} />
+                                                <div className='select'>
+                                                    <select class="form-select" name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
+                                                        <option value='' >Select an option</option>
+                                                        <option value="Fixed">Fixed</option>
+                                                        <option value="Percantage">Percantage</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className='col-sm-1'>
                                             <div className="form-group">
-                                                <label for="inputState">General</label>
-                                                <select className='form-control' id="inputState" value={general} onChange={(e) => setGeneral(e.target.value)}>
-                                                    <option value="0">0</option>
-                                                    <option value="1">1</option>
-                                                </select>
+                                                <label>General</label>
+                                                <input type='checkbox' checked={general} name='general' onChange={handleGeneralChange} />
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>

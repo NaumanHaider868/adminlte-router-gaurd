@@ -3,44 +3,45 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
-import { fetchTodos, deleteTodo } from '../../../redux/slice/userSlice'
+import { fetchCoupons, deleteCoupon, searchCoupon } from '../../../redux/slice/userSlice'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
 
 function Coupons() {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    // const [totalPage, setTotalPage] = useState();
     const [totalCoupons, setTotalCoupons] = useState()
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
     const coupon = useSelector((state) => state.user.coupon?.data?.coupons?.data || []);
     const totalPage = useSelector((state) => state.user.coupon?.data?.coupons?.total || state.user.coupon?.data?.coupons?.total);
 
+    const searchData = useSelector((state) => state.user.coupon)
+    console.log(searchData)
     useEffect(() => {
         getCoupon()
     }, []);
-    
+
     const getCoupon = () => {
-        dispatch(fetchTodos());
+        dispatch(fetchCoupons());
     }
 
     const handleChange = (page) => {
         setPage(page)
-        dispatch(fetchTodos(page))
+        dispatch(fetchCoupons(page))
     }
-    
+
     const editCoupon = (id) => {
         navigate('/editcoupon/' + id)
     }
 
-    const deleteCoupon = (id, page) => {
-        dispatch(deleteTodo(id))
+    const handleDelete = (id, page) => {
+        dispatch(deleteCoupon(id))
             .then((action) => {
                 getCoupon()
                 toast.success(action.payload.messages[0]);
@@ -55,21 +56,19 @@ function Coupons() {
 
     const getSearch = (e) => {
         e.preventDefault();
-        api.get(`/coupons?keyword=${search}`)
-            .then((res) => {
-                console.log(res, 'search coupons')
-                // setCoupon(res.data.data.coupons.data);
-                // setTotalPage(res.data.data.coupons.total);
-                setTotalCoupons(res.data.data.coupons);
-            })
+        dispatch(searchCoupon(search))
+        // api.get(`/coupons?keyword=${search}`)
+        //     .then((res) => {
+        //         console.log(res, 'search coupons')
+        //         // setCoupon(res.data.data.coupons.data);
+        //         // setTotalPage(res.data.data.coupons.total);
+        //         setTotalCoupons(res.data.data.coupons);
+        //     })
     }
     const closeSearch = (e) => {
         // e.preventDefault();
-        api.get(`/coupons?keyword=${[]}`)
-            .then((res) => {
-                // setCoupon(res.data.data.coupons.data)
-                // setTotalPage(res.data.data.coupons.total)
-            }).finally(() => {
+        dispatch(fetchCoupons())
+            .finally(() => {
                 setSearch('');
             });
     }
@@ -131,7 +130,7 @@ function Coupons() {
                                                                 <td>{item.discount_type}</td>
                                                                 <td>{item.general}</td>
                                                                 <td>
-                                                                    <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
+                                                                    <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => handleDelete(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
                                                                 </td>
                                                             </tr>
                                                         )

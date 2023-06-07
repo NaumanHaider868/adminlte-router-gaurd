@@ -4,7 +4,7 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
-import { viewTodo } from '../../../redux/slice/userSlice'
+import { viewCoupon } from '../../../redux/slice/userSlice'
 import { useNavigate, useParams, Link} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -16,7 +16,7 @@ function ViewCoupon() {
 
     useEffect(() => {
         const id = param.id;
-        dispatch(viewTodo(id))
+        dispatch(viewCoupon(id))
         
     }, [])
     return (

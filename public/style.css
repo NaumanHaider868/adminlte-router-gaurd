@@ -10,7 +10,7 @@
     color: #fff;
 }
 
-/* #alert-message{
+#alert-message{
     display: none;
     width: "100%";
     margin-top: -12px;
@@ -25,9 +25,9 @@
 .valid-p{
     margin-left: 20px;
     margin-bottom: 0px;
-}    */
+}   
 
-.valid {
+/* .valid {
     display: none;
     background-color: yellow;
     padding: 10px;
@@ -37,4 +37,12 @@
   .valid-p {
     margin: 0;
     color: red;
+  } */
+
+
+  .select .form-select:focus{
+    box-shadow: none;
+  }
+  .form-group .form-control:focus{
+    box-shadow: none;
   }

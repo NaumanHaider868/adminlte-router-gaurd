@@ -35,7 +35,7 @@ function AdminProfile() {
             setPhone(res.data.data.usermeta.phone);
             setPhoto(res.data.data.usermeta.image)
             setPassword(res.data.data.usermeta.password)
-            console.log(res.data.data.usermeta.password, 'profile password')
+            // console.log(res.data.data.usermeta.password, 'profile password')
             // setUserMeta(res.data.data.usermeta)
             console.log(res, 'profile')
         }).catch((error) => {

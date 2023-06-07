@@ -5,7 +5,7 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import { postTodo } from '../../../redux/slice/userSlice'
+import { postCoupon } from '../../../redux/slice/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,7 +16,7 @@ function AddCoupon() {
     const [description, setDescription] = useState();
     const [discount, setDiscount] = useState();
     const [discount_type, setDiscountType] = useState();
-    const [general, setGeneral] = useState();
+    const [general, setGeneral] = useState(false);
     const [expires_at, setExpires] = useState('');
 
     const [alert, setAlert] = useState([])
@@ -31,22 +31,42 @@ function AddCoupon() {
             expires_at: expires_at
         }
         e.preventDefault();
-        dispatch(postTodo(payload))
+        dispatch(postCoupon(payload))
             .then((action) => {
-                // if (action.data.data.success !== false) {
-                //     navigate('/coupons');
-                // }
-                navigate('/coupons')
-                // console.log(action)
+                if (action.payload.success !== false) {
+                    navigate('/coupons');
+                } else {
+                    console.log(action.error.message)
+                }
+
             })
-            // .catch((error) => {
-            //     setAlert(error.response.data.errors)
-            //     document.querySelector('#alert-message').style.display = 'block';
-            //     setTimeout(() => {
-            //         document.querySelector('#alert-message').style.display = 'none';
-            //     }, 3000);
-            // })
+        // .catch((error) => {
+        //     setAlert(error.response.data.errors)
+        //     document.querySelector('#alert-message').style.display = 'block';
+        //     setTimeout(() => {
+        //         document.querySelector('#alert-message').style.display = 'none';
+        //     }, 3000);
+        // })
     }
+    // const formatDate = (inputDate) => {
+    //     const dateParts = inputDate.split('-');
+    //     const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    //     return formattedDate;
+    //   };
+    // for date
+    const handleDateChange = (e) => {
+        const inputDate = e.target.value;
+        const dateParts = inputDate.split('-');
+        const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
+        setExpires(formattedDate);
+      };
+
+    // for general
+
+    const handleGeneralChange = (e) => {
+        const isChecked = e.target.checked;
+        setGeneral(isChecked);
+      };
     return (
         <div className='wrapper'>
             <Navbar />
@@ -110,27 +130,38 @@ function AddCoupon() {
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label for="cars">Discount Type</label>
+                                            {/* <div className="form-group">
+                                                <label>Discount Type</label>
                                                 <select className='form-control' name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
                                                     <option value="Fixed">Fixed</option>
                                                     <option value="Percantage">Percantage</option>
                                                 </select>
+                                            </div> */}
+                                            <div className="form-group ">
+                                                <label>Discount Type</label>
+                                                <div className='select'>
+                                                    <select class="form-select" aria-label="Default select example" name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
+                                                        <option selected>Select Discount Type</option>
+                                                        <option value="Fixed">Fixed</option>
+                                                        <option value="Percantage">Percantage</option>
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
-                                                <label for="cars">General</label>
-                                                <select className='form-control' name={general} onChange={(e) => setGeneral(e.target.value)}>
+                                                <label for="cars">General</label><br />
+                                                {/* <select className='form-control' name={general} onChange={(e) => setGeneral(e.target.value)}>
                                                     <option value="0">0</option>
                                                     <option value="1">1</option>
-                                                </select>
+                                                </select> */}
+                                                <input type='checkbox' name={general} onChange={handleGeneralChange} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Expires</label>
-                                                <input type="text" className="form-control" name={expires_at} onChange={(e) => setExpires(e.target.value)} />
+                                                <input type="date" className="form-control" name={expires_at} onChange={handleDateChange} />
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>

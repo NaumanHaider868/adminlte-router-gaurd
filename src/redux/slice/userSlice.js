@@ -1,109 +1,124 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from '../../pages/services/ApiUrl'
+import api from '../../pages/services/ApiUrl';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // i call fetch coupon api
-export const fetchTodos = createAsyncThunk('fetchTodos', async (page) => {
+export const fetchCoupons = createAsyncThunk('fetchCoupons', async (page) => {
     const response = await api.get(`/coupons?page=${page}`);
     return response.data;
 });
 
 // i call delete coupon Api
-export const deleteTodo = createAsyncThunk('deleteTodo', async (id) => {
+export const deleteCoupon = createAsyncThunk('deleteCoupon', async (id) => {
     const response = await api.delete(`/coupons/${id}`);
     return response.data;
 });
 
 // i call view coupon Api
-export const viewTodo = createAsyncThunk('viewTodo', async (id) => {
+export const viewCoupon = createAsyncThunk('viewCoupon', async (id) => {
     const response = await api.get(`/coupons/${id}`);
-    return response.data;
+    // console.log(response.data.data.coupon, 'view coupon')
+    return response.data.data.coupon;
 
 });
 
 // i call add coupon api
-export const postTodo = createAsyncThunk('postTodo', async (payload) => {
-    const response = await api.post(`/coupons`, payload);
-    return response.data.data.coupon;
-
+export const postCoupon = createAsyncThunk('postCoupon', async (payload) => {
+    try {
+        const response = await api.post(`/coupons`, payload);
+        return response.data;
+    } catch (error) {
+        throw Error(error.response.data.errors);
+    }
 });
 
 // get coupon for editgetForPost
-export const getForPost = createAsyncThunk('getForPost', async (id) => {
+export const getCouponForPost = createAsyncThunk('getCouponForPost', async (id) => {
     const response = await api.get(`/coupons/${id}`);
     return response.data.data.coupon;
 });
 
-// post coupon after edit
-// export const editTodo = createAsyncThunk('editTodo', async (id,formData) => {
-//     // const { id, formData } = payload
-//     const response = await api.post(`/coupons/${id}`, formData);
-//     return response.data.data.coupon;
-
-// });
-
-export const editTodo = createAsyncThunk('editTodo', async ({id,formData}) => {
-    console.log(id,'post id')
-    const response = await api.post(`/coupons/${id}`, formData);
-    return response.data;
+export const editCoupon = createAsyncThunk('editCoupon', async ({ id, formData }) => {
+    try {
+        const response = await api.post(`/coupons/${id}`, formData);
+        // console.log(response,'edit from slice')
+        return response;
+    } catch (error) {
+        console.log(error)
+        return error.response.data.errors
+    }
 });
+
+// for search coupon
+export const searchCoupon = createAsyncThunk('searchCoupon', async (search) => {
+    const response = await api.get(`/coupons?keyword=${search}`);
+    console.log(response.data.data.coupons.data, 'search coupons')
+    return response.data.data.coupons.data;
+});
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        data: null,
+        // data: [], // Initialize as an empty array
         coupon: [],
-        viewCoupon: []
-
+        // viewCoupon: [],
+        error: [],
     },
     reducers: {},
     extraReducers: (builder) => {
         // getCoupons
-        builder.addCase(fetchTodos.fulfilled, (state, action) => {
-            console.log(action.payload, 'addcase');
-            state.data = action.payload;
-            state.coupon = action.payload // Set the coupon state with the incoming data
-        })
+        builder.addCase(fetchCoupons.fulfilled, (state, action) => {
+            // console.log(action.payload, 'addcase');
+            // state.data = action.payload;
+            state.coupon = action.payload; // Set the coupon state with the incoming data
+        });
 
         // Delete Coupon
-
-        builder.addCase(deleteTodo.fulfilled, (state, action) => {
-            console.log(action.payload.messages, 'deletecase');
-            state.data = action.payload;
-        })
+        builder.addCase(deleteCoupon.fulfilled, (state, action) => {
+            // console.log(action.payload.messages, 'deletecase');
+            state.coupon = action.payload;
+        });
 
         // view Coupon
-        builder.addCase(viewTodo.fulfilled, (state, action) => {
-            state.coupon = action.payload
-        })
-
+        builder.addCase(viewCoupon.fulfilled, (state, action) => {
+            state.coupon = action.payload;
+        });
 
         // add coupon
-        builder.addCase(postTodo.fulfilled, (state, action) => {
-            state.data.push(action.payload)
+        builder.addCase(postCoupon.fulfilled, (state, action) => {
+            state.coupon.push(action.payload);
             // console.log(action.payload, 'post in coupon')
-        })
+        });
 
         // get for edit coupon
-
-        builder.addCase(getForPost.fulfilled, (state, action) => {
+        builder.addCase(getCouponForPost.fulfilled, (state, action) => {
             const couponData = action.payload;
-            state.viewCoupon = couponData;
-            // console.log(state.viewCoupon, 'post coupon')
+            state.coupon = couponData;
+            // console.log(state.viewCoupon, 'getpost coupon')
         });
 
-        // update coupon
-        // builder.addCase(editTodo.fulfilled, (state, action) => {
-        //     state.data.push(action.payload)
-        //     console.log(action, 'edit coupon')
-        // })
-
-        builder.addCase(editTodo.fulfilled, (state, action) => {
+        builder.addCase(editCoupon.fulfilled, (state, action) => {
             const postedData = action.payload;
-            console.log(postedData, 'posted data');
+            state.coupon = postedData;
+            // console.log(action, 'posted data from coupon edit slice');
+        });
+
+        builder.addCase(editCoupon.rejected, (state, action) => {
+            const errorResponse = action.payload;
+            state.error = errorResponse;
+            console.log(errorResponse, 'posted data from coupon edit error');
+        });
+
+        // search api
+
+        builder.addCase(searchCoupon.fulfilled, (state, action) => {
+            const searchData = action.payload;
+            state.coupon = searchData;
+            console.log(searchData, 'search data from slice');
         });
     }
-    
+
 })
 
 export default userSlice.reducer

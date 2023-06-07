@@ -32,7 +32,7 @@ function SideBar() {
             }
         })
         .then((res)=>{
-            console.log(res.data.data.usermeta.image,'sidebarimage')
+            // console.log(res.data.data.usermeta.image,'sidebarimage')
             // console.log
             setUserName(res.data.data.user.username)
             setImage(res.data.data.usermeta.image)
