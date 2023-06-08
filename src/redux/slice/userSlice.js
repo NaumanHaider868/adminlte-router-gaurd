@@ -1,11 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import api from '../../pages/services/ApiUrl';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 // i call fetch coupon api
 export const fetchCoupons = createAsyncThunk('fetchCoupons', async (page) => {
-    const response = await api.get(`/coupons?page=${page}`);
+    const response = await api.get(`/coupons?page=${page}`)
     return response.data;
 });
 
@@ -51,11 +49,17 @@ export const editCoupon = createAsyncThunk('editCoupon', async ({ id, formData }
 });
 
 // for search coupon
-export const searchCoupon = createAsyncThunk('searchCoupon', async (search) => {
-    const response = await api.get(`/coupons?keyword=${search}`);
-    console.log(response.data.data.coupons.data, 'search coupons')
-    return response.data.data.coupons.data;
+export const searchCoupon = createAsyncThunk('searchCoupon', async ({ search }) => {
+    try {
+        const response = await api.get(`/coupons?keyword=${search}`);
+        console.log(response.data, 'search coupons');
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 });
+
 
 const userSlice = createSlice({
     name: 'user',
@@ -72,6 +76,7 @@ const userSlice = createSlice({
             // console.log(action.payload, 'addcase');
             // state.data = action.payload;
             state.coupon = action.payload; // Set the coupon state with the incoming data
+            state.total = action.payload.total
         });
 
         // Delete Coupon
@@ -117,6 +122,10 @@ const userSlice = createSlice({
             state.coupon = searchData;
             console.log(searchData, 'search data from slice');
         });
+
+        builder.addCase(searchCoupon.rejected, (state, action) => {
+            state.error = action.error;
+          });
     }
 
 })

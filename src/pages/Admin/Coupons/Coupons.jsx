@@ -15,13 +15,15 @@ import { useDispatch, useSelector } from 'react-redux'
 function Coupons() {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    const [totalCoupons, setTotalCoupons] = useState()
+    // const [totalPage, setotalPage] = settotalPage()
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
     const coupon = useSelector((state) => state.user.coupon?.data?.coupons?.data || []);
-    const totalPage = useSelector((state) => state.user.coupon?.data?.coupons?.total || state.user.coupon?.data?.coupons?.total);
+    // const totalPage = useSelector((state) => state.user.coupon?.data?.coupons?.total || state.user.coupon?.data?.coupons?.total);
+    const totalPage = useSelector((state) => state.user);
+    
 
-    const searchData = useSelector((state) => state.user.coupon)
+    const searchData = useSelector((state) => state.user)
     console.log(searchData)
     useEffect(() => {
         getCoupon()
@@ -30,6 +32,14 @@ function Coupons() {
     const getCoupon = () => {
         dispatch(fetchCoupons());
     }
+
+    
+
+    // const closeSearch = () => {
+    //     setSearch('')
+    //     setPage(1)
+    //     dispatch(fetchCoupons({ page: 1, search: "" }))
+    // };
 
     const handleChange = (page) => {
         setPage(page)
@@ -54,19 +64,11 @@ function Coupons() {
         navigate('/viewcoupon/' + id)
     }
 
-    const getSearch = (e) => {
+    const getSearch = (e,search) => {
         e.preventDefault();
         dispatch(searchCoupon(search))
-        // api.get(`/coupons?keyword=${search}`)
-        //     .then((res) => {
-        //         console.log(res, 'search coupons')
-        //         // setCoupon(res.data.data.coupons.data);
-        //         // setTotalPage(res.data.data.coupons.total);
-        //         setTotalCoupons(res.data.data.coupons);
-        //     })
     }
     const closeSearch = (e) => {
-        // e.preventDefault();
         dispatch(fetchCoupons())
             .finally(() => {
                 setSearch('');
@@ -137,7 +139,7 @@ function Coupons() {
                                                     })}
                                                 </tbody>
                                             </table>
-                                            {totalCoupons && totalCoupons.total <= 10 ?
+                                            {totalPage && totalPage.total <= 10 ?
                                                 '' :
                                                 <PaginationControl
                                                     page={page}
