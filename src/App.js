@@ -55,25 +55,25 @@ function App() {
       <ToastContainer />
       <Router>
         <Routes>
-          <Route path='/' element={<Protucted Component={Login} />} />
+          <Route path='/' element={<Login />} />
           <Route path='/register' element={<Protucted Component={Register} />} />
           <Route path='/dashboard' element={<Protucted Component={Dashborad} />} />
-          <Route path="/forgetpassword" element={<Protucted Component={ForgetPassword}/>} />
+          <Route path="/forgetpassword" element={<Protucted Component={ForgetPassword} />} />
 
-          <Route path="/categorie" element={<Protucted Component={Categorie}/>} />
-          <Route path="/item" element={<Protucted Component={Items}/>} />
-          <Route path="/addcategories" element={<Protucted Component={AddCategories}/>} />
-          <Route path="/additems" element={<Protucted Component={AddItems}/>} />
+          <Route path="/categorie" element={<Protucted Component={Categorie} />} />
+          <Route path="/item" element={<Protucted Component={Items} />} />
+          <Route path="/addcategories" element={<Protucted Component={AddCategories} />} />
+          <Route path="/additems" element={<Protucted Component={AddItems} />} />
 
 
 
           <Route path="/admin" element={<Protucted Component={Admin} />} />
-          <Route path="/viewcategories" element={<Protucted Component={ViewCategories}  />} />
+          <Route path="/viewcategories" element={<Protucted Component={ViewCategories} />} />
           <Route path="/addcategorie" element={<Protucted Component={AddCategorie} />} />
           <Route path="/viewitems" element={<Protucted Component={ViewItems} />} />
           <Route path='/additem' element={<Protucted Component={AddItem} />} />
-          <Route path="/profile" element={<Protucted Component={AdminProfile}/>} />
-          <Route path="/editprofile" element={<Protucted Component={EditAdminProfile}/>} />
+          <Route path="/profile" element={<Protucted Component={AdminProfile} />} />
+          <Route path="/editprofile" element={<Protucted Component={EditAdminProfile} />} />
 
           <Route path="/orders" element={<Protucted Component={Orders} />} />
           <Route path="/editorder/:id" element={<Protucted Component={EditOrder} />} />
@@ -85,13 +85,12 @@ function App() {
           <Route path='/addshop' element={<Protucted Component={AddShop} />} />
           <Route path='/viewshop/:id' element={<Protucted Component={ViewShop} />} />
           <Route path='/shoporder/:id' element={<Protucted Component={ShopOrder} />} />
-          <Route path='/viewshoporder/:id/:id1' element={<Protucted Component={ViewShopOrder}/>} />
-          <Route path='/editshoporder/:id/:id1' element={<Protucted Component={EditShopOrder}/>} />
+          <Route path='/viewshoporder/:id/:id1' element={<Protucted Component={ViewShopOrder} />} />
+          <Route path='/editshoporder/:id/:id1' element={<Protucted Component={EditShopOrder} />} />
 
-          
 
           <Route path='/owner' element={<Protucted Component={Owner} />} />
-          <Route path='/editowner/:id' element={<Protucted Component={EditOwner} />}/>
+          <Route path='/editowner/:id' element={<Protucted Component={EditOwner} />} />
           <Route path='/viewowner/:id' element={<Protucted Component={ViewOwner} />} />
           <Route path='/addowner' element={<Protucted Component={AddOwner} />} />
 

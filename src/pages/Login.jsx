@@ -146,14 +146,7 @@ function Login() {
                                         Login
                                     </button>
                                 }
-                                {/* <button className="btn btn-primary btn-block" onClick={submit}>
-                                    <ClipLoader
-                                        loading={loading}
-                                        size={150}
-                                        aria-label="Loading Spinner"
-                                        data-testid="loader"
-                                    /> Login
-                                </button> */}
+                                
                             </div>
                         </div>
 

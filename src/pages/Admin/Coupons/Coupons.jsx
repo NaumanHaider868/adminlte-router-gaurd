@@ -3,7 +3,7 @@ import Navbar from '../../../componets/Navbar'
 import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
-import { fetchCoupons, deleteCoupon, searchCoupon } from '../../../redux/slice/userSlice'
+import { fetchCoupons, deleteCoupon, searchCoupon, handleCloseSearch } from '../../../redux/slice/userSlice'
 import { useState, useEffect } from 'react'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import { useNavigate, Link } from 'react-router-dom'
@@ -15,61 +15,68 @@ import { useDispatch, useSelector } from 'react-redux'
 function Coupons() {
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-    // const [totalPage, setotalPage] = settotalPage()
+    const [coupon, setCoupon] = useState([])
+    const [totalCoupons, setTotalCoupons] = useState();
+    const [totalPage, setTotalPage] = useState()
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
-    const coupon = useSelector((state) => state.user.coupon?.data?.coupons?.data || []);
-    // const totalPage = useSelector((state) => state.user.coupon?.data?.coupons?.total || state.user.coupon?.data?.coupons?.total);
-    const totalPage = useSelector((state) => state.user);
-    
 
-    const searchData = useSelector((state) => state.user)
-    console.log(searchData)
     useEffect(() => {
         getCoupon()
     }, []);
 
     const getCoupon = () => {
-        dispatch(fetchCoupons());
+        dispatch(fetchCoupons())
+            .then((action) => {
+                setCoupon(action.payload.data.coupons.data)
+                setTotalPage(action.payload.data.coupons.total)
+                setTotalCoupons(action.payload.data.coupons)
+            })
     }
 
-    
-
-    // const closeSearch = () => {
-    //     setSearch('')
-    //     setPage(1)
-    //     dispatch(fetchCoupons({ page: 1, search: "" }))
-    // };
 
     const handleChange = (page) => {
         setPage(page)
         dispatch(fetchCoupons(page))
+            .then((action) => {
+                // console.log(action,'page change')
+                setCoupon(action.payload.data.coupons.data)
+            })
     }
 
     const editCoupon = (id) => {
         navigate('/editcoupon/' + id)
     }
 
-    const handleDelete = (id, page) => {
+    const handleDelete = (id) => {
         dispatch(deleteCoupon(id))
             .then((action) => {
                 getCoupon()
                 toast.success(action.payload.messages[0]);
             })
-            .catch((error) => {
-                // Handle error if necessary
-            });
     }
     const ViewCoupon = (id) => {
         navigate('/viewcoupon/' + id)
     }
 
-    const getSearch = (e,search) => {
+    const getSearch = (e) => {
         e.preventDefault();
         dispatch(searchCoupon(search))
+            .then((action) => {
+                // console.log(action.payload.data.data.coupons)
+                setCoupon(action.payload.data.data.coupons.data)
+                setTotalCoupons(action.payload.data.data.coupons)
+                setTotalPage(action.payload.data.data.coupons.total)
+            })
     }
     const closeSearch = (e) => {
-        dispatch(fetchCoupons())
+        dispatch(handleCloseSearch())
+            .then((action) => {
+                setCoupon(action.payload.data.data.coupons.data)
+                setPage(1)
+                setTotalCoupons(action.payload.data.data.coupons)
+                setTotalPage(action.payload.data.data.coupons.total)
+            })
             .finally(() => {
                 setSearch('');
             });
@@ -114,23 +121,33 @@ function Coupons() {
                                             <table className="table" style={{ marginBottom: '30px' }}>
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">Sr.#</th>
-                                                        <th scope="col">Code</th>
-                                                        <th scope="col">Description</th>
-                                                        <th scope="col">Discount Type</th>
-                                                        <th scope="col">General</th>
-                                                        <th className='' scope="col">Action</th>
+                                                        <th>Sr.#</th>
+                                                        <th>Code</th>
+                                                        {/* <th>Description</th> */}
+                                                        <th>Discount</th>
+                                                        <th>Discount Type</th>
+                                                        <th>Expire Date</th>
+                                                        <th>General</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {coupon.map((item, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td>{((page - 1) * 10) + i + 1}</td>
+                                                                <td><b>{((page - 1) * 10) + i + 1}</b></td>
                                                                 <td>{item.code}</td>
-                                                                <td>{item.description}</td>
-                                                                <td>{item.discount_type}</td>
-                                                                <td>{item.general}</td>
+                                                                <td>{item.discount}%</td>
+                                                                {/* <td>{item.description}</td> */}
+                                                                {/* <td><p style={{width:'45px',padding:'1px 2px 1px 1px',borderRadius:'6px',color:'#fff',fontSize:'14px',backgroundColor: item.discount_type === 'Fixed' ? '#46cbe1' : '#38b529'}}>{item.discount_type}</p></td> */}
+                                                                <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.discount_type == "Fixed" ? "#17A2B8" : "#28A745"}` }}>{item.discount_type}</button></td>
+                                                                <td>{new Date(item.expires_at).toLocaleDateString('en-GB', {
+                                                                    day: '2-digit',
+                                                                    month: '2-digit',
+                                                                    year: '2-digit'
+                                                                }).split('/').join('-')}</td>
+                                                                <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.general === 1 ? "#17A2B8" : "#28A745"}` }}>{item.general === 1 ? 'Yes' : 'No'}</button></td>
+
                                                                 <td>
                                                                     <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => handleDelete(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
                                                                 </td>
@@ -139,7 +156,7 @@ function Coupons() {
                                                     })}
                                                 </tbody>
                                             </table>
-                                            {totalPage && totalPage.total <= 10 ?
+                                            {totalCoupons && totalCoupons.total <= 10 ?
                                                 '' :
                                                 <PaginationControl
                                                     page={page}

@@ -4,9 +4,9 @@ import SideBar from './../../../componets/SideBar'
 import Footer from './../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
+import {getCategorie} from '../../../redux/slice/mainCategoriesSlice'
 import { Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
-// import { getAdminCategorie, getAdminCategorieSearch } from '../services/ApiUrl'
 
 function ViewCategories() {
     const [search, setSearch] = useState([])

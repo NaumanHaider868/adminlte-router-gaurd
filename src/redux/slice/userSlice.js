@@ -27,7 +27,8 @@ export const postCoupon = createAsyncThunk('postCoupon', async (payload) => {
         const response = await api.post(`/coupons`, payload);
         return response.data;
     } catch (error) {
-        throw Error(error.response.data.errors);
+        // console.log(error.response.data.errors);
+        return error.response.data.errors
     }
 });
 
@@ -43,89 +44,93 @@ export const editCoupon = createAsyncThunk('editCoupon', async ({ id, formData }
         // console.log(response,'edit from slice')
         return response;
     } catch (error) {
-        console.log(error)
+        // console.log(error.response.data.errors, 'error')
         return error.response.data.errors
     }
 });
 
 // for search coupon
-export const searchCoupon = createAsyncThunk('searchCoupon', async ({ search }) => {
-    try {
-        const response = await api.get(`/coupons?keyword=${search}`);
-        console.log(response.data, 'search coupons');
-        return response.data;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-});
+
+export const searchCoupon = createAsyncThunk('searchCoupon', async (search) => {
+    const response = await api.get(`/coupons?keyword=${search}`);
+    return response
+})
+
+export const handleCloseSearch = createAsyncThunk('handleCloseSearch', async () => {
+    const response = await api.get(`/coupons?keyword=${[]}`);
+    return response
+})
 
 
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        // data: [], // Initialize as an empty array
         coupon: [],
-        // viewCoupon: [],
-        error: [],
+        error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
         // getCoupons
         builder.addCase(fetchCoupons.fulfilled, (state, action) => {
-            // console.log(action.payload, 'addcase');
-            // state.data = action.payload;
-            state.coupon = action.payload; // Set the coupon state with the incoming data
+            state.error = null;
+            state.coupon = action.payload;
             state.total = action.payload.total
         });
 
         // Delete Coupon
         builder.addCase(deleteCoupon.fulfilled, (state, action) => {
-            // console.log(action.payload.messages, 'deletecase');
+            state.error = null;
             state.coupon = action.payload;
         });
 
         // view Coupon
         builder.addCase(viewCoupon.fulfilled, (state, action) => {
+            state.error = null;
             state.coupon = action.payload;
         });
 
         // add coupon
         builder.addCase(postCoupon.fulfilled, (state, action) => {
-            state.coupon.push(action.payload);
-            // console.log(action.payload, 'post in coupon')
+            state.error = null;
+            state.coupon = action.payload
         });
+
+        builder.addCase(postCoupon.rejected, (state,action)=>{
+            state.coupon = null;
+            state.error = action.payload
+        })
 
         // get for edit coupon
         builder.addCase(getCouponForPost.fulfilled, (state, action) => {
+            state.error = null;
             const couponData = action.payload;
             state.coupon = couponData;
-            // console.log(state.viewCoupon, 'getpost coupon')
         });
 
         builder.addCase(editCoupon.fulfilled, (state, action) => {
+            state.error = null;
             const postedData = action.payload;
             state.coupon = postedData;
-            // console.log(action, 'posted data from coupon edit slice');
         });
 
         builder.addCase(editCoupon.rejected, (state, action) => {
+            state.coupon = null;
             const errorResponse = action.payload;
             state.error = errorResponse;
-            console.log(errorResponse, 'posted data from coupon edit error');
+            // console.log(state.error,'state.error')
         });
 
         // search api
 
         builder.addCase(searchCoupon.fulfilled, (state, action) => {
-            const searchData = action.payload;
-            state.coupon = searchData;
-            console.log(searchData, 'search data from slice');
-        });
+            state.item = action.payload
+            state.error = null
+        })
 
-        builder.addCase(searchCoupon.rejected, (state, action) => {
-            state.error = action.error;
-          });
+        builder.addCase(handleCloseSearch.fulfilled, (state, action) => {
+            state.item = action.payload
+            state.error = null
+        })
     }
 
 })

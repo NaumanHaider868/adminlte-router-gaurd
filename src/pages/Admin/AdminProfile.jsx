@@ -202,7 +202,7 @@ function AdminProfile() {
                                                     <div className="form-group row">
                                                         <label className="col-sm-2 col-form-label">Confirm Password</label>
                                                         <div className="col-sm-10">
-                                                            <input type="text" className="form-control" placeholder="Password" value={confirm_password} name='confirm_password' onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                            <input type="text" className="form-control" placeholder="Confirm Password" value={confirm_password} name='confirm_password' onChange={(e) => setConfirmPassword(e.target.value)} />
                                                         </div>
                                                     </div>
                                                     <div className="form-group row">

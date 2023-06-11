@@ -19,7 +19,9 @@ function AddCoupon() {
     const [general, setGeneral] = useState(false);
     const [expires_at, setExpires] = useState('');
 
-    const [alert, setAlert] = useState([])
+
+    const errors = useSelector((state) => state.user.coupon || []);
+
     const dispatch = useDispatch();
     const handleSubmit = (e) => {
         let payload = {
@@ -33,40 +35,38 @@ function AddCoupon() {
         e.preventDefault();
         dispatch(postCoupon(payload))
             .then((action) => {
-                if (action.payload.success !== false) {
+                console.log(action)
+                if (action.payload && action.payload.success === true) {
                     navigate('/coupons');
-                } else {
-                    console.log(action.error.message)
+                    toast.success(action.payload.messages[0])
+                }
+                if (action && action.payload) {
+                    const data = document.querySelector('#alert-message');
+                    if (data) {
+                        data.style.display = 'block';
+                        setTimeout(() => {
+                            data.style.display = 'none'
+                        }, 3000)
+                    }
                 }
 
             })
-        // .catch((error) => {
-        //     setAlert(error.response.data.errors)
-        //     document.querySelector('#alert-message').style.display = 'block';
-        //     setTimeout(() => {
-        //         document.querySelector('#alert-message').style.display = 'none';
-        //     }, 3000);
-        // })
     }
-    // const formatDate = (inputDate) => {
-    //     const dateParts = inputDate.split('-');
-    //     const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-    //     return formattedDate;
-    //   };
+
     // for date
     const handleDateChange = (e) => {
         const inputDate = e.target.value;
         const dateParts = inputDate.split('-');
         const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
         setExpires(formattedDate);
-      };
+    };
 
     // for general
 
     const handleGeneralChange = (e) => {
         const isChecked = e.target.checked;
         setGeneral(isChecked);
-      };
+    };
     return (
         <div className='wrapper'>
             <Navbar />
@@ -95,73 +95,71 @@ function AddCoupon() {
                             </div>
 
                             <div className='alert alert-danger' id='alert-message'>
-                                {
-                                    alert.map((err, index) => {
-                                        return (
-                                            <div className='valid'>
-                                                <p className='valid-p alert-danger' key={index}>{err}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
+                                {errors.length > 0 && (
+                                    errors.map((err, index) => (
+                                        <div className="valid" key={index}>
+                                            <p className="valid-p alert-danger">{err}</p>
+                                        </div>
+                                    ))
+                                )}
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>
                                 <div className="card-body">
                                     <div className='row'>
-                                        <div className='col-sm-6'>
+                                        <div className='col-sm-4'>
                                             <div className="form-group">
                                                 <label>Code</label>
                                                 <input type="text" className="form-control" name={code} onChange={(e) => setCode(e.target.value)} />
                                             </div>
                                         </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Description</label>
-                                                <input type="text" className="form-control" name={description} onChange={(e) => setDescription(e.target.value)} />
-                                            </div>
-                                        </div>
 
 
-                                        <div className='col-sm-6'>
+
+                                        <div className='col-sm-4'>
                                             <div className="form-group">
                                                 <label>Discount</label>
                                                 <input type="text" className='form-control' name={discount} onChange={(e) => setDiscount(e.target.value)} />
                                             </div>
                                         </div>
-                                        <div className='col-sm-6'>
-                                            {/* <div className="form-group">
-                                                <label>Discount Type</label>
-                                                <select className='form-control' name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
-                                                    <option value="Fixed">Fixed</option>
-                                                    <option value="Percantage">Percantage</option>
-                                                </select>
-                                            </div> */}
+                                        <div className='col-sm-4'></div>
+
+                                        <div className='col-sm-4'>
                                             <div className="form-group ">
                                                 <label>Discount Type</label>
                                                 <div className='select'>
                                                     <select class="form-select" aria-label="Default select example" name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
                                                         <option selected>Select Discount Type</option>
                                                         <option value="Fixed">Fixed</option>
-                                                        <option value="Percantage">Percantage</option>
+                                                        <option value="Percentage">Percentage</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label for="cars">General</label><br />
-                                                {/* <select className='form-control' name={general} onChange={(e) => setGeneral(e.target.value)}>
-                                                    <option value="0">0</option>
-                                                    <option value="1">1</option>
-                                                </select> */}
-                                                <input type='checkbox' name={general} onChange={handleGeneralChange} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
+
+                                        <div className='col-sm-4'>
                                             <div className="form-group">
                                                 <label>Expires</label>
                                                 <input type="date" className="form-control" name={expires_at} onChange={handleDateChange} />
+                                            </div>
+                                        </div>
+
+                                        <div className='col-sm-4'></div>
+
+                                        <div className='col-sm-4'>
+                                            <div className="form-group">
+                                                <label>Description</label>
+                                                <textarea type="text" className="form-control" name={description} onChange={(e) => setDescription(e.target.value)} />
+                                            </div>
+                                        </div>
+
+                                        <div className='col-sm-4'></div>
+                                        <div className='col-sm-4'></div>
+
+                                        <div className='col-sm-4'>
+                                            <div className="form-group">
+                                                <input type='checkbox' style={{ paddingTop: '4px' }} name={general} onChange={handleGeneralChange} />&nbsp;&nbsp;
+                                                <label for="cars">Active</label><br />
                                             </div>
                                         </div>
                                         <div className="card-footer" style={{ background: '#fff' }}>

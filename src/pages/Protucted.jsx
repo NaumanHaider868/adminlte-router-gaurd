@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from "react";
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Protected = (props) => {
-    const {Component} = props;
+    const { Component } = props;
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const checkUserToken = () => {
@@ -28,9 +28,9 @@ const Protected = (props) => {
 
 
     useEffect(() => {
-            checkExpireToken();
-            checkUserToken();
-        }, [isLoggedIn]);
+        checkExpireToken();
+        checkUserToken();
+    }, [isLoggedIn]);
     return (
         <>
             <Component />

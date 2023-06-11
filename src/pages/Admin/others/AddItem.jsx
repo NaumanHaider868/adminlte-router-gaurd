@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Navbar from './../../../componets/Navbar'
 import SideBar from './../../../componets/SideBar'
 import Footer from './../../../componets/Footer'
@@ -6,10 +6,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../services/ApiUrl'
 
+import { postItem } from '../../../redux/slice/mainItemSlice'
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useDispatch, useSelector } from 'react-redux'
 
 function AddItem() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
@@ -25,16 +29,24 @@ function AddItem() {
 
     const [variation_name, setVariationName] = useState();
     const [variation_price, setVariationPrice] = useState();
+
+    const errors = useSelector((state) => state.items.item.errors || []);
+    console.log("errors", errors)
+    // setAlert(errors)
+    // document.querySelector('#alert-message').style.display = 'block';
+    // setTimeout(() => {
+    //     document.querySelector('#alert-message').style.display = 'none';
+    // }, 3000);
+
     const handleSubmit = (e) => {
+        e.preventDefault();
         let payload = [{
-            // id: variation_id,
-            // item_id: variation_item_id,
             name: variation_name,
             price: variation_price
         }]
 
 
-        e.preventDefault();
+
         const formData = new FormData();
         formData.append('name', name);
         formData.append('price', price);
@@ -48,22 +60,23 @@ function AddItem() {
             formData.append(`variations[${index}][name]`, variation.name);
             formData.append(`variations[${index}][price]`, variation.price);
         });
-        // formData.append('variations', JSON.stringify(payload));
         formData.append('active', active)
 
-        api.post('/items', formData).then((res) => {
-            console.log(res.data);
-            if (res.data.success === true) {
-                navigate('/item')
-            }
-            toast.success(res.data.messages[0])
-        })
-            .catch((error) => {
-                setAlert(error.response.data.errors)
-                document.querySelector('#alert-message').style.display = 'block';
-                setTimeout(() => {
-                    document.querySelector('#alert-message').style.display = 'none';
-                }, 3000);
+        dispatch(postItem(formData))
+            .then((action) => {
+                if (action.payload.data && action.payload.data.success === true) {
+                    navigate('/item')
+                    toast.success(action.payload.data.messages[0])
+                }
+                if (action && action.payload) {
+                    const data = document.querySelector('#alert-message');
+                    if (data) {
+                        data.style.display = 'block';
+                        setTimeout(() => {
+                            data.style.display = 'none'
+                        }, 3000)
+                    }
+                }
             })
     }
     return (
@@ -93,16 +106,14 @@ function AddItem() {
                                 <h3 class="card-title">Quick Example</h3>
                             </div>
 
-                            <div className='alert alert-danger' id='alert-message'>
-                                {
-                                    alert.map((err, index) => {
-                                        return (
-                                            <div className='valid'>
-                                                <p className='valid-p alert-danger' key={index}>{err}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
+                            <div className="alert alert-danger" id="alert-message">
+                                {errors.length > 0 && (
+                                    errors.map((err, index) => (
+                                        <div className="valid" key={index}>
+                                            <p className="valid-p alert-danger">{err}</p>
+                                        </div>
+                                    ))
+                                )}
                             </div>
 
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>

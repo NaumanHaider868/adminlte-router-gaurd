@@ -16,16 +16,17 @@
     margin-top: -12px;
 }
 
-.valid{
+.valid {
     background-color: #DC3545;
     color: #fff;
     padding: 1px;
     padding: 5px 0px;
 }
-.valid-p{
+
+.valid-p {
     margin-left: 20px;
     margin-bottom: 0px;
-}   
+}
 
 /* .valid {
     display: none;
@@ -45,4 +46,8 @@
   }
   .form-group .form-control:focus{
     box-shadow: none;
+  }
+
+  table tbody, table thead{
+    text-align: center;
   }

@@ -6,60 +6,67 @@ import SideBar from './../../../componets/SideBar'
 import Footer from './../../../componets/Footer'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import moment from "moment";
+import { getItem, handlePage, handleSearch, handleCloseSearch } from '../../../redux/slice/mainItemSlice.js'
+import { useDispatch } from 'react-redux'
 
 
 
 function ViewItems() {
+
+    const dispatch = useDispatch();
+
     const [items, setItems] = useState([]);
     const [totalItem, setTotalItem] = useState();
     const [search, setSearch] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
 
+
+
     useEffect(() => {
-        api.get(`https://foodapis.techenablers.info/api/admin/items`, {
-            headers: {
-                Authorization: `Bearer` + localStorage.getItem('token')
-            }
-        }).then((res) => {
-            console.log(res.data.data.items)
-            setItems(res.data.data.items.data)
-            setTotalPage(res.data.data.items.total)
-            setTotalItem(res.data.data.items)
-        })
+        dispatch(getItem())
+            .then((action) => {
+                setItems(action.payload.data.data.items.data)
+                setTotalItem(action.payload.data.data.items)
+                console.log(action.payload.data.data.items, 'total items')
+                setTotalPage(action.payload.data.data.items.total)
+                console.log(action.payload.data.data.items.total, 'total page')
+            })
     }, [])
 
-    const handleChange = (page) => {
-        setPage(page)
-        api.get(`/items?page=${page}`).then((res) => {
-            console.log(res.data.data.items)
-            setItems(res.data.data.items.data)
-        })
-    }
 
-    const getSearch = () => {
-        api.get(`/items?keyword=${search}`)
-            .then((res) => {
-                setItems(res.data.data.items.data)
-                setTotalPage(res.data.data.items.total)
-                setTotalItem(res.data.data.items)
+    const handleChange = (page) => {
+        setPage(page);
+        dispatch(handlePage(page))
+            .then((action) => {
+                setItems(action.payload.data.data.items.data)
             })
     }
 
-    const closeSearch = (e) => {
-        // e.preventDefault();
-        api.get(`/items?keyword=${[]}`)
-            .then((res) => {
-                setItems(res.data.data.items.data)
-                setTotalItem(res.data.data.items)
-                setTotalPage(res.data.data.items.total)
 
+    const getSearch = () => {
+        dispatch(handleSearch(search))
+            .then((action) => {
+                console.log(action, 'search')
+                setItems(action.payload.data.data.items.data)
+                setTotalItem(action.payload.data.data.items)
+                setTotalPage(action.payload.data.data.items.total)
+            })
+    }
+
+
+    const closeSearch = () => {
+        dispatch(handleCloseSearch())
+            .then((action) => {
+                setPage(1)
+                setItems(action.payload.data.data.items.data);
+                setTotalItem(action.payload.data.data.items);
+                setTotalPage(action.payload.data.data.items.total)
             }).finally(() => {
                 setSearch('');
             });
     }
 
-    // const hourMinuteFormat = "HH:mm";
 
     return (
         <div className='wrapper'>
