@@ -6,7 +6,7 @@ import api from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
-
+import ClipLoader from 'react-spinners/ClipLoader';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,7 +22,7 @@ function Orders() {
     const [deliveryMens, setDeliveryMens] = useState([]);
     const [deliveryMen, setDeliveryMen] = useState();
     const [order, setOrder] = useState([]);
-    const [totalOrder,setTotalOrder] = useState()
+    const [totalOrder, setTotalOrder] = useState()
     const handleClose = () => setShow(false);
 
     // Pagination
@@ -32,25 +32,25 @@ function Orders() {
     const [search, setSearch] = useState([]);
 
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        // if (localStorage.getItem('token')) {
-            getOrder()
-        // }
+        getOrder()
     }, [])
     const getOrder = () => {
+        setIsLoading(true)
         api.get(`/orders`)
-        .then((res) => {
-            // console.log('order', res.data.data.orders.data)
-            setOrder(res.data.data.orders.data)
-            setTotalPage(res.data.data.orders.total)
-            setTotalOrder(res.data.data.orders)
-            // setOrder(res.data.data.order)
+            .then((res) => {
+                setOrder(res.data.data.orders.data)
+                setTotalPage(res.data.data.orders.total)
+                setTotalOrder(res.data.data.orders)
 
-        })
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }
     const getSearch = (e) => {
-        // setSearch(e.target.value)
+        setIsLoading(true)
         e.preventDefault();
         api.get(`/orders?keyword=${search}`)
             .then((res) => {
@@ -58,25 +58,30 @@ function Orders() {
                 setOrder(res.data.data.orders.data)
                 setTotalPage(res.data.data.orders.total)
                 setTotalOrder(res.data.data.orders)
-            })
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setIsLoading(true)
+        setSearch('');
+        setPage(1)
         api.get(`/orders?keyword=${[]}`)
             .then((res) => {
                 setOrder(res.data.data.orders.data)
                 setTotalPage(res.data.data.orders.total)
                 setTotalOrder(res.data.data.orders)
             }).finally(() => {
-                setSearch('');
+                
+                setIsLoading(false);
             });
     }
     const handleShow = (id) => {
+        // setIsLoading(true)
         api.get(`/deliverymens`)
             .then((res) => {
                 console.log('deliverymens', res.data.data.deliveryMens.data);
                 setDeliveryMens(res.data.data.deliveryMens.data);
-                // toast.success("Updated Successfully")
             })
         console.log(id)
         setShow(true)
@@ -92,6 +97,7 @@ function Orders() {
     }
 
     const postOrder = () => {
+        setIsLoading(true)
         api.post(`/order/assign`, payload)
             .then((res) => {
                 console.log(res, 'deliver id');
@@ -103,20 +109,23 @@ function Orders() {
                 toast.error(error.response.data.errors[0], {
                     position: 'top-center'
                 })
-            })
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }
 
     const handleChange = (page) => {
+        setIsLoading(true)
         setPage(page);
         api.get(`/orders?page=${page}`)
             .then((res) => {
-                // console.log('order', res.data.data.orders.data)
                 setOrder(res.data.data.orders.data)
                 setTotalPage(res.data.data.orders.total)
                 setTotalOrder(res.data.data.orders)
-                // setOrder(res.data.data.order)
 
-            })
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }
 
 
@@ -172,12 +181,7 @@ function Orders() {
                             <div className="col-sm-6">
                                 <h1>Orders</h1>
                             </div>
-                            {/* <div className="col-sm-6">
-                                <ol className="breadcrumb float-sm-right">
-                                    <Link to='/orders' className="breadcrumb-item"><a href="#">Admin Orders</a></Link>
-                                    <li className="breadcrumb-item active">Orders</li>
-                                </ol>
-                            </div> */}
+
                         </div>
                     </div>
                 </section>
@@ -200,41 +204,50 @@ function Orders() {
                                                 </button>
                                             </div>
                                         </div><br />
-                                        <table className="table" style={{ marginBottom: '30px' }}>
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Sr.#</th>
-                                                    <th scope="col">Date</th>
-                                                    <th scope="col">Customer Name</th>
-                                                    <th scope="col">Location</th>
-                                                    <th scope="col">Amount</th>
-                                                    <th scope="col">status</th>
-                                                    <th className='' scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {order.map((item, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{((page - 1) * 10) + index + 1}</td>
-                                                            <td>1/1/2023</td>
-                                                            <td>{item.username}</td>
-                                                            <td>{item.location}</td>
-                                                            <td>{item.total}</td>
-                                                            <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.status}</button></td>
-                                                            <td>
-                                                                <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>&nbsp;
-                                                                <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>
-                                                                <a onClick={() => handleShow(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}>Assgin</a>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })}
-                                            </tbody>
-                                        </table>
-                                        {totalOrder && totalOrder.total <= 10 ? 
-                                               '' :
-                                                <PaginationControl
+                                        {isLoading ? ( // Show the spinner if isLoading is true
+                                            <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                            </div>
+                                        ) : (
+                                            <table className="table" style={{ marginBottom: '30px' }}>
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Sr.#</th>
+                                                        <th scope="col">Date</th>
+                                                        <th scope="col">Customer Name</th>
+                                                        <th scope="col">Location</th>
+                                                        <th scope="col">Amount</th>
+                                                        <th scope="col">status</th>
+                                                        <th className='' scope="col">Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    {order.map((item, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td><b>{((page - 1) * 10) + index + 1}</b></td>
+                                                                <td>1/1/2023</td>
+                                                                <td>{item.username}</td>
+                                                                <td>{item.location}</td>
+                                                                <td>{item.total}</td>
+                                                                <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.status}</button></td>
+                                                                <td>
+                                                                    <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>&nbsp;
+                                                                    <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>
+                                                                    <a onClick={() => handleShow(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}>Assgin</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
+                                                </tbody>
+
+                                            </table>
+                                        )}
+
+                                        {totalOrder && totalOrder.total <= 10 ?
+                                            '' :
+                                            <PaginationControl
                                                 page={page}
                                                 total={totalPage}
                                                 limit={10}
@@ -244,7 +257,7 @@ function Orders() {
                                                 }}
                                             />
                                             // <h1>Ho</h1>
-                                            }
+                                        }
                                     </div>
 
                                 </div>

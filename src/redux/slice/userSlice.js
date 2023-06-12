@@ -38,9 +38,9 @@ export const getCouponForPost = createAsyncThunk('getCouponForPost', async (id) 
     return response.data.data.coupon;
 });
 
-export const editCoupon = createAsyncThunk('editCoupon', async ({ id, formData }) => {
+export const editCoupon = createAsyncThunk('editCoupon', async ({ id, payload }) => {
     try {
-        const response = await api.post(`/coupons/${id}`, formData);
+        const response = await api.post(`/coupons/${id}`, payload);
         // console.log(response,'edit from slice')
         return response;
     } catch (error) {
@@ -67,14 +67,22 @@ const userSlice = createSlice({
     initialState: {
         coupon: [],
         error: null,
+        // isLoading: false
     },
     reducers: {},
     extraReducers: (builder) => {
         // getCoupons
+
+        // builder.addCase(fetchCoupons.pending, (state, action) => {
+        //     state.error = null;
+        //     state.isLoading = true
+        // });
+
         builder.addCase(fetchCoupons.fulfilled, (state, action) => {
+            // state.isLoading = false;
             state.error = null;
             state.coupon = action.payload;
-            state.total = action.payload.total
+            state.total = action.payload.total;
         });
 
         // Delete Coupon
@@ -95,7 +103,7 @@ const userSlice = createSlice({
             state.coupon = action.payload
         });
 
-        builder.addCase(postCoupon.rejected, (state,action)=>{
+        builder.addCase(postCoupon.rejected, (state, action) => {
             state.coupon = null;
             state.error = action.payload
         })

@@ -5,12 +5,16 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 
 function ViewCustomer() {
     const param = useParams();
-    const [customer, setCustomer] = useState([])
+    const [customer, setCustomer] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/customers/${param.id}`, {
             headers: {
                 Authorization: `Bearer` + localStorage.getItem('token')
@@ -19,6 +23,8 @@ function ViewCustomer() {
             .then((res) => {
                 console.log(res)
                 setCustomer(res.data.data.customer)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     return (
@@ -44,25 +50,32 @@ function ViewCustomer() {
 
                             <>
                                 <p className='para_bold'>Order #300112</p>
-                                <div className='row'>
-                                    <div className='col-md-6'>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                    </div>
+                                ) :
+                                    <div className='row'>
+                                        <div className='col-md-6'>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
 
-                                                <label className='label_1'>Customer Name</label>
-                                                <p className='p_1'>{customer.username}</p>
-                                                <label className='label_1'>First Name</label>
-                                                <p className='p_1'>{customer.first_name}</p>
-                                                <label className='label_1'>Last Name</label>
-                                                <p className='p_1'>{customer.last_name}</p>
-                                                <label className='label_1'>Phone</label>
-                                                {/* <p className='p_1'>{customer.userMeta.phone}</p> */}
+                                                    <label className='label_1'>Customer Name</label>
+                                                    <p className='p_1'>{customer.username}</p>
+                                                    <label className='label_1'>First Name</label>
+                                                    <p className='p_1'>{customer.first_name}</p>
+                                                    <label className='label_1'>Last Name</label>
+                                                    <p className='p_1'>{customer.last_name}</p>
+                                                    <label className='label_1'>Phone</label>
+                                                    {/* <p className='p_1'>{customer.userMeta.phone}</p> */}
+
+                                                </div>
 
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
+                                }
+
                             </>
 
 

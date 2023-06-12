@@ -20,6 +20,8 @@ function AdminProfile() {
     const [password, setPassword] = useState('')
     const [confirm_password, setConfirmPassword] = useState('')
     const [alert, setAlert] = useState([]);
+
+    const image = localStorage.getItem('image')
     useEffect(() => {
         axios.get('https://foodapis.techenablers.info/api/user/profile', {
             headers: {
@@ -27,8 +29,8 @@ function AdminProfile() {
                 "Content-Type": "multipart/form-data",
             }
         }).then((res) => {
-            // setUser(res.data.data.user)
-            setName(res.data.data.user.username);
+            const username = localStorage.getItem('username');
+            setName(username);
             setEmail(res.data.data.user.email);
             setFirstName(res.data.data.user.first_name);
             setLastName(res.data.data.user.last_name)
@@ -69,10 +71,11 @@ function AdminProfile() {
             }
         })
             .then((res) => {
+                console.log(res.data.data.userMeta.image,'post image')
+                localStorage.setItem('image',res.data.data.userMeta.image)
                 toast.success('update.')
             })
             .catch((error) => {
-                // console.log(error.response.data.errors,'profile post')
                 setAlert(error.response.data.errors)
                 document.addEventListener('DOMContentLoaded', function () {
                     const alertMessage = document.querySelector('#alert-message');
@@ -116,7 +119,7 @@ function AdminProfile() {
                                     <div className="card-body box-profile">
                                         <div className="text-center">
                                             <img className="profile-user-img img-fluid img-circle"
-                                                src={photo}
+                                                src={image}
                                                 alt="User profile picture" />
                                         </div>
 

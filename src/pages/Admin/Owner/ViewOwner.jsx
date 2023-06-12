@@ -5,20 +5,25 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function ViewOwner() {
     const [owner, setOwner] = useState([])
     const [phone, setPhone] = useState('');
-    // console.log(phone)
+    const [isLoading, setIsLoading] = useState(false);
+
     const param = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/owners/${param.id}`)
             .then((res) => {
-                console.log(res.data.data);
-                setOwner(res.data.data.shop)
-                setPhone(res.data.data.shop.user_meta.phone)
+                console.log(res.data.data,'shop');
+                setOwner(res.data.data.owner)
+                setPhone(res.data.data.owner.user_meta.phone)
+            }).finally(()=>{
+                setIsLoading(false)
             })
     }, [])
     return (
@@ -44,7 +49,11 @@ function ViewOwner() {
 
                             <>
                                 <p className='para_bold'>Order #300112</p>
-                                <div className='row'>
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                    </div>
+                                ) : <div className='row'>
                                     <div className='col-md-6'>
                                         <div className='row'>
                                             <div className='col-md-6'>
@@ -65,7 +74,8 @@ function ViewOwner() {
                                         </div>
 
                                     </div>
-                                </div>
+                                </div>}
+                                
                             </>
 
 

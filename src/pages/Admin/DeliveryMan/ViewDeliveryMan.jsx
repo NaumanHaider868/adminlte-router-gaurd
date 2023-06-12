@@ -4,21 +4,26 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import { useParams, Link } from 'react-router-dom'
 import api from '../../services/ApiUrl'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 
 function ViewDeliveryMan() {
     const param = useParams();
     const [deliveryman, setDeliveryMen] = useState([]);
     const [delivery_man_meta, setDeliveryMenMeta] = useState()
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/deliverymens/${param.id}`)
             .then((res) => {
-                console.log(res.data.data.delivery_man)
-                setDeliveryMen(res.data.data.delivery_man);
+                console.log(res.data, 'daa')
+                setDeliveryMen(res.data.data.deliveryMens);
                 setDeliveryMenMeta(res.data.data.delivery_man_meta.phone)
+            }).finally(() => {
+                setIsLoading(false)
             })
-    },[])
+    }, [])
     return (
         <div className='wrapper'>
             <Navbar />
@@ -42,25 +47,32 @@ function ViewDeliveryMan() {
 
                             <>
                                 <p className='para_bold'>Order #300112</p>
-                                <div className='row'>
-                                    <div className='col-md-6'>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                    </div>
+                                ) :
+                                    <div className='row'>
+                                        <div className='col-md-6'>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
 
-                                                <label className='label_1'>User Name</label>
-                                                <p className='p_1'>{deliveryman.email}</p>
-                                                <label className='label_1'>First Name</label>
-                                                <p className='p_1'>{deliveryman.first_name}</p>
-                                                <label className='label_1'>Last Name</label>
-                                                <p className='p_1'>{deliveryman.last_name}</p>
-                                                <label className='label_1'>Phone</label>
-                                                <p className='p_1'>{delivery_man_meta}</p>
+                                                    <label className='label_1'>User Name</label>
+                                                    <p className='p_1'>{deliveryman.email}</p>
+                                                    <label className='label_1'>First Name</label>
+                                                    <p className='p_1'>{deliveryman.first_name}</p>
+                                                    <label className='label_1'>Last Name</label>
+                                                    <p className='p_1'>{deliveryman.last_name}</p>
+                                                    <label className='label_1'>Phone</label>
+                                                    <p className='p_1'>{delivery_man_meta}</p>
+
+                                                </div>
 
                                             </div>
-
                                         </div>
                                     </div>
-                                </div>
+                                }
+
                             </>
 
 

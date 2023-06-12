@@ -6,6 +6,7 @@ import api from '../../services/ApiUrl'
 import { useParams, useNavigate } from 'react-router-dom'
 import moment from 'moment'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function ShopOrder() {
     const [page, setPage] = useState(1)
@@ -16,8 +17,10 @@ function ShopOrder() {
     const param = useParams();
     const [showMessage, setShowMessage] = useState(true);
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/shops/${param.id}/orders`)
             .then((res) => {
                 console.log(res.data.data.shopOrderList, 'shop order')
@@ -35,10 +38,13 @@ function ShopOrder() {
                         alertMessage.style.display = 'none';
                     }, 3000);
                 }
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [page])
 
     const handelChange = (page) => {
+        setIsLoading(true)
         setPage(page);
         api.get(`/shops/${param.id}/orders?page=${page}`)
             .then((res) => {
@@ -47,28 +53,33 @@ function ShopOrder() {
                 setTotalPage(res.data.data.shopOrderList.total)
                 // setOrder(res.data.data.order)
 
-            })
+            }).finally(() => {
+                setIsLoading(false)
+            });
     }
 
     const getSearch = (e) => {
-        // setSearch(e.target.value)
+        setIsLoading(true)
         e.preventDefault();
         api.get(`/shops/${param.id}/orders?keyword=${search}`)
             .then((res) => {
                 setTotalPage(res.data.data.shopOrderList.total)
                 setOrders(res.data.data.shopOrderList.data)
-            })
+            }).finally(() => {
+                setIsLoading(false)
+            });
 
     }
 
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setIsLoading(true)
+        setSearch('');
         api.get(`/shops?keyword=${[]}`)
             .then((res) => {
                 setTotalPage(res.data.data.shopOrderList.total)
                 setOrders(res.data.data.shopOrderList.data)
             }).finally(() => {
-                setSearch('');
+                setIsLoading(false)
             });
     }
 
@@ -126,14 +137,11 @@ function ShopOrder() {
                                     </div>
                                 </div><br />
 
-                                {/* {showMessage && <div className='alert alert-danger' id='alert-message'>
-                                    <div className='valid'>
-                                        <p className='valid-p alert-danger'>{alert}</p>
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                     </div>
-                                </div>} */}
-
-
-                                {orders && orders.length > 0 ?
+                                ) : orders && orders.length > 0 ? (
                                     <table className="table" style={{ marginBottom: '30px' }}>
                                         <thead>
                                             <tr>
@@ -152,10 +160,8 @@ function ShopOrder() {
                                             {orders.map((item, i) => {
                                                 return (
                                                     <tr key={i}>
-                                                        {/* <td>{((page - 1) * 10) + i + 1}</td> */}
                                                         <td>{((page - 1) * 10) + i + 1}</td>
                                                         <td>{moment(item.created_at).calendar()}</td>
-
                                                         <td>{item.shopname}</td>
                                                         <td>{item.shopaddress}</td>
                                                         <td>{item.username}</td>
@@ -163,16 +169,19 @@ function ShopOrder() {
                                                         <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.status}</button></td>
                                                         <td>{item.total}</td>
                                                         <td>
-                                                            <i class="fas fa-edit" onClick={() => editShopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i onClick={() => viewShopOrder(item.id)} class="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
+                                                            <i className="fas fa-edit" onClick={() => editShopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
+                                                            <i onClick={() => viewShopOrder(item.id)} className="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
                                                         </td>
                                                     </tr>
                                                 )
                                             })}
                                         </tbody>
                                     </table>
+                                ) : (
+                                    <div className='text-center'>No Orders Found</div>
+                                )}
 
-                                    : <div className='text-center'>Not Order Found</div>
-                                }
+
 
                                 <PaginationControl
                                     page={page}

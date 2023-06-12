@@ -5,7 +5,8 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
-import moment from "moment";
+import ClipLoader from 'react-spinners/ClipLoader';
+
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +15,7 @@ function Shops() {
     //pagination
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState();
-
+    const [isLoading, setIsLoading] = useState(false);
     const [shops, setShops] = useState([]);
     const [totalShop, setTotalShop] = useState();
     const navigate = useNavigate();
@@ -24,21 +25,27 @@ function Shops() {
     }, [page]);
 
     const handleChange = (page) => {
+        setIsLoading(true)
         setPage(page)
         api.get(`/shops?page=${page}`)
             .then((resp) => {
                 console.log('shop data', resp);
                 setShops(resp.data.data.shops.data)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
 
     const getShop = () => {
+        setIsLoading(true)
         api.get(`/shops?page=${page}`)
             .then((resp) => {
                 console.log('shop data', resp);
                 setShops(resp.data.data.shops.data)
                 setTotalPage(resp.data.data.shops.total)
                 setTotalShop(resp.data.data.shops)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
 
@@ -49,7 +56,7 @@ function Shops() {
         navigate('/viewshop/' + id)
     }
     const deleteProduct = (id) => {
-        console.log(id);
+        setIsLoading(true)
         api.delete(`/shops/${id}`)
             .then((res) => {
                 getShop()
@@ -58,11 +65,14 @@ function Shops() {
                 setTotalShop(res.data.data.shops)
                 toast.success(res.data.messages[0])
             })
+            .finally(()=>{
+                setIsLoading(false)
+            })
     }
 
     const [search, setSearch] = useState();
     const getSearch = (e) => {
-        // setSearch(e.target.value)
+        setIsLoading(true)
         e.preventDefault();
         api.get(`/shops?keyword=${search}`)
             .then((res) => {
@@ -70,18 +80,22 @@ function Shops() {
                 setTotalPage(res.data.data.shops.total)
                 setShops(res.data.data.shops.data);
                 setTotalShop(res.data.data.shops)
+            }).finally(()=>{
+                setIsLoading(false)
             })
     }
 
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setPage(1);
+        setSearch('');
+        setIsLoading(true);
         api.get(`/shops?keyword=${[]}`)
             .then((res) => {
                 setTotalPage(res.data.data.shops.total)
                 setShops(res.data.data.shops.data);
                 setTotalShop(res.data.data.shops)
             }).finally(() => {
-                setSearch('');
+                setIsLoading(false)
             });
     }
 
@@ -126,36 +140,43 @@ function Shops() {
                                         </button>
                                     </div>
                                 </div><br />
-                                <table className="table" style={{ marginBottom: '30px' }}>
-                                    <thead>
-                                        <tr>
-                                            <th className='text-center'>Sr.#</th>
-                                            <th className='text-center'>Date</th>
-                                            <th className='text-center'>Name</th>
-                                            <th className='text-center'>Phone</th>
-                                            <th className='text-center'>Address</th>
-                                            <th className='text-center'>Shop Orders</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {shops.map((item, i) => {
-                                            return (
-                                                <tr key={i}>
-                                                    <td className='text-center'>{((page - 1) * 10) + i + 1}</td>
-                                                    <td className='text-center'>1/1/2023</td>
-                                                    <td className='text-center'>{item.name}</td>
-                                                    <td className='text-center'>{item.phone}</td>
-                                                    <td className='text-center'>{item.address}</td>
-                                                    <td className='text-center'>{item.orders_count}</td>
-                                                    <td>
-                                                        <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => viewShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>  <button class="btn" onClick={() => shopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', background: '#3d84dd', color: '#fff' }}>shop order</button>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })}
-                                    </tbody>
-                                </table>
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                    </div>
+                                ) :
+                                    <table className="table" style={{ marginBottom: '30px' }}>
+                                        <thead>
+                                            <tr>
+                                                <th className='text-center'>Sr.#</th>
+                                                {/* <th className='text-center'>Date</th> */}
+                                                <th className='text-center'>Name</th>
+                                                <th className='text-center'>Phone</th>
+                                                <th className='text-center'>Address</th>
+                                                <th className='text-center'>Shop Orders</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {shops.map((item, i) => {
+                                                return (
+                                                    <tr key={i}>
+                                                        <td className='text-center'><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                        {/* <td className='text-center'>1/1/2023</td> */}
+                                                        <td className='text-center'>{item.name}</td>
+                                                        <td className='text-center'>{item.phone}</td>
+                                                        <td className='text-center'>{item.address}</td>
+                                                        <td className='text-center'>{item.orders_count}</td>
+                                                        <td>
+                                                            <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => viewShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>  <button class="btn" onClick={() => shopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', background: '#3d84dd', color: '#fff' }}>shop order</button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </tbody>
+                                    </table>
+                                }
+
                                 {totalShop && totalShop.total <= 10 ?
                                     '' :
                                     <PaginationControl

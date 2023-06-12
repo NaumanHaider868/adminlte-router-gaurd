@@ -4,6 +4,7 @@ import SideBar from './../../../componets/SideBar'
 import Footer from './../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
+import Spinner from '../../../componets/Spinner';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,8 +15,10 @@ function AddCategorie() {
     const [image, setImage] = useState(null);
     const [alert, setAlert] = useState([])
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = (e) => {
+        setIsLoading(true)
         const payload = new FormData();
 
         payload.append('name', name);
@@ -36,6 +39,8 @@ function AddCategorie() {
                     document.querySelector('#alert-message').style.display = 'none';
                 }, 3000);
                 setAlert(error.response.data.errors)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     return (
@@ -100,7 +105,11 @@ function AddCategorie() {
                                         </div>
 
                                         <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-success">Add Categorie</button>
+                                            <button type="submit" className="btn btn-success">
+                                                {isLoading ? (
+                                                    <Spinner />
+                                                ) : 'Add Categorie'}
+                                            </button>
                                         </div>
 
                                     </div>

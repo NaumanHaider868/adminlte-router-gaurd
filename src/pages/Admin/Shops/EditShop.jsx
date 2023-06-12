@@ -5,10 +5,10 @@ import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../services/ApiUrl'
+import ClipLoader from 'react-spinners/ClipLoader';
+import Spinner from '../../../componets/Spinner';
 
 import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 function EditShop() {
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -18,13 +18,16 @@ function EditShop() {
     const [address, setAddress] = useState('');
     const [longitude, setLongtitude] = useState();
     const [latitude, setLatitude] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const [alert,setAlert] = useState([])
+    const [alert, setAlert] = useState([])
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
     const param = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/shops/${param.id}`)
             .then((resp) => {
                 console.log(resp)
@@ -39,10 +42,13 @@ function EditShop() {
             })
             .catch((error) => {
                 console.log(error)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
 
     const submitEdit = (e) => {
+        setIsLoadingTwo(true)
         e.preventDefault();
         const formatData = new FormData();
         formatData.append('name', name)
@@ -75,8 +81,10 @@ function EditShop() {
                         alertMessage.style.display = 'none';
                     }, 3000);
                 }
+            }).finally(()=>{
+                setIsLoadingTwo(false)
             })
-            
+
     }
     return (
         <div className='wrapper'>
@@ -116,67 +124,79 @@ function EditShop() {
                                     })
                                 }
                             </div>
-
-                            <form encType="multipart/form-data">
-                                <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Name</label>
-                                                <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Address</label>
-                                                <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} />
-                                            </div>
-                                        </div>
-
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Image</label><br />
-                                                <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Open Hours</label>
-                                                <input type="time" value={open_hours} className="form-control" onChange={(e) => setOpenHour(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Close Hours</label>
-                                                <input type="time" className="form-control" value={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Longitude</label>
-                                                <input type="text" className="form-control" value={longitude} onChange={(e) => setLongtitude(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Latitude</label>
-                                                <input type="text" className="form-control" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
-                                        </div>
-                                    </div>
-
-
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                 </div>
-                            </form>
+                            ) :
+                                <form encType="multipart/form-data">
+                                    <div className="card-body">
+                                        <div className='row'>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Name</label>
+                                                    <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Address</label>
+                                                    <input type="text" className="form-control" value={address} onChange={(e) => setAddress(e.target.value)} />
+                                                </div>
+                                            </div>
+
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Image</label><br />
+                                                    <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Open Hours</label>
+                                                    <input type="time" value={open_hours} className="form-control" onChange={(e) => setOpenHour(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Close Hours</label>
+                                                    <input type="time" className="form-control" value={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Longitude</label>
+                                                    <input type="text" className="form-control" value={longitude} onChange={(e) => setLongtitude(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Latitude</label>
+                                                    <input type="text" className="form-control" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="card-footer" style={{ background: '#fff' }}>
+                                                <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>
+                                                {isLoadingTwo ? (
+                                                        <Spinner />
+                                                    ) : (
+                                                        'Update'
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            }
+
 
                         </div>
 

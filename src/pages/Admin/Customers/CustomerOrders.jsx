@@ -5,15 +5,18 @@ import Navbar from '../../../componets/Navbar';
 import SideBar from '../../../componets/SideBar';
 import Footer from '../../../componets/Footer';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function CustomerOrders() {
     const [orders, setOrders] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
     const [search, setSearch] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
 
     const param = useParams();
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/customers/${param.id}/orders`)
             .then((res) => {
                 console.log(res)
@@ -21,29 +24,35 @@ function CustomerOrders() {
             })
             .catch((error) => {
                 console.log(error)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     const handelChange = () => {
 
     }
     const getSearch = (e) => {
+        setIsLoading(true)
         // setSearch(e.target.value)
         e.preventDefault();
         api.get(`/customers/${param.id}/orders?keyword=${search}`)
             .then((res) => {
                 setOrders(res.data.data.order)
                 // setTotalPage(res.data.data.order.total)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
 
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setPage(1)
+        setSearch('');
+        setIsLoading(true)
         api.get(`/customers/${param.id}/orders?keyword=${[]}`)
             .then((res) => {
                 setOrders(res.data.data.order)
-                // setTotalPage(res.data.data.order.total)
             }).finally(() => {
-                setSearch('');
+                setIsLoading(false)
             });
     }
     return (
@@ -89,40 +98,48 @@ function CustomerOrders() {
                                                     </button>
                                                 </div>
                                             </div><br />
-                                            <table className="table" style={{ marginBottom: '30px' }}>
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Sr.#</th>
-                                                        <th scope="col">Customer Name</th>
-                                                        <th scope="col">Customer Phone</th>
-                                                        <th scope="col">Delivery Charges</th>
-                                                        <th scope="col">Location</th>
-                                                        <th scope="col">Status</th>
-                                                        <th scope="col">Sub Total</th>
-                                                        <th scope="col">Tax</th>
-                                                        <th scope="col">Total</th>
+                                            {isLoading ? (
+                                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                                </div>
+                                            )
+                                                :
+                                                <table className="table" style={{ marginBottom: '30px' }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Sr.#</th>
+                                                            <th scope="col">Customer Name</th>
+                                                            <th scope="col">Customer Phone</th>
+                                                            <th scope="col">Delivery Charges</th>
+                                                            <th scope="col">Location</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Sub Total</th>
+                                                            <th scope="col">Tax</th>
+                                                            <th scope="col">Total</th>
 
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {orders.map((item, i) => {
-                                                        return (
-                                                            <tr key={i}>
-                                                                <td>{((page - 1) * 10) + i + 1}</td>
-                                                                <td>{item.customer_name}</td>
-                                                                <td>{item.customer_phone}</td>
-                                                                <td>{item.delivery_charges}</td>
-                                                                <td>{item.location}</td>
-                                                                <td>{item.status}</td>
-                                                                <td>{item.sub_total}</td>
-                                                                <td>{item.tax}</td>
-                                                                <td>{item.total}</td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {orders.map((item, i) => {
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <td><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                                    <td>{item.customer_name}</td>
+                                                                    <td>{item.customer_phone}</td>
+                                                                    <td>{item.delivery_charges}</td>
+                                                                    <td>{item.location}</td>
+                                                                    <td>{item.status}</td>
+                                                                    <td>{item.sub_total}</td>
+                                                                    <td>{item.tax}</td>
+                                                                    <td>{item.total}</td>
 
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                </tbody>
-                                            </table>
+                                                                </tr>
+                                                            )
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            }
+
                                             <PaginationControl
                                                 page={page}
                                                 total={totalPage}

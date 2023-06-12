@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
 import { useNavigate, Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function Customers() {
     const navigate = useNavigate();
@@ -14,25 +15,34 @@ function Customers() {
     const [totalCustomer, setTotalCustomer] = useState([]);
     const [page, setPage] = useState(1)
     const [totalPage, setTotalPage] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/customers`)
             .then((res) => {
                 console.log(res.data.data.customers.data);
                 setCustomer(res.data.data.customers.data);
                 setTotalPage(res.data.data.customers.total);
                 setTotalCustomer(res.data.data.customers);
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     const handelChange = (page) => {
+        setIsLoading(true)
         setPage(page)
         api.get(`/customers?page=${page}`)
             .then((res) => {
                 console.log(res.data.data.customers.data)
                 setCustomer(res.data.data.customers.data)
-            })
+            }).finally(() => {
+                setIsLoading(false)
+
+            });
     }
     const getSearch = (e) => {
-        // setSearch(e.target.value)
+        setIsLoading(true)
         e.preventDefault();
         api.get(`/customers?keyword=${search}`)
             .then((res) => {
@@ -40,18 +50,22 @@ function Customers() {
                 setTotalPage(res.data.data.customers.total)
                 setCustomer(res.data.data.customers.data)
                 setTotalCustomer(res.data.data.customers);
-            })
+            }).finally(() => {
+                setIsLoading(false)
+            });
     }
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setSearch('');
+        setIsLoading(true)
+        setPage(1)
         api.get(`/customers?keyword=${[]}`)
             .then((res) => {
                 setTotalPage(res.data.data.customers.total)
                 setCustomer(res.data.data.customers.data)
                 setTotalCustomer(res.data.data.customers)
             }).finally(() => {
-                setSearch('');
-              });
+                setIsLoading(false)
+            });
     }
     const ViewCustomer = (id) => {
         navigate('/viewcustomer/' + id)
@@ -98,7 +112,11 @@ function Customers() {
                                                     </button>
                                                 </div>
                                             </div><br />
-                                            <table className="table" style={{ marginBottom: '30px' }}>
+                                            {isLoading ? (
+                                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                                </div>
+                                            ) : <table className="table" style={{ marginBottom: '30px' }}>
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Sr.#</th>
@@ -113,7 +131,7 @@ function Customers() {
                                                     {customer.map((item, i) => {
                                                         return (
                                                             <tr key={i}>
-                                                                <td>{((page - 1) * 10) + i + 1}</td>
+                                                                <td><b>{((page - 1) * 10) + i + 1}</b></td>
                                                                 <td>{item.username}</td>
                                                                 <td>{item.email}</td>
                                                                 <td>{item.first_name}</td>
@@ -127,19 +145,20 @@ function Customers() {
                                                         )
                                                     })}
                                                 </tbody>
-                                            </table>
-                                            {totalCustomer && totalCustomer.total <= 10 ? 
-                                               '' :
+                                            </table>}
+
+                                            {totalCustomer && totalCustomer.total <= 10 ?
+                                                '' :
                                                 <PaginationControl
-                                                page={page}
-                                                total={totalPage}
-                                                limit={10}
-                                                changePage={(page) => {
-                                                    handelChange(page)
-                                                }}
-                                                ellipsis={1}
-                                            />
-                                            // <h1>Ho</h1>
+                                                    page={page}
+                                                    total={totalPage}
+                                                    limit={10}
+                                                    changePage={(page) => {
+                                                        handelChange(page)
+                                                    }}
+                                                    ellipsis={1}
+                                                />
+                                                // <h1>Ho</h1>
                                             }
                                         </div>
 

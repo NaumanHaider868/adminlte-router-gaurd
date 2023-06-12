@@ -1,36 +1,56 @@
 import React, { useState, useEffect } from 'react'
+import Spinner from '../componets/Spinner';
 import { Link, useNavigate } from 'react-router-dom'
-// import { Outlet } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { CSSProperties } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
 
 function Login() {
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [username, setUserName] = useState();
+    const [image, setImage] = useState();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState([]);
     const navigate = useNavigate();
-    // const history = useHistory();
 
-    // useEffect(() => {
-    //     let login = localStorage.getItem('token');
-    //     if (login) {
-    //         navigate('/admin')
+
+    // const submit = () => {
+    //     setIsLoading(true);
+    //     const payload = {
+    //         email: email,
+    //         password: password
     //     }
-    // });
+    //     console.log(payload);
+    //     axios.post('https://foodapis.techenablers.info/api/login', payload)
+    //         .then((res) => {
+    //             console.log(res);
+    //             toast.success(res.data.messages[0])
+    //             localStorage.setItem('token', res.data.data.token);
+    //             navigate('/orders')
 
-    // toast.configure();
-    useEffect(() => {
-        setLoading(false)
-        setTimeout(() => {
-            setLoading(false)
-        }, 5000)
-    }, [])
+    //         })
+    //         .catch((error) => {
+    //             const alertMessage = document.querySelector('#alert-message');
+    //             setAlert(error.response.data.errors);
+    //             if (alertMessage) {
+    //                 alertMessage.style.display = 'block';
+
+    //                 setTimeout(() => {
+    //                     alertMessage.style.display = 'none';
+    //                 }, 2000);
+
+    //             }
+    //         }).finally(() => {
+    //             setIsLoading(false);
+    //         });
+
+
+    // }
+
     const submit = () => {
+        setIsLoading(true);
         const payload = {
             email: email,
             password: password
@@ -39,46 +59,49 @@ function Login() {
         axios.post('https://foodapis.techenablers.info/api/login', payload)
             .then((res) => {
                 console.log(res);
+                toast.success(res.data.messages[0]);
 
-                toast.success(res.data.messages[0])
                 localStorage.setItem('token', res.data.data.token);
-                // localStorage.setItem('login', true)
-                navigate('/admin')
+                localStorage.setItem('login', true);
 
-                // if (res.data.data.token !== null) {
-                // localStorage.setItem('token', res.data.data.token);
-                // navigate('/admin')
-                // // navigate('/dashboard')
-                // // history.push('/dashboard');
-                // }
+                axios.get('https://foodapis.techenablers.info/api/user/profile', {
+                        headers: {
+                            Authorization: `Bearer ${res.data.data.token}`,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    })
+                    .then((res) => {
+                        console.log('API response:', res.data);
+                        const { username } = res.data.data.user;
+                        const image = res.data.data.usermeta.image;
+                        console.log(image, 'user')
+                        localStorage.setItem('username', username);
+                        localStorage.setItem('image', image);
+                        setUserName(username);
+                        setImage(image);
+                    })
+                    .catch((error) => {
+                        console.log('API call error:', error);
+                    });
+
+                navigate('/orders');
             })
-            .catch((error)=>{
+            .catch((error) => {
                 const alertMessage = document.querySelector('#alert-message');
                 setAlert(error.response.data.errors);
-                if(alertMessage){
+                if (alertMessage) {
                     alertMessage.style.display = 'block';
 
                     setTimeout(() => {
                         alertMessage.style.display = 'none';
-                      }, 2000);
-
+                    }, 2000);
                 }
-         })
-            // .catch((error) => {
-            //     console.log(error)
-            //     // if (error.response.status === 401 || error.response.status === 400) {
-            //         setAlert(error.response.data.errors);
-            //         const alertMessage = document.querySelector('#alert-message');
-            //         if (alertMessage) {
-            //             alertMessage.style.display = 'block';
-            //             setTimeout(() => {
-            //                 alertMessage.style.display = 'none';
-            //             }, 2000);
-            //         }
-            //     // }
-            // });
-
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
+
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -133,20 +156,14 @@ function Login() {
                                 </div>
                             </div>
                             <div className="col-4">
-                                {loading ?
-                                    <button className="btn btn-primary btn-block" onClick={submit}>
-                                        <ClipLoader
-                                            loading={loading}
-                                            size={150}
-                                            aria-label="Loading Spinner"
-                                            data-testid="loader"
-                                        /> Login
-                                    </button> :
-                                    <button className="btn btn-primary btn-block" onClick={submit}>
-                                        Login
-                                    </button>
-                                }
-                                
+                                <button className="btn btn-primary btn-block" onClick={submit} disabled={isLoading}>
+                                    {isLoading ? (
+                                        <Spinner />
+                                    ) : (
+                                        'Login'
+                                    )}
+                                </button>
+
                             </div>
                         </div>
 

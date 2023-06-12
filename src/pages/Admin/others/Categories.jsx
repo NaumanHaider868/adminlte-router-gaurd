@@ -4,28 +4,34 @@ import SideBar from './../../../componets/SideBar'
 import Footer from './../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
-import {getCategorie} from '../../../redux/slice/mainCategoriesSlice'
+import { getCategorie } from '../../../redux/slice/mainCategoriesSlice'
 import { Link } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function ViewCategories() {
     const [search, setSearch] = useState([])
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState();
+    const [isLoading, setIsLoading] = useState(false);
 
     const [categorie, setCategorie] = useState([]);
     const [totalCategorie, setTotalCategorie] = useState()
     useEffect(() => {
 
+        setIsLoading(true)
         api.get(`categories?page=${page}`)
             .then((res) => {
                 console.log(res.data.data);
                 setCategorie(res.data.data.categories.data)
                 setTotalPage(res.data.data.categories.total)
                 setTotalCategorie(res.data.data.categories)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [page])
     const getSearch = (e) => {
+        setIsLoading(true)
         e.preventDefault();
         api.get(`/categories?keyword=${search}`)
             .then((res) => {
@@ -33,22 +39,26 @@ function ViewCategories() {
                 setCategorie(res.data.data.categories.data)
                 setTotalPage(res.data.data.categories.total)
                 setTotalCategorie(res.data.data.categories)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setSearch('');
+        setIsLoading(true)
         api.get(`/categories?keyword=${[]}`)
             .then((res) => {
                 setCategorie(res.data.data.categories.data);
                 setTotalPage(res.data.data.categories.total)
                 setTotalCategorie(res.data.data.categories)
-                
+
             }).finally(() => {
-                setSearch('');
+                setIsLoading(false)
             });
     }
     const handleChange = (page) => {
-        setPage(page);
+        setIsLoading(true)
+        setPage(1);
         api.get(`/categories?page=${page}`)
             .then((res) => {
                 // console.log('order', res.data.data.orders.data)
@@ -57,6 +67,8 @@ function ViewCategories() {
                 setTotalCategorie(res.data.data.categories)
                 // setOrder(res.data.data.order)
 
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     return (
@@ -96,42 +108,47 @@ function ViewCategories() {
                                                     </button>
                                                 </div>
                                             </div><br />
-                                            <table className="table" style={{ marginBottom: '30px' }}>
-                                                <thead>
-                                                    <tr>
-                                                        <th scope="col">Sr.#</th>
-                                                        <th scope="col">Name</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                            {isLoading ? (
+                                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                                </div>
+                                            ) :
+                                                <table className="table" style={{ marginBottom: '30px' }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Sr.#</th>
+                                                            <th scope="col">Name</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                                                    {categorie.map((item, i) => {
-                                                        return (
-                                                            <>
-                                                                <tr key={i}>
-                                                                    <td>{((page - 1) * 10) + i + 1}</td>
-                                                                    <td>{item.name}</td>
-                                                                </tr>
+                                                        {categorie.map((item, i) => {
+                                                            return (
+                                                                <>
+                                                                    <tr key={i}>
+                                                                        <td><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                                        <td>{item.name}</td>
+                                                                    </tr>
 
-                                                            </>
-                                                        )
-                                                    })}
+                                                                </>
+                                                            )
+                                                        })}
 
-                                                </tbody>
-                                            </table>
-                                            {totalCategorie && totalCategorie.total <= 10 ? 
-                                            '' : 
-                                            <PaginationControl
-                                                page={page}
-                                                total={totalPage}
-                                                limit={10}
-                                                changePage={(page) => {
-                                                    handleChange(page);
-                                                }}
-                                                ellipsis={1}
-                                            />
+                                                    </tbody>
+                                                </table>}
+                                            {totalCategorie && totalCategorie.total <= 10 ?
+                                                '' :
+                                                <PaginationControl
+                                                    page={page}
+                                                    total={totalPage}
+                                                    limit={10}
+                                                    changePage={(page) => {
+                                                        handleChange(page);
+                                                    }}
+                                                    ellipsis={1}
+                                                />
                                             }
-                                            
+
                                         </div>
 
                                     </div>

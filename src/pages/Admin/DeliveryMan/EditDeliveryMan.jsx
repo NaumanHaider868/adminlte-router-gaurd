@@ -8,7 +8,8 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import ClipLoader from 'react-spinners/ClipLoader';
+import { Spinner } from 'react-bootstrap'
 function EditDeliveryMan() {
     const [email, setEmail] = useState();
     const [first_name, setFirstName] = useState();
@@ -16,25 +17,31 @@ function EditDeliveryMan() {
     const [status, setStatus] = useState();
     const [last_login, setLastLogin] = useState();
     const [phone, setPhone] = useState();
-    const [password,setPassword] = useState('');
-    const [confirm_password,setConfirmPassword] = useState('');
+    // const [password,setPassword] = useState('');
+    // const [confirm_password,setConfirmPassword] = useState('');
 
     const [alert, setAlert] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false);
 
     const navigate = useNavigate();
     const param = useParams();
+
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/deliverymens/${param.id}`)
             .then((res) => {
-                console.log(res.data.data)
-                setEmail(res.data.data.delivery_man.email);
-                setFirstName(res.data.data.delivery_man.first_name);
-                setLastName(res.data.data.delivery_man.last_name);
-                setStatus(res.data.data.delivery_man.status);
+                setEmail(res.data.data.deliveryMens.email);
+                setFirstName(res.data.data.deliveryMens.first_name);
+                setLastName(res.data.data.deliveryMens.last_name);
+                setStatus(res.data.data.deliveryMens.status);
                 setPhone(res.data.data.delivery_man_meta.phone)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, []);
     const submitEdit = (e) => {
+        setIsLoadingTwo(true)
         e.preventDefault();
         let payload = {
             last_login: last_login,
@@ -43,8 +50,8 @@ function EditDeliveryMan() {
             last_name: last_name,
             phone: phone,
             status: status,
-            password:password,
-            password_confirmation: confirm_password
+            // password:password,
+            // password_confirmation: confirm_password
         }
         api.post(`/deliverymens/${param.id}`, payload)
             .then((res) => {
@@ -57,6 +64,8 @@ function EditDeliveryMan() {
                 setTimeout(() => {
                     document.querySelector('#alert-message').style.display = 'none';
                 }, 3000);
+            }).finally(() => {
+                setIsLoadingTwo(false)
             })
     }
     return (
@@ -97,54 +106,66 @@ function EditDeliveryMan() {
                                     })
                                 }
                             </div>
-
-                            <form>
-                                <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Email</label>
-                                                <input type="text" className="form-control" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) :
+                                <form>
+                                    <div className="card-body">
+                                        <div className='row'>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Email</label>
+                                                    <input type="text" className="form-control" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>First Name</label>
-                                                <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Last Name</label>
-                                                <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
+                                            {/* <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Password</label>
                                                 <input type="text" className="form-control" value={password} name={password} onChange={(e) => setPassword(e.target.value)} />
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
+                                        </div> */}
+                                            {/* <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Confirm Password</label>
                                                 <input type="text" className="form-control" value={confirm_password} name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" className="form-control" value={phone} name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                        </div> */}
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="card-footer" style={{ background: '#fff' }}>
+                                                <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>
+                                                    {isLoadingTwo ? (
+                                                        <Spinner />
+                                                    ) :
+                                                        'Update'
+                                                    }
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
-                                        </div>
+
+
                                     </div>
+                                </form>
+                            }
 
-
-                                </div>
-                            </form>
 
                         </div>
 

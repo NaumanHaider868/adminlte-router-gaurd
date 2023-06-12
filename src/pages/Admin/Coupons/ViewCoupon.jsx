@@ -7,6 +7,7 @@ import api from '../../services/ApiUrl'
 import { viewCoupon } from '../../../redux/slice/userSlice'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function ViewCoupon() {
     const [coupon, setCoupon] = useState([]);
@@ -14,13 +15,16 @@ function ViewCoupon() {
     const param = useParams();
     // const coupon = useSelector((state) => state.user.coupon);
     // console.log(coupon,'viewcoupon')
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true)
         const id = param.id;
         dispatch(viewCoupon(id))
             .then((action) => {
-                // console.log(action,'action')
                 setCoupon(action.payload)
+            }).finally(() => {
+                setIsLoading(false)
             })
 
     }, [])
@@ -47,29 +51,35 @@ function ViewCoupon() {
 
                             <>
                                 <p className='para_bold'>Order #300112</p>
-                                <div className='row'>
-                                    <div className='col-md-6'>
-                                        <div className='row'>
-                                            <div className='col-md-6'>
-
-                                                <label className='label_1'>Code</label>
-                                                <p className='p_1'>{coupon.code}</p>
-                                                <label className='label_1'>Description</label>
-                                                <p className='p_1'>{coupon.description}</p>
-                                                <label className='label_1'>General</label>
-                                                <p className='p_1'>{coupon.general}</p>
-
-                                            </div>
-                                            <div className='col-md-6'>
-                                                <label className='label_1'>Discount</label>
-                                                <p className='p_1'>{coupon.discount}</p>
-                                                <label className='label_1'>Discount Type</label>
-                                                <p className='p_1'>{coupon.discount_type}</p>
-                                            </div>
-                                        </div>
-
+                                {isLoading ? (
+                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                     </div>
-                                </div>
+                                ) :
+                                    <div className='row'>
+                                        <div className='col-md-6'>
+                                            <div className='row'>
+                                                <div className='col-md-6'>
+
+                                                    <label className='label_1'>Code</label>
+                                                    <p className='p_1'>{coupon.code}</p>
+                                                    <label className='label_1'>Description</label>
+                                                    <p className='p_1'>{coupon.description}</p>
+                                                    <label className='label_1'>General</label>
+                                                    <p className='p_1'>{coupon.general}</p>
+
+                                                </div>
+                                                <div className='col-md-6'>
+                                                    <label className='label_1'>Discount</label>
+                                                    <p className='p_1'>{coupon.discount}</p>
+                                                    <label className='label_1'>Discount Type</label>
+                                                    <p className='p_1'>{coupon.discount_type}</p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                }
                             </>
 
 

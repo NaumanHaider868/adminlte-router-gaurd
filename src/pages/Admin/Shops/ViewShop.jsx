@@ -5,14 +5,18 @@ import Navbar from '../../../componets/Navbar'
 import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function ViewShop() {
+    const [isLoading, setIsLoading] = useState(false);
+
     const param = useParams();
     const [name, setName] = useState();
     const [phone, setPhone] = useState();
     const [address, setAddress] = useState();
     // const [price,setPrice] = useState();
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/shops/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.shop, 'shop views');
@@ -20,6 +24,8 @@ function ViewShop() {
                 setAddress(res.data.data.shop.address);
                 setPhone(res.data.data.shop.phone)
                 // setPrice(res.data.data.shop.price)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     return (
@@ -46,7 +52,11 @@ function ViewShop() {
                             <>
                                 <p className='para_bold'>Order #300112</p>
                                 <div className='row'>
-                                    <div className='col-md-6'>
+                                    {isLoading ? (
+                                        <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                            <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                        </div>
+                                    ) : <div className='col-md-6'>
                                         <div className='row'>
                                             <div className='col-md-6'>
 
@@ -60,7 +70,8 @@ function ViewShop() {
                                             </div>
                                         </div>
 
-                                    </div>
+                                    </div>}
+
                                 </div>
                             </>
 

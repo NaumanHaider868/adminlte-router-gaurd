@@ -7,6 +7,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ClipLoader from 'react-spinners/ClipLoader';
+import Spinner from '../../../componets/Spinner';
 
 
 function EditCustomer() {
@@ -18,10 +20,13 @@ function EditCustomer() {
     const [last_name, setLastName] = useState();
     const [phone, setPhone] = useState();
     const [password, setPassword] = useState(null)
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
     const [alert, setAlert] = useState([]);
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/customers/${param.id}`)
             .then((res) => {
                 setEmail(res.data.data.customer.email);
@@ -31,9 +36,12 @@ function EditCustomer() {
                 setPhone(res.data.data.customer.userMeta.phone)
                 setPassword('000000')
                 console.log(res)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     const handleSubmit = (e) => {
+        setIsLoadingTwo(true)
         e.preventDefault();
         const formData = new FormData();
         formData.append('email', email);
@@ -58,6 +66,8 @@ function EditCustomer() {
                 setTimeout(() => {
                     document.querySelector('#alert-message').style.display = 'none';
                 }, 3000);
+            }).finally(() => {
+                setIsLoadingTwo(false)
             })
     }
     return (
@@ -97,49 +107,62 @@ function EditCustomer() {
                                     })
                                 }
                             </div>
-                            <form encType="multipart/form-data" onSubmit={handleSubmit}>
-                                <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>User Name</label>
-                                                <input type="text" className="form-control" value={username} onChange={(e) => setUserName(e.target.value)} />
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) :
+                                <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                                    <div className="card-body">
+                                        <div className='row'>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>User Name</label>
+                                                    <input type="text" className="form-control" value={username} onChange={(e) => setUserName(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Email</label>
-                                                <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Email</label>
+                                                    <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>First Name</label>
-                                                <input type="text" value={first_name} className="form-control" onChange={(e) => setFirstName(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" value={first_name} className="form-control" onChange={(e) => setFirstName(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Last Name</label>
-                                                <input type="text" className="form-control" value={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" className="form-control" value={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
                                             </div>
+
+                                            <div className="card-footer" style={{ background: '#fff' }}>
+                                                <button type="submit" className="btn btn-success" >
+                                                    {isLoadingTwo ? (
+                                                        <Spinner />
+                                                    ) : (
+                                                        'Update'
+                                                    )}
+                                                </button>
+                                            </div>
+
                                         </div>
 
-                                        <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-success" >Update</button>
-                                        </div>
 
                                     </div>
+                                </form>
+                            }
 
-
-                                </div>
-                            </form>
 
                         </div>
 

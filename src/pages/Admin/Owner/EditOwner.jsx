@@ -5,9 +5,11 @@ import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import Spinner from '../../../componets/Spinner';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function EditOwner() {
     const [phone, setPhone] = useState('');
@@ -16,8 +18,10 @@ function EditOwner() {
     const [last_name, setLastName] = useState('');
     const [status, setStatus] = useState('');
     const [password, setPassword] = useState('');
-    const [confirm_password,setConfimPassword] = useState('')
+    const [confirm_password, setConfimPassword] = useState('')
     const [ownerData, setOwnerData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
     const [alert, setAlert] = useState([]);
 
@@ -25,6 +29,7 @@ function EditOwner() {
     const param = useParams();
     const navigate = useNavigate();
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.shop);
@@ -35,11 +40,14 @@ function EditOwner() {
                 setUserName(res.data.data.shop.username)
                 setOwnerData(res.data.data.shop.user_meta.phone);
                 setPhone(res.data.data.shop.user_meta.phone)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, []);
 
 
     const handleSubmit = (e) => {
+        setIsLoadingTwo(true)
         e.preventDefault();
         const formData = new FormData();
         // formData.append('email', email);
@@ -48,10 +56,10 @@ function EditOwner() {
         formData.append('status', status);
         formData.append('username', username);
         formData.append('password', password);
-        formData.append('password_confirmation',confirm_password)
+        formData.append('password_confirmation', confirm_password)
         // formData.append('phone', ownerData);
         formData.append('password', password);
-        formData.append('phone',phone)
+        formData.append('phone', phone)
         api.post(`/owners/${param.id}`, formData)
             .then((res) => {
                 console.log(res)
@@ -66,6 +74,8 @@ function EditOwner() {
                 setTimeout(() => {
                     document.querySelector('#alert-message').style.display = 'none';
                 }, 3000);
+            }).finally(() => {
+                setIsLoadingTwo(false)
             })
     }
     return (
@@ -106,93 +116,77 @@ function EditOwner() {
                                     })
                                 }
                             </div>
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) :
+                                <form onSubmit={handleSubmit}>
+                                    <div className="card-body">
+                                        <div className='row'>
 
-                            <form onSubmit={handleSubmit}>
-                                <div className="card-body">
-                                    <div className='row'>
-                                        
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>User Name</label>
-                                                <input type="text" className="form-control" value={username} placeholder="User Name" onChange={(e) => setUserName(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>First Name</label>
-                                                <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Last Name</label>
-                                                <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Password</label>
-                                                <input type="text" className="form-control" value={password} placeholder="Customer Name" onChange={(e) => setPassword(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Confirm Password</label>
-                                                <input type="text" className="form-control" value={confirm_password} placeholder="Customer Name" onChange={(e) => setConfimPassword(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Status</label>
-                                                <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
-                                                    <option value="0">0</option>
-                                                    <option value="1">1</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" className="form-control" value={phone} placeholder="Customer Phone" onChange={(e) => setPhone(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-
-
-                                    {/* <div className="row">
-                                        <div className="col-12">
-                                            <div className="card">
-                                                
-                                                <div className="card-body">
-
-                                                    <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Phone</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>{ownerData}</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>User Name</label>
+                                                    <input type="text" className="form-control" value={username} placeholder="User Name" onChange={(e) => setUserName(e.target.value)} />
                                                 </div>
-
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Password</label>
+                                                    <input type="text" className="form-control" value={password} placeholder="Customer Name" onChange={(e) => setPassword(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Confirm Password</label>
+                                                    <input type="text" className="form-control" value={confirm_password} placeholder="Customer Name" onChange={(e) => setConfimPassword(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Status</label>
+                                                    <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
+                                                        <option value="0">0</option>
+                                                        <option value="1">1</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} placeholder="Customer Phone" onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
                                             </div>
 
                                         </div>
 
-                                    </div> */}
+                                    </div>
+                                    <div className="card-footer" style={{ background: '#fff' }}>
+                                        <button type="submit" className="btn btn-success">
+                                        {isLoadingTwo ? (
+                                                        <Spinner />
+                                                    ) : (
+                                                        'Update'
+                                                    )}
+                                        </button>
+                                    </div>
+                                </form>
+                            }
 
 
-
-                                </div>
-                                <div className="card-footer" style={{ background: '#fff' }}>
-                                    <button type="submit" className="btn btn-success">Update</button>
-                                </div>
-                            </form>
 
                         </div>
 

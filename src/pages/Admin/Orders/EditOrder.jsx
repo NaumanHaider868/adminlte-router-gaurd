@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Navbar from '../../../componets/Navbar'
-import SideBar from '../../../componets/SideBar'
-import Footer from '../../../componets/Footer'
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import Navbar from '../../../componets/Navbar';
+import SideBar from '../../../componets/SideBar';
+import Footer from '../../../componets/Footer';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../../services/ApiUrl'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Spinner from '../../../componets/Spinner';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function EditOrder() {
     const navigate = useNavigate();
@@ -22,10 +24,13 @@ function EditOrder() {
     const [total_amount, setTotalAmount] = useState('');
     const [shopId, setShopId] = useState('');
     const [total, setTotal] = useState('');
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false)
+    const [alert, setAlert] = useState([]);
 
-    const [alert , setAlert] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/orders/${param.id}`)
             .then((res) => {
                 console.log(res.data.data, 'edit')
@@ -35,7 +40,6 @@ function EditOrder() {
                 setStatus(res.data.data.order.status);
                 setTotal(res.data.data.order.total);
                 setShopId(res.data.data.order.shop_id)
-                // setTax(res.data.data.order.tax)
 
 
                 setCookTime(res.data.data.orderItems[0].cook_time);
@@ -44,12 +48,14 @@ function EditOrder() {
                 setName(res.data.data.orderItems[0].name);
                 setPrice(res.data.data.orderItems[0].price);
                 setTotalAmount(res.data.data.orderItems[0].total_amount);
-                // setVariationId(res.data.data.orderItems[0].variation_id)
 
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, []);
 
     const submitEdit = (e) => {
+        setIsLoadingTwo(true)
         e.preventDefault();
         const payload = {
             customer_name: customer_name,
@@ -86,6 +92,8 @@ function EditOrder() {
                 setTimeout(() => {
                     document.querySelector('#alert-message').style.display = 'none';
                 }, 3000);
+            }).finally(() => {
+                setIsLoadingTwo(false)
             })
     }
 
@@ -127,93 +135,108 @@ function EditOrder() {
                                     })
                                 }
                             </div>
-                            <form>
-                                <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Name</label>
-                                                <input type="text" className="form-control" value={customer_name} placeholder="Customer Name" onChange={(e) => setCustomerName(e.target.value)} />
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            )
+                                :
+                                <form>
+                                    <div className="card-body">
+                                        <div className='row'>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Name</label>
+                                                    <input type="text" className="form-control" value={customer_name} placeholder="Customer Name" onChange={(e) => setCustomerName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Location</label>
+                                                    <input type="text" className="form-control" value={location} placeholder="Location" onChange={(e) => setLocation(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Status</label>
+                                                    <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
+                                                        <option value="New">New</option>
+                                                        <option value="InProccess">InProccess</option>
+                                                        <option value="Packed">Packed</option>
+                                                        <option value="Onway">Onway</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <option value="Completed">Completed</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Total</label>
+                                                    <input type="text" className="form-control" value={total} placeholder="Total" onChange={(e) => setTotal(e.target.value)} />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Location</label>
-                                                <input type="text" className="form-control" value={location} placeholder="Location" onChange={(e) => setLocation(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Status</label>
-                                                <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
-                                                    <option value="New">New</option>
-                                                    <option value="InProccess">InProccess</option>
-                                                    <option value="Packed">Packed</option>
-                                                    <option value="Onway">Onway</option>
-                                                    <option value="Delivered">Delivered</option>
-                                                    <option value="Completed">Completed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Total</label>
-                                                <input type="text" className="form-control" value={total} placeholder="Total" onChange={(e) => setTotal(e.target.value)} />
-                                            </div>
-                                        </div>
-                                    </div>
 
 
-                                    <div className="row">
-                                        <div className="col-12">
-                                            <div className="card">
-                                                {/* <div className='car-header'>
-                                                    <h1 className='card-title'>Order Items</h1>
-                                                </div> */}
-                                                <div className="card-body">
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <div className="card">
+                                                    <div className="card-body">
 
-                                                    <table className="table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th scope="col">Name</th>
-                                                                <th scope="col">Price</th>
-                                                                <th scope="col">cook time</th>
-                                                                <th scope="col">qty</th>
-                                                                <th scope="col">total amount</th>
+                                                        <table className="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Name</th>
+                                                                    <th scope="col">Price</th>
+                                                                    <th scope="col">cook time</th>
+                                                                    <th scope="col">qty</th>
+                                                                    <th scope="col">total amount</th>
 
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {orderItem.map((item, i) => {
-                                                                return (
-                                                                    <>
-                                                                        <tr key={i}>
-                                                                            <td>{item.name}</td>
-                                                                            <td>{item.price}</td>
-                                                                            <td>{item.cook_time}</td>
-                                                                            <td>{item.qty}</td>
-                                                                            <td>{item.total_amount}</td>
-                                                                        </tr>
-                                                                    </>
-                                                                )
-                                                            })}
-                                                        </tbody>
-                                                    </table>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {orderItem.map((item, i) => {
+                                                                    return (
+                                                                        <>
+                                                                            <tr key={i}>
+                                                                                <td>{item.name}</td>
+                                                                                <td>{item.price}</td>
+                                                                                <td>{item.cook_time}</td>
+                                                                                <td>{item.qty}</td>
+                                                                                <td>{item.total_amount}</td>
+                                                                            </tr>
+                                                                        </>
+                                                                    )
+                                                                })}
+                                                            </tbody>
+                                                        </table>
 
+
+                                                    </div>
 
                                                 </div>
+                                            </div>
+                                        </div>
 
+
+
+                                    </div>
+                                    <div className='row'>
+                                        <div className='col-md-4'>
+                                            <div className="card-footer" style={{ background: '#fff' }}>
+                                                <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>
+                                                    {isLoadingTwo ? (
+                                                        <Spinner />
+                                                    ) : (
+                                                        'Update'
+                                                    )}
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                            }
 
-
-
-                                </div>
-                                <div className="card-footer" style={{ background: '#fff' }}>
-                                    <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>Update</button>
-                                </div>
-                            </form>
 
                         </div>
 

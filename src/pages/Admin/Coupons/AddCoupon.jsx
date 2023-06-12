@@ -9,6 +9,8 @@ import { postCoupon } from '../../../redux/slice/userSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DatePicker from 'react-datepicker';
+import moment from 'moment/moment'
 
 function AddCoupon() {
     const navigate = useNavigate();
@@ -17,7 +19,7 @@ function AddCoupon() {
     const [discount, setDiscount] = useState();
     const [discount_type, setDiscountType] = useState();
     const [general, setGeneral] = useState(false);
-    const [expires_at, setExpires] = useState('');
+    const [expires_at, setExpires] = useState();
 
 
     const errors = useSelector((state) => state.user.coupon || []);
@@ -30,7 +32,7 @@ function AddCoupon() {
             discount: discount,
             discount_type: discount_type,
             general: general,
-            expires_at: expires_at
+            expires_at: moment(expires_at).format('YYYY-MM-DD'),
         }
         e.preventDefault();
         dispatch(postCoupon(payload))
@@ -54,12 +56,12 @@ function AddCoupon() {
     }
 
     // for date
-    const handleDateChange = (e) => {
-        const inputDate = e.target.value;
-        const dateParts = inputDate.split('-');
-        const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
-        setExpires(formattedDate);
-    };
+    // const handleDateChange = (e) => {
+    //     const inputDate = e.target.value;
+    //     const dateParts = inputDate.split('-');
+    //     const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
+    //     setExpires(formattedDate);
+    // };
 
     // for general
 
@@ -140,7 +142,14 @@ function AddCoupon() {
                                         <div className='col-sm-4'>
                                             <div className="form-group">
                                                 <label>Expires</label>
-                                                <input type="date" className="form-control" name={expires_at} onChange={handleDateChange} />
+                                                {/* <input type="date" className="form-control" name={expires_at} onChange={handleDateChange} /> */}
+                                                <DatePicker
+                                                    dateFormat="yyyy-MM-dd"
+                                                    className="form-control"
+                                                    placeholder="Select a date"
+                                                    selected={expires_at}
+                                                    onChange={(date) => setExpires(date)}
+                                                />
                                             </div>
                                         </div>
 

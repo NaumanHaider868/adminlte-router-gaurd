@@ -7,9 +7,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { editCoupon, getCouponForPost } from '../../../redux/slice/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
-
+import moment from 'moment/moment'
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function EditCoupon() {
     const dispatch = useDispatch();
@@ -21,10 +22,12 @@ function EditCoupon() {
     const [discount_type, setDiscountType] = useState();
     const [general, setGeneral] = useState(0);
     const [expires, setExpires] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const couponError = useSelector((state) => state.user.coupon || []);
     useEffect(() => {
+        setIsLoading(true)
         const id = param.id;
         dispatch(getCouponForPost(id))
             .then((action) => {
@@ -34,22 +37,26 @@ function EditCoupon() {
                 setDiscountType(action.payload.discount_type);
                 setGeneral(action.payload.general)
                 setExpires(action.payload.expires_at)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, []);
 
     // const id = param.id;
 
     const handleSubmit = (e) => {
-        const formData = new FormData();
-        formData.append('code', code);
-        formData.append('description', description);
-        formData.append('discount', discount);
-        formData.append('discount_type', discount_type);
-        formData.append('general', general);
-        formData.append('expires_at', new Date(expires).toISOString());
+        setIsLoading(true)
+        let payload = {
+            code,
+            description,
+            discount,
+            discount_type,
+            general: general,
+            expires_at: moment(expires).format('YYYY-MM-DD'),
+        }
         e.preventDefault();
         const id = param.id;
-        dispatch(editCoupon({ id, formData }))
+        dispatch(editCoupon({ id, payload }))
             .then((action) => {
 
                 if (action.payload.data && action.payload.data.success === true) {
@@ -66,6 +73,8 @@ function EditCoupon() {
                         }, 3000)
                     }
                 }
+            }).finally(() => {
+                setIsLoading(false)
             })
 
     }
@@ -83,24 +92,10 @@ function EditCoupon() {
     //     const formattedDate = `${dateParts[0]}-${dateParts[1]}-${dateParts[2]}`;
     //     setExpires(formattedDate);
     // };
-    // const handleDateChange = (date) => {
-    //     if (date) {
-    //         const day = String(date.getDate()).padStart(2, '0');
-    //         const month = String(date.getMonth() + 1).padStart(2, '0');
-    //         const year = date.getFullYear();
-    //         const formattedDate = `${day}-${month}-${year}`;
-    //         setExpires(formattedDate);
-    //     }
-    // };
+    
 
-    const handleDateChange = (date) => {
-        if (date) {
-          const formattedDate = date.toLocaleDateString('en-GB').split('/').reverse().join('-');
-          setExpires(formattedDate);
-        } else {
-          setExpires(''); // Reset the expires state if date is cleared
-        }
-      };
+
+
     return (
         <div className='wrapper'>
             <Navbar />
@@ -140,79 +135,83 @@ function EditCoupon() {
                                     ))
                                 )}
                             </div>
-                            <form encType="multipart/form-data" onSubmit={handleSubmit}>
-                                <div className="card-body">
-                                    <div className='row'>
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-                                                <label>Code</label>
-                                                <input type="text" className="form-control" value={code} onChange={(e) => setCode(e.target.value)} />
-                                            </div>
-                                        </div>
-
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-                                                <label>Discount</label>
-                                                <input type="text" value={discount} className="form-control" onChange={(e) => setDiscount(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-4'></div>
-
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-
-                                                <label>Discount Type</label>
-                                                <div className='select'>
-                                                    <select class="form-select" name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
-                                                        <option value='' >Select an option</option>
-                                                        <option value="Fixed">Fixed</option>
-                                                        <option value="Percantage">Percantage</option>
-                                                    </select>
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) :
+                                <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                                    <div className="card-body">
+                                        <div className='row'>
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <label>Code</label>
+                                                    <input type="text" className="form-control" value={code} onChange={(e) => setCode(e.target.value)} />
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-                                                <label>Expires</label>
-                                                {/* <input type="date" readonly  className="form-control" name={expires} value={expires} onChange={handleDateChange} /> */}
-                                                <DatePicker
-                                                    className="form-control"
-                                                    name="expires"
-                                                    selected={expires ? new Date(expires) : null}
-                                                    onChange={handleDateChange}
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <label>Discount</label>
+                                                    <input type="text" value={discount} className="form-control" onChange={(e) => setDiscount(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-4'></div>
 
-                                                />
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+
+                                                    <label>Discount Type</label>
+                                                    <div className='select'>
+                                                        <select class="form-select" name={discount_type} onChange={(e) => setDiscountType(e.target.value)}>
+                                                            <option value='' >Select an option</option>
+                                                            <option value="Fixed">Fixed</option>
+                                                            <option value="Percantage">Percantage</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <label>Expires</label>
+                                                    <DatePicker
+                                                        className="form-control"
+                                                        placeholder='expire_at'
+                                                        dateFormat="yyyy-MM-dd"
+                                                        selected={new Date(expires)}
+                                                        onChange={(date) => setExpires(date.toISOString())}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-4'></div>
+
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <label>Description</label>
+                                                    <textarea type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-4'></div>
+                                            <div className='col-sm-4'></div>
+
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <input type='checkbox' checked={general} name='general' onChange={handleGeneralChange} />&nbsp;&nbsp;
+                                                    <label>Active</label><br />
+                                                </div>
+                                            </div>
+
+
+                                            <div className="card-footer" style={{ background: '#fff' }}>
+                                                <button type="submit" className="btn btn-success" >Update</button>
                                             </div>
                                         </div>
-                                        <div className='col-sm-4'></div>
-
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-                                                <label>Description</label>
-                                                <textarea type="text" className="form-control" value={description} onChange={(e) => setDescription(e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <div className='col-sm-4'></div>
-                                        <div className='col-sm-4'></div>
-
-                                        <div className='col-sm-4'>
-                                            <div className="form-group">
-                                                <input type='checkbox' checked={general} name='general' onChange={handleGeneralChange} />&nbsp;&nbsp;
-                                                <label>Active</label><br />
-                                            </div>
-                                        </div>
 
 
-                                        <div className="card-footer" style={{ background: '#fff' }}>
-                                            <button type="submit" className="btn btn-success" >Update</button>
-                                        </div>
                                     </div>
-
-
-                                </div>
-                            </form>
-
+                                </form>
+                            }
                         </div>
 
 
@@ -226,3 +225,4 @@ function EditCoupon() {
 }
 
 export default EditCoupon
+

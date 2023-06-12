@@ -11,6 +11,7 @@ import { useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from 'react-redux'
+import ClipLoader from 'react-spinners/ClipLoader';
 
 function Coupons() {
     const navigate = useNavigate();
@@ -20,27 +21,35 @@ function Coupons() {
     const [totalPage, setTotalPage] = useState()
     const dispatch = useDispatch();
     const [search, setSearch] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
         getCoupon()
     }, []);
 
     const getCoupon = () => {
+        setIsLoading(true)
         dispatch(fetchCoupons())
             .then((action) => {
                 setCoupon(action.payload.data.coupons.data)
                 setTotalPage(action.payload.data.coupons.total)
                 setTotalCoupons(action.payload.data.coupons)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
 
 
     const handleChange = (page) => {
+        setIsLoading(true)
         setPage(page)
         dispatch(fetchCoupons(page))
             .then((action) => {
                 // console.log(action,'page change')
                 setCoupon(action.payload.data.coupons.data)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
 
@@ -60,16 +69,20 @@ function Coupons() {
     }
 
     const getSearch = (e) => {
+        setIsLoading(true)
         e.preventDefault();
         dispatch(searchCoupon(search))
             .then((action) => {
-                // console.log(action.payload.data.data.coupons)
                 setCoupon(action.payload.data.data.coupons.data)
                 setTotalCoupons(action.payload.data.data.coupons)
                 setTotalPage(action.payload.data.data.coupons.total)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     const closeSearch = (e) => {
+        setSearch('');
+        setIsLoading(true)
         dispatch(handleCloseSearch())
             .then((action) => {
                 setCoupon(action.payload.data.data.coupons.data)
@@ -78,8 +91,8 @@ function Coupons() {
                 setTotalPage(action.payload.data.data.coupons.total)
             })
             .finally(() => {
-                setSearch('');
-            });
+                setIsLoading(false)
+            })
     }
     return (
         <div className='wrapper'>
@@ -118,44 +131,52 @@ function Coupons() {
                                                     </button>
                                                 </div>
                                             </div><br />
-                                            <table className="table" style={{ marginBottom: '30px' }}>
-                                                <thead>
-                                                    <tr>
-                                                        <th>Sr.#</th>
-                                                        <th>Code</th>
-                                                        {/* <th>Description</th> */}
-                                                        <th>Discount</th>
-                                                        <th>Discount Type</th>
-                                                        <th>Expire Date</th>
-                                                        <th>General</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {coupon.map((item, i) => {
-                                                        return (
-                                                            <tr key={i}>
-                                                                <td><b>{((page - 1) * 10) + i + 1}</b></td>
-                                                                <td>{item.code}</td>
-                                                                <td>{item.discount}%</td>
-                                                                {/* <td>{item.description}</td> */}
-                                                                {/* <td><p style={{width:'45px',padding:'1px 2px 1px 1px',borderRadius:'6px',color:'#fff',fontSize:'14px',backgroundColor: item.discount_type === 'Fixed' ? '#46cbe1' : '#38b529'}}>{item.discount_type}</p></td> */}
-                                                                <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.discount_type == "Fixed" ? "#17A2B8" : "#28A745"}` }}>{item.discount_type}</button></td>
-                                                                <td>{new Date(item.expires_at).toLocaleDateString('en-GB', {
-                                                                    day: '2-digit',
-                                                                    month: '2-digit',
-                                                                    year: '2-digit'
-                                                                }).split('/').join('-')}</td>
-                                                                <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.general === 1 ? "#17A2B8" : "#28A745"}` }}>{item.general === 1 ? 'Yes' : 'No'}</button></td>
 
-                                                                <td>
-                                                                    <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => handleDelete(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })}
-                                                </tbody>
-                                            </table>
+                                            {isLoading ? (
+                                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                                </div>
+                                            ) :
+                                                <table className="table" style={{ marginBottom: '30px' }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sr.#</th>
+                                                            <th>Code</th>
+                                                            {/* <th>Description</th> */}
+                                                            <th>Discount</th>
+                                                            <th>Discount Type</th>
+                                                            <th>Expire Date</th>
+                                                            <th>General</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {coupon.map((item, i) => {
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <td><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                                    <td>{item.code}</td>
+                                                                    <td>{item.discount}%</td>
+                                                                    {/* <td>{item.description}</td> */}
+                                                                    {/* <td><p style={{width:'45px',padding:'1px 2px 1px 1px',borderRadius:'6px',color:'#fff',fontSize:'14px',backgroundColor: item.discount_type === 'Fixed' ? '#46cbe1' : '#38b529'}}>{item.discount_type}</p></td> */}
+                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.discount_type == "Fixed" ? "#17A2B8" : "#28A745"}` }}>{item.discount_type}</button></td>
+                                                                    <td>{new Date(item.expires_at).toLocaleDateString('en-GB', {
+                                                                        day: '2-digit',
+                                                                        month: '2-digit',
+                                                                        year: '2-digit'
+                                                                    }).split('/').join('-')}</td>
+                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.general === 1 ? "#17A2B8" : "#28A745"}` }}>{item.general === 1 ? 'Yes' : 'No'}</button></td>
+
+                                                                    <td>
+                                                                        <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => handleDelete(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>
+                                                                    </td>
+                                                                </tr>
+                                                            )
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            }
+
                                             {totalCoupons && totalCoupons.total <= 10 ?
                                                 '' :
                                                 <PaginationControl

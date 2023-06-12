@@ -4,6 +4,7 @@ import Navbar from '../../../componets/Navbar';
 import SideBar from '../../../componets/SideBar';
 import Footer from '../../../componets/Footer';
 import { PaginationControl } from 'react-bootstrap-pagination-control';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 import api from '../../services/ApiUrl'
 
@@ -14,9 +15,11 @@ function DeliveryManOrders() {
     const navigate = useNavigate();
     const [search, setSearch] = useState([])
     const param = useParams();
+    const [isLoading, setIsLoading] = useState(false);
 
 
     useEffect(() => {
+        setIsLoading(true)
         api.get(`/deliverymens/${param.id}/orders`)
             .then((res) => {
                 console.log(res)
@@ -25,9 +28,12 @@ function DeliveryManOrders() {
             })
             .catch((error) => {
                 console.log(error)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }, [])
     const getSearch = (e) => {
+        setIsLoading(true)
         // setSearch(e.target.value)
         e.preventDefault();
         api.get(`/deliverymens/${param.id}/orders?keyword=${search}`, {
@@ -38,24 +44,30 @@ function DeliveryManOrders() {
             .then((res) => {
                 console.log(res.data.data.orders)
                 setOrders(res.data.data.orders)
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     const closeSearch = (e) => {
-        // e.preventDefault();
+        setIsLoading(true)
+        setSearch('');
         api.get(`/deliverymens/${param.id}/orders?keyword=${[]}`)
             .then((res) => {
                 setOrders(res.data.data.orders)
             }).finally(() => {
-                setSearch('');
-              });
+                setIsLoading(false)
+            });
     }
     const handelChange = (page) => {
+        setIsLoading(true)
         setPage(page)
         api.get(`/deliverymens/${param.id}/orders?page=${page}`)
             .then((res) => {
                 console.log(res.data.data.orders);
                 setOrders(res.data.data.orders);
 
+            }).finally(() => {
+                setIsLoading(false)
             })
     }
     return (
@@ -98,45 +110,75 @@ function DeliveryManOrders() {
                                                     </button>
                                                 </div>
                                             </div><br />
-                                            {orders && orders.length > 0 ?
-                                            <table className="table" style={{ marginBottom: '30px' }}>
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Sr.#</th>
-                                                    <th scope="col">Customer Name</th>
-                                                    <th scope="col">Customer Phone</th>
-                                                    <th scope="col">Shop Name</th>
-                                                    <th scope="col">Shop Location</th>
-                                                    <th scope="col">Delivery Time</th>
-                                                    <th scope="col">Pickup Time</th>
-                                                    <th scope="col">Amount</th>
-                                                    <th scope="col">Status</th>
-                                                    {/* <th scope="col">Amount</th> */}
+                                            {isLoading ? (
+                                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                                </div>
+                                            ) : (
+                                                orders && orders.length > 0 ? (
+                                                    <table className="table" style={{ marginBottom: '30px' }}>
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Sr.#</th>
+                                                                <th scope="col">Customer Name</th>
+                                                                <th scope="col">Customer Phone</th>
+                                                                <th scope="col">Shop Name</th>
+                                                                <th scope="col">Shop Location</th>
+                                                                <th scope="col">Delivery Time</th>
+                                                                <th scope="col">Pickup Time</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {orders.map((item, i) => {
+                                                                return (
+                                                                    <tr key={i}>
+                                                                        <td>{((page - 1) * 10) + i + 1}</td>
+                                                                        <td>{item.customer_name}</td>
+                                                                        <td>{item.customer_phone}</td>
+                                                                        <td>{item.shop_name}</td>
+                                                                        <td>{item.shop_location}</td>
+                                                                        <td>{item.delivery_time}</td>
+                                                                        <td>{item.pickup_time}</td>
+                                                                        <td>{item.total_amount}</td>
+                                                                        <td>
+                                                                            <button
+                                                                                style={{
+                                                                                    border: 'none',
+                                                                                    borderRadius: '4px',
+                                                                                    fontSize: '10px',
+                                                                                    padding: '0px 4px',
+                                                                                    fontWeight: '700',
+                                                                                    color: '#fff',
+                                                                                    backgroundColor: `${item.status === 'New'
+                                                                                            ? '#17A2B8'
+                                                                                            : item.status === 'Delivered'
+                                                                                                ? '#28A745'
+                                                                                                : item.status === 'InProccess'
+                                                                                                    ? '#7C007C'
+                                                                                                    : item.status === 'Completed'
+                                                                                                        ? '#FFC107'
+                                                                                                        : item.status === 'Packed'
+                                                                                                            ? '#28A745'
+                                                                                                            : '#444'
+                                                                                        }`,
+                                                                                }}
+                                                                            >
+                                                                                {item.order_status}
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                ) : (
+                                                    <div className="text-center">You have no orders</div>
+                                                )
+                                            )}
 
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {orders.map((item, i) => {
-                                                    return (
-                                                        <tr key={i}>
-                                                            <td>{((page - 1) * 10) + i + 1}</td>
-                                                            <td>{item.customer_name}</td>
-                                                            <td>{item.customer_phone}</td>
-                                                            <td>{item.shop_name}</td>
-                                                            <td>{item.shop_location}</td>
-                                                            <td>{item.delivery_time}</td>
-                                                            <td>{item.pickup_time}</td>
-                                                            <td>{item.total_amount}</td>
-                                                            <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.order_status}</button></td>
 
-                                                        </tr>
-                                                    )
-                                                })}
-                                            </tbody>
-                                        </table>: 
-                                        <div className='text-center'>You have not a order</div>
-                                        }
-                                            
                                             <PaginationControl
                                                 page={page}
                                                 total={totalPage}
