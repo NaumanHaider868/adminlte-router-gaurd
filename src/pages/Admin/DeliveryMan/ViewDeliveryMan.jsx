@@ -65,6 +65,9 @@ function ViewDeliveryMan() {
                                                     <p className='p_1'>{deliveryman.last_name}</p>
                                                     <label className='label_1'>Phone</label>
                                                     <p className='p_1'>{delivery_man_meta}</p>
+                                                    <label className='label_1'>Status</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type='checkbox'style={{marginTop:'5px'}} checked={deliveryman.status} />
+                                                    
 
                                                 </div>
 

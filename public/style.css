@@ -77,3 +77,401 @@
     width: 52px;
     height: 24px;
   }
+  
+  
+  
+  /* .btn_search_1 {
+    padding: 4px 8px;
+    margin-top: -3px;
+  }
+  .edit_card input {
+    width: 100%;
+    border: 1px solid #E6EAEC;
+    border-radius: 3px;
+    padding: 6px;
+    outline: none;
+  }
+  
+  .btn_update {
+    padding: 4px 8px;
+  }
+  
+  .status_button {
+    font-size: 10px;
+    padding: 0px 4px;
+    font-weight: 800;
+    color: #fff;
+    text-transform: uppercase;
+  }
+  
+  .status_button:hover {
+    color: #fff;
+  }
+  
+  #val {
+    width: 100%;
+    margin-top: -12px;
+  }
+  
+  .update_b_e {
+    margin-top: 23px;
+  }
+  
+  .pagination {
+    margin-top: 50px;
+  }
+  
+  .search_none {
+    display: none;
+  }
+  
+  .btn_assign {
+    font-size: 11px;
+    padding: 1px 3px;
+    font-weight: 700;
+  }
+  
+  
+  
+  .big_prob_spinner {
+    text-align: center;
+  }
+  
+  .add_heading {
+    text-align: center !important;
+    margin-bottom: 43px;
+  }
+  
+  .text_cen {
+    text-align: center;
+  }
+
+  
+  .btn_b {
+    margin-bottom: 20px;
+  }
+  
+  .content-wrapper .content {
+    padding-bottom: 20px;
+  }
+  
+  .add_item_btn {
+    margin-bottom: 16px;
+  }
+  
+  .editorder_window .modal-footer {
+    border: none !important;
+    justify-content: space-between;
+  }
+  
+  .btn_Censel {
+    padding: 6px 22px;
+  }
+  
+  .add_btn_right {
+    float: right;
+  }
+  
+  .custom-thead {
+    background-color: #F8F9FA;
+  
+  }
+  
+  .total_section {
+    width: 386px;
+    padding: 0.75rem;
+    border: 1px solid #DEE2E6;
+  }
+  
+  .item_p_sec {
+    margin-bottom: 0px;
+  }
+  
+  .grand_total_price {
+    padding-left: 0px;
+  }
+  
+  .edit_order_wrapper label {
+    margin-top: 18px;
+  }
+  
+  .delivery_details {
+    padding: 12px;
+    border: 1px solid #CED4DA;
+    padding-bottom: 0px;
+    margin-top: 34px;
+    width: 83%;
+    float: right;
+  }
+  .admin_notes {
+    margin-top: 5px!important;
+    margin-bottom: 9px;
+  }
+
+  .prob_select {
+    outline: none;
+    width: 100%;
+    margin-bottom: 20px;
+    border: 1px solid #E6EAEC;
+    border-radius: 3px;
+    padding: 6px;
+} */
+
+.top_login {
+  -ms-flex-align: center;
+  align-items: center;
+  background-color: #e9ecef;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  height: 100vh;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.btn_table {
+  font-size: 10px;
+  padding: 1px 4px;
+  font-weight: bold;
+}
+
+.btn_cooking {
+  background: #FFC008;
+  border: 1px solid #FFC008;
+}
+
+.fa-eye {
+  margin-right: 6px;
+}
+
+.fa-edit {
+  margin-right: 6px;
+}
+
+.fa-trash {
+  margin-right: 6px;
+}
+
+.btn_search_1 {
+  padding: 4px 8px;
+  margin-top: -3px;
+}
+
+.search_input {
+  width: 53%;
+  height: 35px;
+  border: 2px solid #E6EAEC;
+  border-radius: 3px;
+  padding: 14px;
+  margin-right: 15px;
+  outline: none;
+}
+
+.search_input::placeholder {
+  font-weight: 600;
+  color: #9AA1A8;
+}
+
+.prob_th {
+  padding-left: 33px !important;
+}
+
+/* .next_input{
+  margin-top: 20px;
+} */
+.edit_card input {
+  width: 100%;
+  border: 1px solid #E6EAEC;
+  border-radius: 3px;
+  padding: 6px;
+  outline: none;
+}
+
+.btn_update {
+  padding: 4px 8px;
+}
+
+.status_button {
+  font-size: 10px;
+  padding: 0px 4px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.status_button:hover {
+  color: #fff;
+}
+
+#val {
+  width: 100%;
+  margin-top: -12px;
+}
+
+.update_b_e {
+  margin-top: 23px;
+}
+
+.pagination {
+  margin-top: 50px;
+}
+
+.search_none {
+  display: none;
+}
+
+.btn_assign {
+  font-size: 11px;
+  padding: 1px 3px;
+  font-weight: 700;
+}
+
+.assign_inp {
+  outline: none;
+  width: 80%;
+  outline: none;
+  width: 80%;
+  margin-bottom: 80px;
+  border: 2px solid #E6EAEC;
+  border-radius: 3px;
+  padding: 6px;
+  margin-top: 6px;
+}
+
+#alert-message {
+  width: 100%, ;
+  margin-top: -12px;
+}
+
+.prob_select {
+  outline: none;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #E6EAEC;
+  border-radius: 3px;
+  padding: 6px;
+}
+
+.update_para {
+  margin-top: 18px;
+  margin-bottom: 8px;
+}
+
+.left_a {
+  margin-right: 10px;
+}
+
+.actions_roll {
+  margin-left: 39px;
+}
+
+.nav a.active {
+  margin: 0px;
+}
+
+.prob2_th {
+  padding-left: 78px !important;
+}
+
+.alrt_center {
+  margin-top: 20px !important;
+  margin-bottom: 40px !important;
+  text-align: center;
+}
+
+.btn_clear_search {
+  margin-left: 6px;
+}
+
+.prob_sppiner {
+  /* / height: 300px; / */
+  /* / text-align: center; / */
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.big_prob_spinner {
+  text-align: center;
+}
+
+.add_heading {
+  text-align: center !important;
+  margin-bottom: 43px;
+}
+
+.text_cen {
+  text-align: center;
+}
+
+#stoploading {
+  margin-top: 8px;
+}
+
+.btn_b {
+  margin-bottom: 20px;
+}
+
+.content-wrapper .content {
+  padding-bottom: 20px;
+}
+
+.add_item_btn {
+  margin-bottom: 16px;
+}
+
+.editorder_window .modal-footer {
+  border: none !important;
+  justify-content: space-between;
+}
+
+.btn_Censel {
+  padding: 6px 22px;
+}
+
+.add_btn_right {
+  float: right;
+}
+
+.custom-thead {
+  background-color: #F8F9FA;
+
+}
+
+.total_section {
+  width: 392px;
+  padding: 0.75rem;
+  border: 1px solid #DEE2E6;
+}
+
+.item_p_sec {
+  margin-bottom: 0px;
+}
+
+.grand_total_price {
+  padding-left: 0px;
+}
+
+.edit_order_wrapper label {
+  margin-top: 18px;
+}
+
+.delivery_details {
+  padding: 12px;
+  border: 1px solid #CED4DA;
+  padding-bottom: 0px;
+  margin-top: 3px;
+  width: 83%;
+  float: right;
+}
+.admin_notes {
+  margin-top: 5px!important;
+  margin-bottom: 9px;
+}
+
+.delivery_man_detail_label{
+  margin-left: 57px;
+  font-size: 19px;
+  margin-bottom: 15px;
+  margin-top: 5px !important;
+}

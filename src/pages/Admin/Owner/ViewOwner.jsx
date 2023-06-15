@@ -19,10 +19,10 @@ function ViewOwner() {
         setIsLoading(true)
         api.get(`/owners/${param.id}`)
             .then((res) => {
-                console.log(res.data.data,'shop');
+                console.log(res.data.data, 'shop');
                 setOwner(res.data.data.owner)
                 setPhone(res.data.data.owner.user_meta.phone)
-            }).finally(()=>{
+            }).finally(() => {
                 setIsLoading(false)
             })
     }, [])
@@ -62,7 +62,8 @@ function ViewOwner() {
                                                 <p className='p_1'>{owner.username}</p>
                                                 <label className='label_1'>Phone</label>
                                                 <p className='p_1'>{phone}</p>
-
+                                                <label className='label_1'>Active</label>&nbsp;&nbsp;&nbsp;
+                                                <input type='checkbox' checked={owner.status} />
 
                                             </div>
                                             <div className='col-md-6'>
@@ -75,7 +76,7 @@ function ViewOwner() {
 
                                     </div>
                                 </div>}
-                                
+
                             </>
 
 

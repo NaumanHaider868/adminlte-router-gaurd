@@ -23,6 +23,8 @@ function EditOwner() {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
+    const[owner,setOwner]=useState([])
+
     const [alert, setAlert] = useState([]);
 
 
@@ -32,14 +34,15 @@ function EditOwner() {
         setIsLoading(true)
         api.get(`/owners/${param.id}`)
             .then((res) => {
-                console.log(res.data.data.shop);
-                setPassword(res.data.data.shop.password);
-                setFirstName(res.data.data.shop.first_name);
-                setLastName(res.data.data.shop.last_name);
-                setStatus(res.data.data.shop.status)
-                setUserName(res.data.data.shop.username)
-                setOwnerData(res.data.data.shop.user_meta.phone);
-                setPhone(res.data.data.shop.user_meta.phone)
+                console.log(res.data.data.owner.username);
+                setOwner(res.data.data.owner)
+                //setPassword(res.data.owner.password);
+                setFirstName(res.data.data.owner.first_name);
+                setLastName(res.data.data.owner.last_name);
+                setStatus(res.data.data.owner.status)
+                setUserName(res.data.data.owner.username)
+                //setOwnerData(res.data.data.shop.user_meta.phone);
+                setPhone(res.data.data.owner.user_meta.phone)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -78,6 +81,11 @@ function EditOwner() {
                 setIsLoadingTwo(false)
             })
     }
+    const handleStatusChange = (e) => {
+        const isChecked = e.target.checked;
+        const value = isChecked ? 1 : 0;
+        setStatus(value);
+    };
     return (
         <div className='wrapper'>
             <Navbar />
@@ -128,46 +136,45 @@ function EditOwner() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>User Name</label>
-                                                    <input type="text" className="form-control" value={username} placeholder="User Name" onChange={(e) => setUserName(e.target.value)} />
+                                                    <input type="text" className="form-control" defaultValue={username} placeholder="User Name" onChange={(e) => setUserName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
+                                                    <input type="text" className="form-control" defaultValue={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                                    <input type="text" className="form-control" defaultValue={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
+                                            </div>
+
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" defaultValue={phone} placeholder="Phone" onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Password</label>
-                                                    <input type="text" className="form-control" value={password} placeholder="Customer Name" onChange={(e) => setPassword(e.target.value)} />
+                                                    <input type="text" className="form-control" defaultValue={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
-                                                    <label>Confirm Password</label>
-                                                    <input type="text" className="form-control" value={confirm_password} placeholder="Customer Name" onChange={(e) => setConfimPassword(e.target.value)} />
+                                                    <label>Password confirmation </label>
+                                                    <input type="text" className="form-control" value={confirm_password} placeholder="Password confirmation" onChange={(e) => setConfimPassword(e.target.value)} />
                                                 </div>
                                             </div>
+
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
-                                                    <label>Status</label>
-                                                    <select className='form-control' value={status} onChange={(e) => setStatus(e.target.value)}>
-                                                        <option value="0">0</option>
-                                                        <option value="1">1</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div className='col-sm-6'>
-                                                <div className="form-group">
-                                                    <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} placeholder="Customer Phone" onChange={(e) => setPhone(e.target.value)} />
+                                                    <input type='checkbox' defaultChecked={status} name='status' onChange={handleStatusChange} />&nbsp;&nbsp;
+                                                    <label>Active</label><br />
                                                 </div>
                                             </div>
 
@@ -176,11 +183,11 @@ function EditOwner() {
                                     </div>
                                     <div className="card-footer" style={{ background: '#fff' }}>
                                         <button type="submit" className="btn btn-success">
-                                        {isLoadingTwo ? (
-                                                        <Spinner />
-                                                    ) : (
-                                                        'Update'
-                                                    )}
+                                            {isLoadingTwo ? (
+                                                <Spinner />
+                                            ) : (
+                                                'Update'
+                                            )}
                                         </button>
                                     </div>
                                 </form>

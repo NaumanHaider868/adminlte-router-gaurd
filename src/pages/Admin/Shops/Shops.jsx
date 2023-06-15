@@ -61,7 +61,6 @@ function Shops() {
             .then((res) => {
                 getShop()
                 console.log('delete', res)
-                getShop()
                 setTotalShop(res.data.data.shops)
                 toast.success(res.data.messages[0])
             })

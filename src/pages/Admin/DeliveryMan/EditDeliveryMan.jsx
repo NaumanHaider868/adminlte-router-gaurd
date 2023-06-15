@@ -14,7 +14,7 @@ function EditDeliveryMan() {
     const [email, setEmail] = useState();
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
-    const [status, setStatus] = useState();
+    const [status, setStatus] = useState(false);
     const [last_login, setLastLogin] = useState();
     const [phone, setPhone] = useState();
     // const [password,setPassword] = useState('');
@@ -31,6 +31,7 @@ function EditDeliveryMan() {
         setIsLoading(true)
         api.get(`/deliverymens/${param.id}`)
             .then((res) => {
+                console.log(res.data.data.deliveryMens)
                 setEmail(res.data.data.deliveryMens.email);
                 setFirstName(res.data.data.deliveryMens.first_name);
                 setLastName(res.data.data.deliveryMens.last_name);
@@ -68,6 +69,11 @@ function EditDeliveryMan() {
                 setIsLoadingTwo(false)
             })
     }
+    const handleStatusChange = (e) => {
+        const isChecked = e.target.checked;
+        const value = isChecked ? 1 : 0;
+        setStatus(value);
+    };
     return (
         <div className='wrapper'>
             <Navbar />
@@ -133,21 +139,27 @@ function EditDeliveryMan() {
                                                 </div>
                                             </div>
                                             {/* <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Password</label>
-                                                <input type="text" className="form-control" value={password} name={password} onChange={(e) => setPassword(e.target.value)} />
+                                                <div className="form-group">
+                                                    <label>Password</label>
+                                                    <input type="text" className="form-control" value={password} name={password} onChange={(e) => setPassword(e.target.value)} />
+                                                </div>
                                             </div>
-                                        </div> */}
-                                            {/* <div className='col-sm-6'>
-                                            <div className="form-group">
-                                                <label>Confirm Password</label>
-                                                <input type="text" className="form-control" value={confirm_password} name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
-                                            </div>
-                                        </div> */}
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Confirm Password</label>
+                                                    <input type="text" className="form-control" value={confirm_password} name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                </div>
+                                            </div> */}
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
                                                     <input type="text" className="form-control" value={phone} name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-4'>
+                                                <div className="form-group">
+                                                    <input type='checkbox' checked={status} name='status' onChange={handleStatusChange} />&nbsp;&nbsp;
+                                                    <label>Active</label><br />
                                                 </div>
                                             </div>
                                             <div className="card-footer" style={{ background: '#fff' }}>

@@ -128,11 +128,11 @@ function Deliverymans() {
                                                 <table className="table" style={{ marginBottom: '30px' }}>
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">Sr.#</th>
-                                                            <th scope="col">Email</th>
-                                                            <th scope="col">First Name</th>
-                                                            <th scope="col">Last Name</th>
-                                                            <th scope='col'>Orders</th>
+                                                            <th>Sr.#</th>
+                                                            <th>Email</th>
+                                                            <th>Full Name</th>
+                                                            <th>Phone Number</th>
+                                                            <th>Status</th>
                                                             <th className='' scope="col">Action</th>
                                                         </tr>
                                                     </thead>
@@ -142,9 +142,9 @@ function Deliverymans() {
                                                                 <tr key={i}>
                                                                     <td><b>{((page - 1) * 10) + i + 1}</b></td>
                                                                     <td>{item.email}</td>
-                                                                    <td>{item.first_name}</td>
-                                                                    <td>{item.last_name}</td>
-                                                                    <td>{item.orders_count}</td>
+                                                                    <td>{item.first_name} {item.last_name}</td>
+                                                                    <td>{item.user_meta.phone}</td>
+                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.status === 1 ? "#17A2B8" : "#28A745"}` }}>{item.status === 1 ? 'Active' : "InActive"}</button></td>
                                                                     <td>
                                                                         <i class="fas fa-edit" onClick={() => editDeliveryMen(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
                                                                         <i class="fas fa-trash" onClick={() => deleteDeliveryMen(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> &nbsp;

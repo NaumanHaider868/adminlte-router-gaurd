@@ -92,7 +92,7 @@ function Orders() {
         setDeliveryMen(e.target.value)
     }
     const payload = {
-        order_id: deliveryMens,
+        order_id: deliveryMens.id,
         delivery_man_id: deliveryMen
     }
 
@@ -150,9 +150,7 @@ function Orders() {
                         <div className='col-sm-6'>
                             <div className="form-group">
                                 <label for="cars">Delivere Man</label>
-                                <select className='form-control' name="cars" id="cars"
-                                    onChange={getDeliveryMen}
-                                >
+                                <select className='form-control' name="cars" id="cars"onChange={getDeliveryMen}>
                                     {deliveryMens.map((item, i) => {
                                         return (
                                             <option key={i} value={item.id}>{item.first_name}</option>
