@@ -144,7 +144,18 @@ function Deliverymans() {
                                                                     <td>{item.email}</td>
                                                                     <td>{item.first_name} {item.last_name}</td>
                                                                     <td>{item.user_meta.phone}</td>
-                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.status === 1 ? "#17A2B8" : "#28A745"}` }}>{item.status === 1 ? 'Active' : "InActive"}</button></td>
+                                                                    <td>
+                                                                        {item.status === 1 && (
+                                                                            <span className="badge badge-success">
+                                                                                Active
+                                                                            </span>
+                                                                        )}
+                                                                        {item.status === 0 && (
+                                                                            <span className="badge badge-warning">
+                                                                                InActive
+                                                                            </span>
+                                                                        )}
+                                                                    </td>
                                                                     <td>
                                                                         <i class="fas fa-edit" onClick={() => editDeliveryMen(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
                                                                         <i class="fas fa-trash" onClick={() => deleteDeliveryMen(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> &nbsp;

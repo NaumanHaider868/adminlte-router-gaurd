@@ -64,7 +64,7 @@ function Shops() {
                 setTotalShop(res.data.data.shops)
                 toast.success(res.data.messages[0])
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoading(false)
             })
     }
@@ -79,7 +79,7 @@ function Shops() {
                 setTotalPage(res.data.data.shops.total)
                 setShops(res.data.data.shops.data);
                 setTotalShop(res.data.data.shops)
-            }).finally(()=>{
+            }).finally(() => {
                 setIsLoading(false)
             })
     }
@@ -147,12 +147,13 @@ function Shops() {
                                     <table className="table" style={{ marginBottom: '30px' }}>
                                         <thead>
                                             <tr>
-                                                <th className='text-center'>Sr.#</th>
-                                                {/* <th className='text-center'>Date</th> */}
-                                                <th className='text-center'>Name</th>
-                                                <th className='text-center'>Phone</th>
-                                                <th className='text-center'>Address</th>
-                                                <th className='text-center'>Shop Orders</th>
+                                                <th>Sr.#</th>
+                                                {/* <th>Date</th> */}
+                                                <th>Shop Name</th>
+                                                <th>Owner Name</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Shop Orders</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -160,14 +161,19 @@ function Shops() {
                                             {shops.map((item, i) => {
                                                 return (
                                                     <tr key={i}>
-                                                        <td className='text-center'><b>{((page - 1) * 10) + i + 1}</b></td>
-                                                        {/* <td className='text-center'>1/1/2023</td> */}
-                                                        <td className='text-center'>{item.name}</td>
-                                                        <td className='text-center'>{item.phone}</td>
-                                                        <td className='text-center'>{item.address}</td>
-                                                        <td className='text-center'>{item.orders_count}</td>
+                                                        <td><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                        {/* <td>1/1/2023</td> */}
+                                                        <td>{item.name}</td>
+                                                        <td>{item.owner_name}</td>
+                                                        <td>{item.phone}</td>
+                                                        <td>{item.address}</td>
                                                         <td>
-                                                            <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => viewShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>  <button class="btn" onClick={() => shopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', background: '#3d84dd', color: '#fff' }}>shop order</button>
+                                                            <span className="badge badge-success">
+                                                                {item.orders_count}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <i class="fas fa-edit" onClick={() => editShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => viewShop(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => deleteProduct(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>  <button class="btn" onClick={() => shopOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', background: '#3d84dd', color: '#fff' }}>Orders</button>
                                                         </td>
                                                     </tr>
                                                 )

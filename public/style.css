@@ -48,9 +48,9 @@
     box-shadow: none;
   }
 
-  table tbody, table thead{
+  /* table tbody, table thead{
     text-align: center;
-  }
+  } */
 
   .spinner {
     border: 4px solid rgba(236, 229, 229, 0.1);
@@ -78,144 +78,6 @@
     height: 24px;
   }
   
-  
-  
-  /* .btn_search_1 {
-    padding: 4px 8px;
-    margin-top: -3px;
-  }
-  .edit_card input {
-    width: 100%;
-    border: 1px solid #E6EAEC;
-    border-radius: 3px;
-    padding: 6px;
-    outline: none;
-  }
-  
-  .btn_update {
-    padding: 4px 8px;
-  }
-  
-  .status_button {
-    font-size: 10px;
-    padding: 0px 4px;
-    font-weight: 800;
-    color: #fff;
-    text-transform: uppercase;
-  }
-  
-  .status_button:hover {
-    color: #fff;
-  }
-  
-  #val {
-    width: 100%;
-    margin-top: -12px;
-  }
-  
-  .update_b_e {
-    margin-top: 23px;
-  }
-  
-  .pagination {
-    margin-top: 50px;
-  }
-  
-  .search_none {
-    display: none;
-  }
-  
-  .btn_assign {
-    font-size: 11px;
-    padding: 1px 3px;
-    font-weight: 700;
-  }
-  
-  
-  
-  .big_prob_spinner {
-    text-align: center;
-  }
-  
-  .add_heading {
-    text-align: center !important;
-    margin-bottom: 43px;
-  }
-  
-  .text_cen {
-    text-align: center;
-  }
-
-  
-  .btn_b {
-    margin-bottom: 20px;
-  }
-  
-  .content-wrapper .content {
-    padding-bottom: 20px;
-  }
-  
-  .add_item_btn {
-    margin-bottom: 16px;
-  }
-  
-  .editorder_window .modal-footer {
-    border: none !important;
-    justify-content: space-between;
-  }
-  
-  .btn_Censel {
-    padding: 6px 22px;
-  }
-  
-  .add_btn_right {
-    float: right;
-  }
-  
-  .custom-thead {
-    background-color: #F8F9FA;
-  
-  }
-  
-  .total_section {
-    width: 386px;
-    padding: 0.75rem;
-    border: 1px solid #DEE2E6;
-  }
-  
-  .item_p_sec {
-    margin-bottom: 0px;
-  }
-  
-  .grand_total_price {
-    padding-left: 0px;
-  }
-  
-  .edit_order_wrapper label {
-    margin-top: 18px;
-  }
-  
-  .delivery_details {
-    padding: 12px;
-    border: 1px solid #CED4DA;
-    padding-bottom: 0px;
-    margin-top: 34px;
-    width: 83%;
-    float: right;
-  }
-  .admin_notes {
-    margin-top: 5px!important;
-    margin-bottom: 9px;
-  }
-
-  .prob_select {
-    outline: none;
-    width: 100%;
-    margin-bottom: 20px;
-    border: 1px solid #E6EAEC;
-    border-radius: 3px;
-    padding: 6px;
-} */
 
 .top_login {
   -ms-flex-align: center;

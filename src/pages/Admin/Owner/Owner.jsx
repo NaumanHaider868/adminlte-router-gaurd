@@ -23,10 +23,6 @@ function Owner() {
 
     const navigate = useNavigate();
     useEffect(() => {
-        // const token = localStorage.getItem('token');
-        // if (token) {
-        //     navigate('/login')
-        // }
         getOwner();
     }, [])
     const getSearch = (e) => {
@@ -53,7 +49,7 @@ function Owner() {
                 setOwner(res.data.data.owners.data)
                 setTotalOwner(res.data.data.owners)
             }).finally(() => {
-                
+
                 setIsLoading(false)
             });
     }
@@ -78,8 +74,6 @@ function Owner() {
         setPage(page)
         api.get(`/owners?page=${page}`)
             .then((res) => {
-                getOwner()
-                console.log(res.data.data.owners, 'owner')
                 setOwner(res.data.data.owners.data)
                 setTotalOwner(res.data.data.owners)
             }).finally(() => {
@@ -161,7 +155,19 @@ function Owner() {
                                                                 <td>{item.email}</td>
                                                                 <td>{item.first_name}</td>
                                                                 <td>{item.last_name}</td>
-                                                                <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "1" ? "#FFC107" : item.status == "0" ? "#28A745" : "#444"}` }}>{item.status}</button></td>
+                                                                {/* <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "1" ? "#FFC107" : item.status == "0" ? "#28A745" : "#444"}` }}>{item.status}</button></td> */}
+                                                                <td>
+                                                                    {item.status === 1 && (
+                                                                        <span className="badge badge-success">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    {item.status === 0 && (
+                                                                        <span className="badge badge-warning">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                </td>
                                                                 <td>
                                                                     <i onClick={() => viewOwner(item.id)} class="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
                                                                     <i onClick={() => editOwner(item.id)} class="fas fa-edit" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;

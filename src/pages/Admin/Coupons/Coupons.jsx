@@ -159,13 +159,35 @@ function Coupons() {
                                                                     <td>{item.discount}%</td>
                                                                     {/* <td>{item.description}</td> */}
                                                                     {/* <td><p style={{width:'45px',padding:'1px 2px 1px 1px',borderRadius:'6px',color:'#fff',fontSize:'14px',backgroundColor: item.discount_type === 'Fixed' ? '#46cbe1' : '#38b529'}}>{item.discount_type}</p></td> */}
-                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.discount_type == "Fixed" ? "#17A2B8" : "#28A745"}` }}>{item.discount_type}</button></td>
+                                                                    <td>
+                                                                        {item.discount_type === "Fixed" && (
+                                                                            <span className="badge badge-warning">
+                                                                                {item.discount_type}
+                                                                            </span>
+                                                                        )}
+                                                                        {item.discount_type === "Percentage" && (
+                                                                            <span className="badge badge-success">
+                                                                                {item.discount_type}
+                                                                            </span>
+                                                                        )}
+                                                                    </td>
                                                                     <td>{new Date(item.expires_at).toLocaleDateString('en-GB', {
                                                                         day: '2-digit',
                                                                         month: '2-digit',
                                                                         year: '2-digit'
                                                                     }).split('/').join('-')}</td>
-                                                                    <td><button className='btn status_button' style={{ fontSize: '12px', color: '#fff', padding: '1px', backgroundColor: `${item.general === 1 ? "#17A2B8" : "#28A745"}` }}>{item.general === 1 ? 'Yes' : 'No'}</button></td>
+                                                                    <td>
+                                                                        {item.general === 1 && (
+                                                                            <span className="badge badge-success">
+                                                                                Yes
+                                                                            </span>
+                                                                        )}
+                                                                        {item.general === 0 && (
+                                                                            <span className="badge badge-warning">
+                                                                                No
+                                                                            </span>
+                                                                        )}
+                                                                    </td>
 
                                                                     <td>
                                                                         <i class="fas fa-edit" onClick={() => editCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-trash" onClick={() => handleDelete(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i> <i class="fas fa-eye" onClick={() => ViewCoupon(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>

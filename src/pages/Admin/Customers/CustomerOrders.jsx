@@ -128,7 +128,34 @@ function CustomerOrders() {
                                                                     <td>{item.customer_phone}</td>
                                                                     <td>{item.delivery_charges}</td>
                                                                     <td>{item.location}</td>
-                                                                    <td>{item.status}</td>
+                                                                    <td>
+                                                                        {item.status === "New" && (
+                                                                            <span className="badge badge-warning">
+                                                                                {item.status}
+                                                                            </span>
+                                                                        )}
+                                                                        {(item.status === "InProccess" || item.status === "InProcess") && (
+                                                                            <span className="badge badge-danger">
+                                                                                {item.status}
+                                                                            </span>
+                                                                        )}
+                                                                        {item.status === "Onway" && (
+                                                                            <span className="badge badge-primary">
+                                                                                {item.status}
+                                                                            </span>
+                                                                        )}
+                                                                        {item.status === "Completed" && (
+                                                                            <span className="badge badge-primary">
+                                                                                {item.status}
+                                                                            </span>
+                                                                        )}
+                                                                        {(item.status === "Packed" || item.status === "Pack") && (
+                                                                            <span className="badge badge-info">
+                                                                                {item.status}
+                                                                            </span>
+                                                                        )}
+
+                                                                    </td>
                                                                     <td>{item.sub_total}</td>
                                                                     <td>{item.tax}</td>
                                                                     <td>{item.total}</td>

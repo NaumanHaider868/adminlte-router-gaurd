@@ -72,7 +72,7 @@ function Orders() {
                 setTotalPage(res.data.data.orders.total)
                 setTotalOrder(res.data.data.orders)
             }).finally(() => {
-                
+
                 setIsLoading(false);
             });
     }
@@ -150,7 +150,7 @@ function Orders() {
                         <div className='col-sm-6'>
                             <div className="form-group">
                                 <label for="cars">Delivere Man</label>
-                                <select className='form-control' name="cars" id="cars"onChange={getDeliveryMen}>
+                                <select className='form-control' name="cars" id="cars" onChange={getDeliveryMen}>
                                     {deliveryMens.map((item, i) => {
                                         return (
                                             <option key={i} value={item.id}>{item.first_name}</option>
@@ -210,13 +210,12 @@ function Orders() {
                                             <table className="table" style={{ marginBottom: '30px' }}>
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">Sr.#</th>
-                                                        <th scope="col">Date</th>
-                                                        <th scope="col">Customer Name</th>
-                                                        <th scope="col">Location</th>
-                                                        <th scope="col">Amount</th>
-                                                        <th scope="col">status</th>
-                                                        <th className='' scope="col">Action</th>
+                                                        <th>Sr.#</th>
+                                                        <th>Customer Name</th>
+                                                        <th>Location</th>
+                                                        <th>Amount</th>
+                                                        <th>status</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
 
@@ -225,11 +224,38 @@ function Orders() {
                                                         return (
                                                             <tr key={index}>
                                                                 <td><b>{((page - 1) * 10) + index + 1}</b></td>
-                                                                <td>1/1/2023</td>
                                                                 <td>{item.username}</td>
                                                                 <td>{item.location}</td>
                                                                 <td>{item.total}</td>
-                                                                <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.status}</button></td>
+                                                                {/* <td><button style={{ border: 'none', borderRadius: '4px', fontSize: '10px', padding: '0px 4px', fontWeight: '700', color: '#fff', backgroundColor: `${item.status == "New" ? "#17A2B8" : item.status == "Delivered" ? "#28A745" : item.status == "InProccess" ? "#7C007C" : item.status == "Completed" ? "#FFC107" : item.status == "Packed" ? "#28A745" : "#444"}` }}>{item.status}</button></td> */}
+                                                                <td>
+                                                                    {item.status === "New" && (
+                                                                        <span className="badge badge-warning">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    {(item.status === "InProccess" || item.status === "InProcess") && (
+                                                                        <span className="badge badge-danger">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    {item.status === "Onway" && (
+                                                                        <span className="badge badge-primary">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    {item.status === "Completed" && (
+                                                                        <span className="badge badge-primary">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    {(item.status === "Packed" || item.status === "Pack") && (
+                                                                        <span className="badge badge-info">
+                                                                            {item.status}
+                                                                        </span>
+                                                                    )}
+                                                                    
+                                                                </td>
                                                                 <td>
                                                                     <a onClick={() => viewOrder(item.id)}><i class="fas fa-eye" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>&nbsp;
                                                                     <a onClick={() => editOrder(item.id)}><i class="fas fa-edit" style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i></a>
