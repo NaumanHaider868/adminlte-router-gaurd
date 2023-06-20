@@ -32,8 +32,10 @@ function AddShop() {
     const [owner_image, setOwnerImage] = useState(null)
 
     const [alert, setAlert] = useState([])
+    const[isLoadingTwo,setIsLoadingTwo]=useState(false)
 
     const handleSubmit = (e) => {
+        setIsLoadingTwo(true)
         const formatData = new FormData();
         formatData.append('name', name)
         formatData.append('address', address)
@@ -72,6 +74,9 @@ function AddShop() {
                         alertMessage.style.display = 'none';
                     }, 3000);
                 }
+            })
+            .finally(()=>{
+                setIsLoadingTwo(false)
             })
     }
     return (
@@ -260,7 +265,7 @@ function AddShop() {
                         </div>
                     </div>
                     <div className="card-footer">
-                        <button type="submit" className="btn btn-success" onClick={handleSubmit} >Add Shop</button>
+                        <button type="submit" className="btn btn-success" onClick={handleSubmit} >{isLoadingTwo && <div className='spinner-border spinner-border-sm' id='stoploading'></div>}Add Shop</button>
                     </div>
                 </section >
             </div >

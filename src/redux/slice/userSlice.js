@@ -67,7 +67,7 @@ const userSlice = createSlice({
     initialState: {
         coupon: [],
         error: null,
-        // isLoading: false
+        isLoading: false
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -78,12 +78,20 @@ const userSlice = createSlice({
         //     state.isLoading = true
         // });
 
+        builder.addCase(fetchCoupons.pending, (state, action) => {
+            // state.isLoading = false;
+            state.error = null;
+            state.isLoading = true
+        });
+
         builder.addCase(fetchCoupons.fulfilled, (state, action) => {
             // state.isLoading = false;
             state.error = null;
             state.coupon = action.payload;
             state.total = action.payload.total;
+            state.isLoading=false
         });
+
 
         // Delete Coupon
         builder.addCase(deleteCoupon.fulfilled, (state, action) => {
@@ -131,13 +139,13 @@ const userSlice = createSlice({
         // search api
 
         builder.addCase(searchCoupon.fulfilled, (state, action) => {
-            state.item = action.payload
-            state.error = null
+            state.item = action.payload;
+            state.error = null;
         })
 
         builder.addCase(handleCloseSearch.fulfilled, (state, action) => {
-            state.item = action.payload
-            state.error = null
+            state.item = action.payload;
+            state.error = null;
         })
     }
 

@@ -89,154 +89,85 @@ function AdminProfile() {
             })
     }
     return (
-        <div className='wrapper'>
+        
+        <div className="wrapper">
             <Navbar />
             <Sidebar />
             <div className="content-wrapper">
-                <section className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-6">
-                                <h1>Profile</h1>
-                            </div>
-                            <div className="col-sm-6">
-                                <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><Link to='/admin' href="#">Admin</Link></li>
-                                    <li className="breadcrumb-item active">Profile</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
                 <section className="content">
-                    <div className="container-fluid">
-                        <div className="row">
+                    <div className="card">
+                        <div className="card-header p-2">
+                            <ul className="nav nav-pills">
 
-
-                            <div className='col-md-3'>
-                                <div className="card card-primary card-outline">
-                                    <div className="card-body box-profile">
-                                        <div className="text-center">
-                                            <img className="profile-user-img img-fluid img-circle"
-                                                src={image}
-                                                alt="User profile picture" />
-                                        </div>
-
-                                        <h3 className="profile-username text-center">{name}</h3>
-
-
-                                        <ul className="list-group list-group-unbordered mb-3">
-                                            <li className="list-group-item">
-                                                <b>First Name</b> <a className="float-right">{first_name}</a>
-                                            </li>
-                                            <li className="list-group-item">
-                                                <b>Last Name</b> <a className="float-right">{last_name}</a>
-                                            </li>
-                                            <li className="list-group-item">
-                                                <b>Phone</b> <a className="float-right">{phone}</a>
-                                            </li>
-                                        </ul>
-
-                                    </div>
-                                </div>
+                                <h3>Edit Profile</h3>
+                            </ul>
+                        </div>
+                        <div className="card-body">
+                            <div className='alert alert-danger' id='alert-message'>
+                                {
+                                    alert.map((err, index) => {
+                                        return (
+                                            <div className='valid'>
+                                                <p className='valid-p alert-danger' key={index}>{err}</p>
+                                            </div>
+                                        )
+                                    })
+                                }
                             </div>
-
-                            <div className="col-md-9">
-                                <div className="card">
-                                    <div className="card-header p-2" style={{ background: '#f7f7f7' }}>
-                                        <ul className="nav nav-pills">
-                                            {/* <li className="nav-item"><a className="nav-link active" href="#timeline" data-toggle="tab">Activity</a></li> */}
-                                            <li className="nav-item"><a className="nav-link active">Edit Profile</a></li>
-                                        </ul>
-                                    </div>
-                                    <div className="card-body">
-                                        {
-                                            alert.map((err, index) => {
-                                                return (
-                                                    <div id="alert-message" className="valid">
-                                                        <p className="valid-p alert-danger" key={index}>
-                                                            {err}
-                                                        </p>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-                                        <br />
-                                        <div className="tab-content">
-                                            <div>
-                                                <form className="form-horizontal">
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Name</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control" value={name} name='name' placeholder="Name" onChange={(e) => setName(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Email</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="email" className="form-control" placeholder="Email" value={email} name='email' readonly />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">First Name</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control" placeholder="First Name" value={first_name} email='first_name' onChange={(e) => setFirstName(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Last Name</label>
-                                                        <div className="col-sm-10">
-                                                            <input type='text' className="form-control" placeholder="Last Name" value={last_name} name='last_name' onChange={(e) => setLastName(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Phone Number</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control" placeholder="Phone" value={phone} name='phone' onChange={(e) => setPhone(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Password</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control" placeholder="Password" value={password} name='password' onChange={(e) => setPassword(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Confirm Password</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="text" className="form-control" placeholder="Confirm Password" value={confirm_password} name='confirm_password' onChange={(e) => setConfirmPassword(e.target.value)} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <label className="col-sm-2 col-form-label">Confirm Password</label>
-                                                        <div className="col-sm-10">
-                                                            <input type="file" className="form-control" onChange={(e) => setPhoto(e.target.files[0])} />
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <div className="offset-sm-2 col-sm-10">
-                                                            <div className="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox" /> I agree to the <a href="#">terms and conditions</a>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="form-group row">
-                                                        <div className="offset-sm-2 col-sm-10">
-                                                            <button onClick={handleProfile} type="submit" className="btn btn-danger">Submit</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                            <div class="row mt-3">
+                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <form action="" method="POST" role="form">
+                                        <div className="row">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">Email</label>
+                                                    <input type="text" className="form-control" placeholder='Enter Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">Phone</label>
+                                                    <input type="text" className="form-control" placeholder='Enter Phone' value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">First Name</label>
+                                                    <input type="text" className="form-control" placeholder='First Name' value={first_name} onChange={(e) => setFirstName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">Last Name</label>
+                                                    <input type="text" className="form-control" placeholder='Last Name' value={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div className="row">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">Password</label>
+                                                    <input type="password" className="form-control" placeholder='Enter Password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <div className="form-group">
+                                                    <label for="">Confirm Password</label>
+                                                    <input type="password" className="form-control" placeholder='Confirm Password' value={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <label>
+                                                    Profile Image
+                                                </label>
+                                                <input className='form-control' type="file" name="image" onChange={(e) => { setPhoto(e.target.files[0]) }} />
+                                            </div>
+                                        </div><br />
+                                        <button type="submit" className="btn btn-success" onClick={handleProfile}>Update</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </section>
             </div>

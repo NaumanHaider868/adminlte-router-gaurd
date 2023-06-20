@@ -89,7 +89,7 @@ function Owner() {
             .then((res) => {
                 console.log(res)
                 getOwner();
-                // alert(res.data.messages)
+                setPage(1)
                 toast.success(res.data.messages[0])
                 setTotalOwner(res.data.data.owners)
             })

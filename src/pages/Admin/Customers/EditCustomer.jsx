@@ -19,7 +19,8 @@ function EditCustomer() {
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
     const [phone, setPhone] = useState();
-    const [password, setPassword] = useState(null)
+    const [password, setPassword] = useState()
+    const [confirmation_password, setConfirmPassword] = useState()
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
@@ -34,7 +35,6 @@ function EditCustomer() {
                 setFirstName(res.data.data.customer.first_name);
                 setLastName(res.data.data.customer.last_name)
                 setPhone(res.data.data.customer.userMeta.phone)
-                setPassword('000000')
                 console.log(res)
             }).finally(() => {
                 setIsLoading(false)
@@ -50,12 +50,9 @@ function EditCustomer() {
         formData.append('last_name', last_name);
         formData.append('phone', phone);
         formData.append('password', password)
+        formData.append('password_confirmation',confirmation_password)
         api.post(`/customers/${param.id}`, formData)
             .then((res) => {
-                setEmail();
-                setUserName();
-                setFirstName();
-                setLastName();
                 // alert(res.data.messages,'edit customer')
                 navigate('/customer')
                 toast.success(res.data.messages[0])
@@ -145,7 +142,18 @@ function EditCustomer() {
                                                     <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
-
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Password</label>
+                                                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Confirm Password</label>
+                                                    <input type="password" className="form-control" value={confirmation_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                </div>
+                                            </div>
                                             <div className="card-footer" style={{ background: '#fff' }}>
                                                 <button type="submit" className="btn btn-success" >
                                                     {isLoadingTwo ? (

@@ -23,6 +23,8 @@ function Coupons() {
     const [search, setSearch] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
+    const Loading = useSelector((state) => state.user.isLoading)
+    console.log(Loading, 'Load')
 
     useEffect(() => {
         getCoupon()
@@ -132,7 +134,7 @@ function Coupons() {
                                                 </div>
                                             </div><br />
 
-                                            {isLoading ? (
+                                            {Loading ? (
                                                 <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
                                                     <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                                 </div>
@@ -142,7 +144,6 @@ function Coupons() {
                                                         <tr>
                                                             <th>Sr.#</th>
                                                             <th>Code</th>
-                                                            {/* <th>Description</th> */}
                                                             <th>Discount</th>
                                                             <th>Discount Type</th>
                                                             <th>Expire Date</th>
@@ -157,8 +158,6 @@ function Coupons() {
                                                                     <td><b>{((page - 1) * 10) + i + 1}</b></td>
                                                                     <td>{item.code}</td>
                                                                     <td>{item.discount}%</td>
-                                                                    {/* <td>{item.description}</td> */}
-                                                                    {/* <td><p style={{width:'45px',padding:'1px 2px 1px 1px',borderRadius:'6px',color:'#fff',fontSize:'14px',backgroundColor: item.discount_type === 'Fixed' ? '#46cbe1' : '#38b529'}}>{item.discount_type}</p></td> */}
                                                                     <td>
                                                                         {item.discount_type === "Fixed" && (
                                                                             <span className="badge badge-warning">

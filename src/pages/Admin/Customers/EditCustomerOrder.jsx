@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../../../componets/Navbar';
-import SideBar from '../../../componets/SideBar';
-import Footer from '../../../componets/Footer';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import api from '../../services/ApiUrl'
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Spinner from '../../../componets/Spinner';
+import React,{useState,useEffect} from 'react'
+import SideBar from '../../../componets/SideBar'
+import Navbar from '../../../componets/Navbar'
+import Footer from '../../../componets/Footer'
+import { useNavigate,useParams,Link } from 'react-router-dom'
 import ClipLoader from 'react-spinners/ClipLoader';
-
+import api from '../../services/ApiUrl'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function EditOrder() {
+
+function EditCustomerOrder() {
     const navigate = useNavigate();
     const param = useParams();
+    console.log(param,'ids')
     const [customer_name, setCustomerName] = useState('');
     const [customer_phone, setCustomerPhone] = useState();
     const [location, setLocation] = useState('');
@@ -52,7 +52,8 @@ function EditOrder() {
     const [orderItemObj, setOrderItemObj] = useState([]);
     const [shopOrder, setShopOrder] = useState([])
     const [shopOrderId, setShopOrderId] = useState()
-    const[variation_id,setVariationId]=useState()
+    
+    
     useEffect(() => {
         getEditOrder()
     }, []);
@@ -60,7 +61,6 @@ function EditOrder() {
         setIsLoading(true)
         api.get(`/orders/${param.id}`)
             .then((res) => {
-                console.log(res.data.data, 'edit');
 
                 //Delivery Man
 
@@ -80,9 +80,7 @@ function EditOrder() {
                 setOrderItem(res.data.data.orderItems);
                 setTotal(res.data.data.order.total)
                 setShopOrder(res.data.data.shopItems)
-                setVariationId(res.data.data.orderItems.variation_id)
                 setOrderId(res.data.data.order.id)
-                
                 // setItemId(res.data.data.orderItems.item_id)
                 // console.log(res.data.data.order.order_id,'shopId')
 
@@ -147,7 +145,6 @@ function EditOrder() {
     const postItem = () => {
         api.post(`/orderitems`, orderItemObj)
             .then((res) => {
-                console.log(res, 'postitem')
             })
     }
     const deleteItem = (id) => {
@@ -161,28 +158,27 @@ function EditOrder() {
             })
     }
 
-    const getShopId = (shopOrderId,variation_id) => {
-        console.log(variation_id, 'itemId');
-        console.log(shopOrderId, 'setShopOrderId');
-        setShopOrderId(shopOrderId);
-        setVariationId(variation_id);
+    const getShopId = (e) => {
+        // console.log(e.target.value, 'shopid')
+        setShopOrderId(e.target.value)
     }
     let shopPayload = {
         item_id: shopOrderId,
         order_id: order_id,
         qty: shopQty,
-        variation_id:variation_id
     }
 
     const addShop = () => {
         api.post(`/orderitems`, shopPayload)
             .then((res) => {
-                console.log(res, 'addshop')
                 getEditOrder()
             })
     }
-    return (
-        <div className='wrapper'>
+    const backOrder=(id)=>{
+        navigate(-1)
+    }
+  return (
+    <div className='wrapper'>
             {/* <ToastContainer/> */}
             <Navbar />
             <SideBar />
@@ -195,8 +191,8 @@ function EditOrder() {
                             </div>
                             <div className="col-sm-6">
                                 <ol className="breadcrumb float-sm-right">
-                                    <Link to='/orders' className="breadcrumb-item"><a href="#">Admin Orders</a></Link>
-                                    <li className="breadcrumb-item active">Edit Order</li>
+                                    <a onClick={backOrder} className="breadcrumb-item"><a href="#">Admin Customers</a></a>
+                                    <li className="breadcrumb-item active">Edit Customers Order</li>
                                 </ol>
                             </div>
                         </div>
@@ -216,7 +212,7 @@ function EditOrder() {
                     </div>
                     <div className="card edit_card">
                         <div className="card-body">
-                            <Link to='/orders'><button className='btn btn-default btn_search_1'><i className="fa fa-arrow-left left_a"></i>Back to Orders</button></Link><br /><br />
+                            <button onClick={backOrder} className='btn btn-default btn_search_1'><i className="fa fa-arrow-left left_a"></i>Back to Orders</button><br /><br />
                             {isLoading ? (
                                 <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
                                     <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
@@ -332,11 +328,10 @@ function EditOrder() {
                                                 <div>
                                                     <label>Select Item</label>
                                                     <select className="form-select" aria-label="Default select example" onChange={getShopId}>
-                                                        <option disabled selected>Select Item</option>
                                                         {shopOrder.map((item, i) => {
                                                             return (
-                                                                <option key={i} value={item.id} data-item-id={item.variation_id}>{item.name}</option>
-                                                            );
+                                                                <option key={i} value={item.id}>{item.name}</option>
+                                                            )
                                                         })}
                                                     </select>
                                                     <label className='w-100 mt-2'>Qty</label>
@@ -390,7 +385,7 @@ function EditOrder() {
             </div>
             <Footer />
         </div>
-    )
+  )
 }
 
-export default EditOrder
+export default EditCustomerOrder

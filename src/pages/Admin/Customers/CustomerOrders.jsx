@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import Navbar from '../../../componets/Navbar';
 import SideBar from '../../../componets/SideBar';
 import Footer from '../../../componets/Footer';
@@ -15,6 +15,8 @@ function CustomerOrders() {
     const [isLoading, setIsLoading] = useState(false);
 
     const param = useParams();
+    console.log(param.id,'id')
+    const navigate = useNavigate();
     useEffect(() => {
         setIsLoading(true)
         api.get(`/customers/${param.id}/orders`)
@@ -54,6 +56,12 @@ function CustomerOrders() {
             }).finally(() => {
                 setIsLoading(false)
             });
+    }
+    const EditOrder = (id) => {
+        navigate('/editcustomerorders/' + id)
+    }
+    const ViewOrder = (id) => {
+        navigate('/viewcustomerorders/' + id)
     }
     return (
         <div className='wrapper'>
@@ -108,15 +116,11 @@ function CustomerOrders() {
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">Sr.#</th>
+                                                            <th>Date</th>
                                                             <th scope="col">Customer Name</th>
-                                                            <th scope="col">Customer Phone</th>
-                                                            <th scope="col">Delivery Charges</th>
                                                             <th scope="col">Location</th>
                                                             <th scope="col">Status</th>
-                                                            <th scope="col">Sub Total</th>
-                                                            <th scope="col">Tax</th>
-                                                            <th scope="col">Total</th>
-
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -124,9 +128,13 @@ function CustomerOrders() {
                                                             return (
                                                                 <tr key={i}>
                                                                     <td><b>{((page - 1) * 10) + i + 1}</b></td>
+                                                                    <td>
+                                                                    {new Date(item.created_at).toLocaleDateString('en-GB', {
+                                                                        day: '2-digit',
+                                                                        month: '2-digit',
+                                                                        year: '2-digit'
+                                                                    }).split('/').join('-')}</td>
                                                                     <td>{item.customer_name}</td>
-                                                                    <td>{item.customer_phone}</td>
-                                                                    <td>{item.delivery_charges}</td>
                                                                     <td>{item.location}</td>
                                                                     <td>
                                                                         {item.status === "New" && (
@@ -156,10 +164,10 @@ function CustomerOrders() {
                                                                         )}
 
                                                                     </td>
-                                                                    <td>{item.sub_total}</td>
-                                                                    <td>{item.tax}</td>
-                                                                    <td>{item.total}</td>
-
+                                                                    <td>
+                                                                        <i class="fas fa-edit" onClick={() => EditOrder(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
+                                                                        <i class="fas fa-eye" onClick={()=>ViewOrder(item.id)}style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
+                                                                    </td>
                                                                 </tr>
                                                             )
                                                         })}

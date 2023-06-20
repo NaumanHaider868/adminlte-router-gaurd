@@ -48,6 +48,8 @@ import Categorie from "./pages/Admin/others/Categories.jsx";
 import Items from "./pages/Admin/others/Items.jsx";
 import AddItems from "./pages/Admin/others/AddItem.jsx";
 import AddCategories from "./pages/Admin/others/AddCategorie.jsx";
+import EditCustomerOrder from "./pages/Admin/Customers/EditCustomerOrder";
+import ViewCustomerOrder from "./pages/Admin/Customers/ViewCustomerOrder";
 
 function App() {
   return (
@@ -98,6 +100,9 @@ function App() {
           <Route path="/editcustomer/:id" element={<Protucted Component={EditCustomer} />} />
           <Route path='/viewcustomer/:id' element={<Protucted Component={ViewCustomer} />} />
           <Route path='/customerorders/:id' element={<Protucted Component={CustomerOrders} />} />
+          <Route path='/editcustomerorders/:id' element={<Protucted Component={EditCustomerOrder} />} />
+          <Route path='/viewcustomerorders/:id' element={<Protucted Component={ViewCustomerOrder} />} />
+          
 
           <Route path='/coupons' element={<Protucted Component={Coupons} />} />
           <Route path='/editcoupon/:id' element={<Protucted Component={EditCoupon} />} />

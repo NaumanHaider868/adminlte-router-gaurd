@@ -67,7 +67,7 @@ function ViewCustomer() {
                                                     <label className='label_1'>Last Name</label>
                                                     <p className='p_1'>{customer.last_name}</p>
                                                     <label className='label_1'>Phone</label>
-                                                    {/* <p className='p_1'>{customer.userMeta.phone}</p> */}
+                                                    <p className='p_1'>{customer.userMeta.phone}</p> 
 
                                                 </div>
 

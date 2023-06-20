@@ -74,8 +74,8 @@ function Customers() {
     const editCustomer = (id) => {
         navigate('/editcustomer/' + id)
     }
-    const customerOrders = (id) => {
-        navigate('/customerorders/' + id)
+    const customerOrders = (id1) => {
+        navigate('/customerorders/' + id1)
     }
     return (
         <div className='wrapper'>
@@ -119,12 +119,13 @@ function Customers() {
                                             ) : <table className="table" style={{ marginBottom: '30px' }}>
                                                 <thead>
                                                     <tr>
-                                                        <th scope="col">Sr.#</th>
-                                                        <th scope="col">User Name</th>
-                                                        <th scope="col">Email</th>
-                                                        <th scope="col">First Name</th>
-                                                        <th scope="col">Last Name</th>
-                                                        <th className='' scope="col">Action</th>
+                                                        <th>Sr.#</th>
+                                                        <th>User Name</th>
+                                                        <th>Email</th>
+                                                        <th>First Name</th>
+                                                        <th>Last Name</th>
+                                                        <th>Orders</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -136,6 +137,7 @@ function Customers() {
                                                                 <td>{item.email}</td>
                                                                 <td>{item.first_name}</td>
                                                                 <td>{item.last_name}</td>
+                                                                <td>{item.orders_count}</td>
                                                                 <td>
                                                                     <i class="fas fa-edit" onClick={() => editCustomer(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;
                                                                     <i class="fas fa-eye" onClick={() => ViewCustomer(item.id)} style={{ fontSize: '12px', cursor: 'pointer', color: '#3d84dd' }}></i>&nbsp;

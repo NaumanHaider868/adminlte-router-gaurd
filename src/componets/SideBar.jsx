@@ -127,7 +127,7 @@ function SideBar() {
                                 </NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink to='/customer' className={"nav-link " + (location.pathname.startsWith("/editcustomer/") || location.pathname.startsWith("/viewcustomer/") || location.pathname.startsWith("/customerorders/") ? 'active' : '')}>
+                                <NavLink to='/customer' className={"nav-link " + (location.pathname.startsWith("/editcustomer/") || location.pathname.startsWith("/viewcustomer/") || location.pathname.startsWith("/customerorders/") || location.pathname.startsWith("/viewcustomerorders/") || location.pathname.startsWith("/editcustomerorders/") ? 'active' : '')}>
                                     <i className="nav-icon fas fa-users"></i>
                                     <p>
                                         Customers
