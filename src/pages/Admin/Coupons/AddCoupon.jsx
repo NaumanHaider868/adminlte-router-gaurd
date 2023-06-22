@@ -92,9 +92,6 @@ function AddCoupon() {
                 <section className='content'>
                     <div className='container-fluid'>
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
-                            </div>
 
                             <div className='alert alert-danger' id='alert-message'>
                                 {errors.length > 0 && (

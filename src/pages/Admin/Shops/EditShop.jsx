@@ -81,7 +81,7 @@ function EditShop() {
                         alertMessage.style.display = 'none';
                     }, 3000);
                 }
-            }).finally(()=>{
+            }).finally(() => {
                 setIsLoadingTwo(false)
             })
 
@@ -108,10 +108,7 @@ function EditShop() {
                 </section>
                 <section className='content'>
                     <div className='container-fluid'>
-                        <div class="card card-dark">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
-                            </div>
+                        <div class="card">
 
                             <div className='alert alert-danger' id='alert-message'>
                                 {
@@ -147,22 +144,18 @@ function EditShop() {
 
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
-                                                    <label>Image</label><br />
-                                                    <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
+
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Open Hours</label>
                                                     <input type="time" value={open_hours} className="form-control" onChange={(e) => setOpenHour(e.target.value)} />
                                                 </div>
                                             </div>
-                                            <div className='col-sm-6'>
-                                                <div className="form-group">
-                                                    <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                                                </div>
-                                            </div>
+
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Close Hours</label>
@@ -181,9 +174,15 @@ function EditShop() {
                                                     <input type="text" className="form-control" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
                                                 </div>
                                             </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Image</label><br />
+                                                    <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                </div>
+                                            </div>
                                             <div className="card-footer" style={{ background: '#fff' }}>
                                                 <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>
-                                                {isLoadingTwo ? (
+                                                    {isLoadingTwo ? (
                                                         <Spinner />
                                                     ) : (
                                                         'Update'
@@ -191,6 +190,83 @@ function EditShop() {
                                                 </button>
                                             </div>
                                         </div>
+
+                                        {/* <div className="row">
+                                            <div className="col-xs-6 col-sm-6 col-md-6 col-lg-12">
+                                                < form action="" method="POST" role="form">
+                                                    <div className="row">
+
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div className="form-group">
+                                                                <label for="">Name</label>
+                                                                <input type="text" className="form-control" defaultValue={name} placeholder='Name' name={name} onChange={(e) => setName(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div className="form-group">
+                                                                <label for="">Address</label>
+                                                                <input type="text" className="form-control" defaultValue={address} placeholder='Address' name={address} onChange={(e) => setAddress(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-12">
+                                                            <div className="form-group">
+                                                                <label for="">Phone</label>
+                                                                <input type="text" className="form-control" defaultValue={phone} placeholder='Phone' name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div>
+                                                                <label for="">Opening Time</label>
+                                                                <input type="time" className='form-control' defaultValue={open_hours} placeholder='Open Time' name={open_hours} onChange={(e) => setOpenHour(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div className="form-group">
+                                                                <label for="">Closing Time</label>
+                                                                <input type="time" className="form-control" defaultValue={close_hours} placeholder='Close Time' name={close_hours} onChange={(e) => setCloseHour(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div className="form-group">
+                                                                <label for="">Latitude</label>
+                                                                <input type="text" className="form-control" defaultValue={latitude} placeholder='Latitude' name={latitude} onChange={(e) => setLatitude(e.target.value)} />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <div className="form-group">
+                                                                <label for="">Longitude</label>
+                                                                <input type="text" className="form-control" defaultValue={longitude} placeholder='Longitude' name={longitude} onChange={(e) => setLongtitude(e.target.value)} />
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="col-md-12">
+                                                            <div className="form-group">
+                                                                <label for="w3review">Other Details</label>
+                                                                <textarea className='form-control' id="w3review" name="w3review" rows="4" cols="50"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="row mb-3">
+
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                            <label>
+                                                                Image
+                                                            </label>
+                                                            <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+                                                        </div>
+                                                        <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                        </div>
+                                                    </div>
+                                                    <div className="row mt-3 mb-3">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div> */}
 
 
                                     </div>

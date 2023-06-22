@@ -10,7 +10,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import ClipLoader from 'react-spinners/ClipLoader';
 
 function ViewCoupon() {
-    const [coupon, setCoupon] = useState([]);
+    const [code, setCode] = useState();
+    const [description, setDescription] = useState();
+    const [discount, setDiscount] = useState();
+    const [discount_type, setDiscountType] = useState();
+    const [general, setGeneral] = useState(false);
+    const [expires_at, setExpires] = useState();
     const dispatch = useDispatch();
     const param = useParams();
     // const coupon = useSelector((state) => state.user.coupon);
@@ -22,7 +27,13 @@ function ViewCoupon() {
         const id = param.id;
         dispatch(viewCoupon(id))
             .then((action) => {
-                setCoupon(action.payload)
+                console.log(action.payload)
+                setCode(action.payload.code)
+                setDescription(action.payload.description)
+                setDiscount(action.payload.discount);
+                setGeneral(action.payload.general);
+                setExpires(action.payload.expires_at);
+                setDiscountType(action.payload.discount_type)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -45,42 +56,73 @@ function ViewCoupon() {
                 <section className="content">
                     <div className="card">
                         <div className="card-body">
-                            <Link to='/coupons'>
-                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Coupon</p>
-                            </Link>
 
-                            <>
-                                <p className='para_bold'>Order #300112</p>
-                                {isLoading ? (
-                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
-                                    </div>
-                                ) :
-                                    <div className='row'>
-                                        <div className='col-md-6'>
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) :
+                                (
+                                    <form>
+                                        <div className="card-body">
                                             <div className='row'>
-                                                <div className='col-md-6'>
-
-                                                    <label className='label_1'>Code</label>
-                                                    <p className='p_1'>{coupon.code}</p>
-                                                    <label className='label_1'>Description</label>
-                                                    <p className='p_1'>{coupon.description}</p>
-                                                    <label className='label_1'>General</label>
-                                                    <p className='p_1'>{coupon.general}</p>
-
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group">
+                                                        <label>Code</label>
+                                                        <input type="text" className="form-control" value={code} readonly />
+                                                    </div>
                                                 </div>
-                                                <div className='col-md-6'>
-                                                    <label className='label_1'>Discount</label>
-                                                    <p className='p_1'>{coupon.discount}</p>
-                                                    <label className='label_1'>Discount Type</label>
-                                                    <p className='p_1'>{coupon.discount_type}</p>
+
+
+
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group">
+                                                        <label>Discount</label>
+                                                        <input type="text" className='form-control' value={discount} readonly />
+                                                    </div>
+                                                </div>
+                                                <div className='col-sm-4'></div>
+
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group ">
+                                                        <label>Discount Type</label>
+                                                        <input type='text' className='form-control' value={discount_type} readonly />
+                                                    </div>
+                                                </div>
+
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group">
+                                                        <label>Expires</label>
+                                                        <input type="date" className="form-control" value={expires_at} readonly />
+
+                                                    </div>
+                                                </div>
+
+                                                <div className='col-sm-4'></div>
+
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group">
+                                                        <label>Description</label>
+                                                        <textarea type="text" className="form-control" value={description} readonly />
+                                                    </div>
+                                                </div>
+
+                                                <div className='col-sm-4'></div>
+                                                <div className='col-sm-4'></div>
+
+                                                <div className='col-sm-4'>
+                                                    <div className="form-group">
+                                                        <input type='checkbox' style={{ paddingTop: '4px' }} checked={general} readonly />&nbsp;&nbsp;
+                                                        <label for="cars">Active</label><br />
+                                                    </div>
                                                 </div>
                                             </div>
 
+
                                         </div>
-                                    </div>
-                                }
-                            </>
+                                    </form>
+                                )
+                            }
 
 
                         </div>

@@ -11,6 +11,11 @@ import ClipLoader from 'react-spinners/ClipLoader';
 function ViewCustomer() {
     const param = useParams();
     const [customer, setCustomer] = useState([]);
+    const [email, setEmail] = useState();
+    const [username, setUserName] = useState();
+    const [first_name, setFirstName] = useState();
+    const [last_name, setLastName] = useState();
+    const [phone, setPhone] = useState();
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -22,7 +27,11 @@ function ViewCustomer() {
         })
             .then((res) => {
                 console.log(res)
-                setCustomer(res.data.data.customer)
+                setEmail(res.data.data.customer.email);
+                setUserName(res.data.data.customer.username);
+                setFirstName(res.data.data.customer.first_name);
+                setLastName(res.data.data.customer.last_name)
+                setPhone(res.data.data.customer.userMeta.phone)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -38,45 +47,68 @@ function ViewCustomer() {
                             <div className="col-sm-6">
                                 <h1>Customer Details</h1>
                             </div>
+                            <div className="col-sm-6">
+                                <ol className="breadcrumb float-sm-right">
+                                    <Link to='/customer' className="breadcrumb-item"><a href="#">Customer</a></Link>
+                                    <li className="breadcrumb-item active">Customer Details</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </section>
                 <section className="content">
                     <div className="card">
                         <div className="card-body">
-                            <Link to='/customer'>
-                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Customers</p>
-                            </Link>
 
-                            <>
-                                <p className='para_bold'>Order #300112</p>
+                            
                                 {isLoading ? (
                                     <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
                                         <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                     </div>
                                 ) :
-                                    <div className='row'>
-                                        <div className='col-md-6'>
+                                    (
+                                        <form encType="multipart/form-data">
+                                        <div className="card-body">
                                             <div className='row'>
-                                                <div className='col-md-6'>
-
-                                                    <label className='label_1'>Customer Name</label>
-                                                    <p className='p_1'>{customer.username}</p>
-                                                    <label className='label_1'>First Name</label>
-                                                    <p className='p_1'>{customer.first_name}</p>
-                                                    <label className='label_1'>Last Name</label>
-                                                    <p className='p_1'>{customer.last_name}</p>
-                                                    <label className='label_1'>Phone</label>
-                                                    <p className='p_1'>{customer.userMeta.phone}</p> 
-
+                                                <div className='col-sm-6'>
+                                                    <div className="form-group">
+                                                        <label>User Name</label>
+                                                        <input type="text" className="form-control" value={username} readonly />
+                                                    </div>
                                                 </div>
-
+                                                <div className='col-sm-6'>
+                                                    <div className="form-group">
+                                                        <label>Email</label>
+                                                        <input type="text" className="form-control" value={email} readonly />
+                                                    </div>
+                                                </div>
+                                                <div className='col-sm-6'>
+                                                    <div className="form-group">
+                                                        <label>First Name</label>
+                                                        <input type="text" value={first_name} className="form-control" readonly />
+                                                    </div>
+                                                </div>
+                                                <div className='col-sm-6'>
+                                                    <div className="form-group">
+                                                        <label>Last Name</label>
+                                                        <input type="text" className="form-control" value={last_name} readonly />
+                                                    </div>
+                                                </div>
+                                                <div className='col-sm-6'>
+                                                    <div className="form-group">
+                                                        <label>Phone</label>
+                                                        <input type="text" className="form-control" value={phone} readonly />
+                                                    </div>
+                                                </div>
+    
                                             </div>
+    
+    
                                         </div>
-                                    </div>
+                                    </form>
+                                        )
                                 }
 
-                            </>
 
 
                         </div>

@@ -14,9 +14,11 @@ function EditDeliveryMan() {
     const [email, setEmail] = useState();
     const [first_name, setFirstName] = useState();
     const [last_name, setLastName] = useState();
+    const [username,setUserName]=useState('')
     const [status, setStatus] = useState(false);
     const [last_login, setLastLogin] = useState();
     const [phone, setPhone] = useState();
+    const [other_details,setOtherDetails]=useState('')
     // const [password,setPassword] = useState('');
     // const [confirm_password,setConfirmPassword] = useState('');
 
@@ -31,12 +33,14 @@ function EditDeliveryMan() {
         setIsLoading(true)
         api.get(`/deliverymens/${param.id}`)
             .then((res) => {
-                console.log(res.data.data.deliveryMens)
+                console.log(res.data.data)
                 setEmail(res.data.data.deliveryMens.email);
                 setFirstName(res.data.data.deliveryMens.first_name);
                 setLastName(res.data.data.deliveryMens.last_name);
                 setStatus(res.data.data.deliveryMens.status);
+                setUserName(res.data.data.deliveryMens.username)
                 setPhone(res.data.data.delivery_man_meta.phone)
+                setOtherDetails(res.data.data.deliveryMens.other_details)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -51,6 +55,7 @@ function EditDeliveryMan() {
             last_name: last_name,
             phone: phone,
             status: status,
+            other_details:other_details
             // password:password,
             // password_confirmation: confirm_password
         }
@@ -96,10 +101,7 @@ function EditDeliveryMan() {
                 </section>
                 <section className='content'>
                     <div className='container-fluid'>
-                        <div class="card card-dark">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
-                            </div>
+                        <div class="card">
 
                             <div className='alert alert-danger' id='alert-message'>
                                 {
@@ -117,51 +119,66 @@ function EditDeliveryMan() {
                                     <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
                                 </div>
                             ) :
-                                <form>
+                                <form onSubmit={submitEdit}>
                                     <div className="card-body">
-                                        <div className='row'>
+                                    <div className='row'>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" className="form-control" value={email} placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+                                                    <input type="text" className="form-control" name={email} value={email} onChange={(e) => setEmail(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" className="form-control" value={first_name} placeholder="First Name" onChange={(e) => setFirstName(e.target.value)} />
+                                                    <input type="text" className="form-control" name={first_name} value={first_name} onChange={(e) => setFirstName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" className="form-control" value={last_name} placeholder="Last Name" onChange={(e) => setLastName(e.target.value)} />
+                                                    <input type="text" className="form-control" name={last_name} value={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>User Name</label>
+                                                    <input type="text" className="form-control" name={username} value={username} onChange={(e) => setUserName(e.target.value)} />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="phone" className="form-control" name={phone} value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             {/* <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Password</label>
-                                                    <input type="text" className="form-control" value={password} name={password} onChange={(e) => setPassword(e.target.value)} />
+                                                    <input type="password" className="form-control" name={password} onChange={(e) => setPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
-                                                    <label>Confirm Password</label>
-                                                    <input type="text" className="form-control" value={confirm_password} name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                    <label>Confiram Password</label>
+                                                    <input type="password" className="form-control" name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
                                                 </div>
                                             </div> */}
+                                            <div className='col-sm-6'></div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
-                                                    <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                    <label>Other Details</label>
+                                                    <textarea className="form-control" name={other_details} value={other_details} onChange={(e) => setOtherDetails(e.target.value)} />
                                                 </div>
                                             </div>
+                                            <div className='col-sm-4'></div>
                                             <div className='col-sm-4'>
                                                 <div className="form-group">
-                                                    <input type='checkbox' checked={status} name='status' onChange={handleStatusChange} />&nbsp;&nbsp;
+                                                    <input type='checkbox' defaultChecked={status} name='status' onChange={handleStatusChange} />&nbsp;&nbsp;
                                                     <label>Active</label><br />
                                                 </div>
                                             </div>
+                                            <div className='col-sm-6'></div>
                                             <div className="card-footer" style={{ background: '#fff' }}>
                                                 <button type="submit" className="btn btn-success" onClick={(e) => submitEdit(e)}>
                                                     {isLoadingTwo ? (
@@ -171,6 +188,7 @@ function EditDeliveryMan() {
                                                     }
                                                 </button>
                                             </div>
+
                                         </div>
 
 

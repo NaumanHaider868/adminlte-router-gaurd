@@ -126,9 +126,7 @@ function EditShopOrder() {
                     <section className='content'>
                         <div className='container-fluid'>
                             <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">Quick Example</h3>
-                                </div>
+                                
                                 <div className='alert alert-danger' id='alert-message'>
                                     {
                                         alert.map((err, index) => {

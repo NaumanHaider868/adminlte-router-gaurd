@@ -23,7 +23,6 @@ function EditOwner() {
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingTwo, setIsLoadingTwo] = useState(false)
 
-    const[owner,setOwner]=useState([])
 
     const [alert, setAlert] = useState([]);
 
@@ -35,7 +34,6 @@ function EditOwner() {
         api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data.owner.username);
-                setOwner(res.data.data.owner)
                 //setPassword(res.data.owner.password);
                 setFirstName(res.data.data.owner.first_name);
                 setLastName(res.data.data.owner.last_name);
@@ -108,10 +106,7 @@ function EditOwner() {
                 </section>
                 <section className='content'>
                     <div className='container-fluid'>
-                        <div class="card card-dark">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
-                            </div>
+                        <div class="card">
 
                             <div className='alert alert-danger' id='alert-message'>
                                 {

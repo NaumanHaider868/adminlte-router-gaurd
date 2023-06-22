@@ -11,7 +11,10 @@ function ViewOwner() {
     const [owner, setOwner] = useState([])
     const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-
+    const [username, setUserName] = useState('');
+    const [first_name, setFirstName] = useState('');
+    const [last_name, setLastName] = useState('');
+    const [status, setStatus] = useState('');
     const param = useParams();
     const navigate = useNavigate();
 
@@ -20,8 +23,12 @@ function ViewOwner() {
         api.get(`/owners/${param.id}`)
             .then((res) => {
                 console.log(res.data.data, 'shop');
-                setOwner(res.data.data.owner)
                 setPhone(res.data.data.owner.user_meta.phone)
+                setFirstName(res.data.data.owner.first_name);
+                setPhone(res.data.data.owner.user_meta.phone)
+                setLastName(res.data.data.owner.last_name);
+                setStatus(res.data.data.owner.status)
+                setUserName(res.data.data.owner.username)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -37,47 +44,79 @@ function ViewOwner() {
                             <div className="col-sm-6">
                                 <h1>Owner Details</h1>
                             </div>
+                            <div className="col-sm-6">
+                                <ol className="breadcrumb float-sm-right">
+                                    <Link to='/owner' className="breadcrumb-item"><a href="#">Owner</a></Link>
+                                    <li className="breadcrumb-item active">Edit Owner</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>
                 </section>
                 <section className="content">
                     <div className="card">
                         <div className="card-body">
-                            <Link to='/owner'>
-                                <p className='btn btn-success'><i class="fa fa-arrow-left left_a"></i>&nbsp;&nbsp;Back to Owner</p>
-                            </Link>
 
-                            <>
-                                <p className='para_bold'>Order #300112</p>
-                                {isLoading ? (
-                                    <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-                                        <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
-                                    </div>
-                                ) : <div className='row'>
-                                    <div className='col-md-6'>
+                            {isLoading ? (
+                                <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
+                                    <ClipLoader loading={isLoading} size={40} color="#17A2B8" />
+                                </div>
+                            ) : (
+                                <form>
+                                    <div className="card-body">
                                         <div className='row'>
-                                            <div className='col-md-6'>
 
-                                                <label className='label_1'>User Name</label>
-                                                <p className='p_1'>{owner.username}</p>
-                                                <label className='label_1'>Phone</label>
-                                                <p className='p_1'>{phone}</p>
-                                                <label className='label_1'>Active</label>&nbsp;&nbsp;&nbsp;
-                                                <input type='checkbox' checked={owner.status} />
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>User Name</label>
+                                                    <input type="text" className="form-control" value={username} placeholder="User Name" readonly />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>First Name</label>
+                                                    <input type="text" className="form-control" value={first_name} placeholder="First Name" readonly />
+                                                </div>
+                                            </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Last Name</label>
+                                                    <input type="text" className="form-control" value={last_name} placeholder="Last Name" readonly />
+                                                </div>
+                                            </div>
 
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" className="form-control" value={phone} placeholder="Phone" readonly />
+                                                </div>
                                             </div>
-                                            <div className='col-md-6'>
-                                                <label className='label_1'>First Name</label>
-                                                <p className='p_1'>{owner.first_name}</p>
-                                                <label className='label_1'>Last Name</label>
-                                                <p className='p_1'>{owner.last_name}</p>
+                                            {/* <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Password</label>
+                                                    <input type="text" className="form-control" defaultValue={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+                                                </div>
                                             </div>
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <label>Password confirmation </label>
+                                                    <input type="text" className="form-control" value={confirm_password} placeholder="Password confirmation" onChange={(e) => setConfimPassword(e.target.value)} />
+                                                </div>
+                                            </div> */}
+
+                                            <div className='col-sm-6'>
+                                                <div className="form-group">
+                                                    <input type='checkbox' checked={status} />&nbsp;&nbsp;
+                                                    <label>Active</label><br />
+                                                </div>
+                                            </div>
+
                                         </div>
 
                                     </div>
-                                </div>}
+                                </form>
+                            )}
 
-                            </>
 
 
                         </div>

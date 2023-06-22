@@ -150,7 +150,7 @@ function SideBar() {
                                     </p>
                                 </NavLink>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <NavLink to='/item' className={"nav-link " + (location.pathname === '/additems' ? 'active' : '')}>
 
                                     <i className="nav-icon fa fa-sitemap"></i>
@@ -158,7 +158,7 @@ function SideBar() {
                                         Items
                                     </p>
                                 </NavLink>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
                                 <NavLink to='/deliveryman' className={"nav-link " + (location.pathname === '/adddeliverymen' || location.pathname.startsWith("/editdeliveryman/") || location.pathname.startsWith("/viewdeliveryman/") || location.pathname.startsWith("/deliverymanorders/") ? 'active' : '')}>
                                     <i class="nav-icon fab fa-first-order"></i>

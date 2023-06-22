@@ -62,6 +62,7 @@ function Coupons() {
     const handleDelete = (id) => {
         dispatch(deleteCoupon(id))
             .then((action) => {
+                setPage(1)
                 getCoupon()
                 toast.success(action.payload.messages[0]);
             })

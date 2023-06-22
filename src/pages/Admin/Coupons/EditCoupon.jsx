@@ -122,10 +122,7 @@ function EditCoupon() {
                 </section>
                 <section className='content'>
                     <div className='container-fluid'>
-                        <div class="card card-dark">
-                            <div class="card-header">
-                                <h3 class="card-title">Quick Example</h3>
-                            </div>
+                        <div class="card">
                             <div className="alert alert-danger" id="alert-message">
                                 {couponError.length > 0 && (
                                     couponError.map((err, index) => (

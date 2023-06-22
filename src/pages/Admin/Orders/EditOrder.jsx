@@ -41,8 +41,8 @@ function EditOrder() {
     const [other_details, setOtherDetails] = useState()
 
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => { setShow(false); setVariations([]) };
+    const handleShow = () => { setShow(true); setVariations([]) };
 
     const [showItem, setShowItem] = useState(false);
     const handleCloseItem = () => setShowItem(false);
@@ -52,7 +52,11 @@ function EditOrder() {
     const [orderItemObj, setOrderItemObj] = useState([]);
     const [shopOrder, setShopOrder] = useState([])
     const [shopOrderId, setShopOrderId] = useState()
-    const[variation_id,setVariationId]=useState()
+    const [variations, setVariations] = useState([])
+    const [variation_id, setVariationId] = useState()
+    const [variation_price, setVariationPrice] = useState()
+
+
     useEffect(() => {
         getEditOrder()
     }, []);
@@ -63,7 +67,7 @@ function EditOrder() {
                 console.log(res.data.data, 'edit');
 
                 //Delivery Man
-
+                setVariations([])
                 setDeliveryManPhone(res.data.data.order.delivery_man_phone);
                 setDeliveryManName(res.data.data.order.delivery_man_name);
                 setCustomerId(res.data.data.order.customer_id)
@@ -80,9 +84,9 @@ function EditOrder() {
                 setOrderItem(res.data.data.orderItems);
                 setTotal(res.data.data.order.total)
                 setShopOrder(res.data.data.shopItems)
-                setVariationId(res.data.data.orderItems.variation_id)
+                //setVariationId(res.data.data.orderItems.variation_id)
                 setOrderId(res.data.data.order.id)
-                
+
                 // setItemId(res.data.data.orderItems.item_id)
                 // console.log(res.data.data.order.order_id,'shopId')
 
@@ -161,25 +165,35 @@ function EditOrder() {
             })
     }
 
-    const getShopId = (shopOrderId,variation_id) => {
-        console.log(variation_id, 'itemId');
-        console.log(shopOrderId, 'setShopOrderId');
-        setShopOrderId(shopOrderId);
-        setVariationId(variation_id);
-    }
+    const getShopId = (e) => {
+        console.log(e.target.value)
+        setShopOrderId(e.target.value);
+        api.get(`/items/${shopOrderId}/variations`)
+            .then((res) => {
+                // console.log(res.data.data.variations, 'res')
+                setVariations(res.data.data.variations)
+                setVariationPrice(res.data.data.variations.price)
+            })
+    };
     let shopPayload = {
         item_id: shopOrderId,
         order_id: order_id,
         qty: shopQty,
-        variation_id:variation_id
+        variation_id: variation_id,
+        price: variation_price,
     }
-
     const addShop = () => {
         api.post(`/orderitems`, shopPayload)
             .then((res) => {
-                console.log(res, 'addshop')
+                // console.log(res, 'addshop')
+                toast.success(res.data.messages[0])
                 getEditOrder()
             })
+    }
+    const handleCheck = (e) => {
+
+        const selectedValue = e.target.value;
+        setVariationId(selectedValue)
     }
     return (
         <div className='wrapper'>
@@ -335,10 +349,22 @@ function EditOrder() {
                                                         <option disabled selected>Select Item</option>
                                                         {shopOrder.map((item, i) => {
                                                             return (
-                                                                <option key={i} value={item.id} data-item-id={item.variation_id}>{item.name}</option>
+                                                                <option key={i} value={item.id}>{item.name}</option>
                                                             );
                                                         })}
-                                                    </select>
+                                                    </select><br />
+
+                                                    {shopOrder && variations.map((item, i) => {
+                                                        return (
+                                                            <>
+                                                                {/* <div> */}
+                                                                <label>{item.name}</label>&nbsp;
+                                                                <input key={i} value={item.id} defaultChecked={variation_id === item.id} onChange={handleCheck} type='checkbox' />&nbsp;
+                                                                {/* </div> */}
+
+                                                            </>
+                                                        )
+                                                    })}
                                                     <label className='w-100 mt-2'>Qty</label>
                                                     <input type='text' value={shopQty} onChange={(e) => setShopQty(e.target.value)} className='form-control w-50' />
                                                 </div>
