@@ -6,6 +6,7 @@ import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import ClipLoader from 'react-spinners/ClipLoader';
+import InputMask from 'react-input-mask'
 
 function ViewOwner() {
     const [owner, setOwner] = useState([])
@@ -88,7 +89,7 @@ function ViewOwner() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} placeholder="Phone" readonly />
+                                                    <InputMask mask='(9999) 999-9999' type="text" className="form-control" value={phone} placeholder="Phone" readonly />
                                                 </div>
                                             </div>
                                             {/* <div className='col-sm-6'>

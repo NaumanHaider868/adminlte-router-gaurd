@@ -9,6 +9,7 @@ import Footer from '../../../componets/Footer'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InputMask from 'react-input-mask'
 
 function AddShop() {
     const navigate = useNavigate();
@@ -32,8 +33,8 @@ function AddShop() {
     const [owner_image, setOwnerImage] = useState(null)
 
     const [alert, setAlert] = useState([])
-    const[isLoadingTwo,setIsLoadingTwo]=useState(false)
-
+    const [isLoadingTwo, setIsLoadingTwo] = useState(false)
+    const [status, setStatus] = useState(0)
     const handleSubmit = (e) => {
         setIsLoadingTwo(true)
         const formatData = new FormData();
@@ -46,7 +47,7 @@ function AddShop() {
         formatData.append('latitude', latitude)
         formatData.append('shop_image', image)
         formatData.append('other_details', other_detail)
-
+        formatData.append('status', status)
         // Owner FormData
         formatData.append('first_name', owner_first_name)
         formatData.append('last_name', owner_last_name)
@@ -75,9 +76,15 @@ function AddShop() {
                     }, 3000);
                 }
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoadingTwo(false)
             })
+    }
+    const hadleStatus = (e) => {
+        const isChecked = e.target.checked;
+        const data = isChecked ? 1 : 0;
+        console.log(data)
+        setStatus(data)
     }
     return (
         <div className="wrapper">
@@ -115,7 +122,7 @@ function AddShop() {
                     <div className='row'>
                         <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                             <div className="card">
-                                <h5 className='card-header'>Shop Details</h5>
+                                <h5 className='card-header' style={{backgroundColor:'#fff'}}>Shop Details</h5>
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-xs-6 col-sm-6 col-md-6 col-lg-12">
@@ -131,14 +138,14 @@ function AddShop() {
                                                     </div>
                                                     <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                                         <div className="form-group">
-                                                            <label for="">Address</label>
-                                                            <input type="text" className="form-control" defaultValue={address} placeholder='Address' name={address} onChange={(e) => setAddress(e.target.value)} />
+                                                            <label for="">Phone</label>
+                                                            <InputMask mask='(9999) 999-9999' type="text" className="form-control" defaultValue={phone} placeholder='Phone' name={phone} onChange={(e) => setPhone(e.target.value)} />
                                                         </div>
                                                     </div>
                                                     <div className="col-xs-6 col-sm-6 col-md-6 col-lg-12">
                                                         <div className="form-group">
-                                                            <label for="">Phone</label>
-                                                            <input type="text" className="form-control" defaultValue={phone} placeholder='Phone' name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                            <label for="">Address</label>
+                                                            <input type="text" className="form-control" defaultValue={address} placeholder='Address' name={address} onChange={(e) => setAddress(e.target.value)} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -190,6 +197,12 @@ function AddShop() {
                                                     </div>
                                                 </div>
                                                 <div className="row mt-3 mb-3">
+                                                    <div className='col-xs-6 col-sm-6 col-md-6 col-lg-6'>
+                                                        <label>
+                                                            Active
+                                                        </label>&nbsp;&nbsp;
+                                                        <input type='checkbox' name='status' checked={status} onChange={hadleStatus} />
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -222,7 +235,7 @@ function AddShop() {
                                                 <div className="col-xs-6 col-sm-6 col-md-6 col-lg-12">
                                                     <div className="form-group">
                                                         <label for="">Phone</label>
-                                                        <input type="text" placeholder='Phone' className="form-control" defaultValue={owner_phone} name='owner_phone' onChange={(e) => setOwnerPhone(e.target.value)} />
+                                                        <InputMask mask='(9999) 999-9999' type="text" placeholder='Phone' className="form-control" defaultValue={owner_phone} name='owner_phone' onChange={(e) => setOwnerPhone(e.target.value)} />
                                                     </div>
                                                 </div>
                                                 <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -256,6 +269,7 @@ function AddShop() {
                                                     </label>
                                                     <input type="file" onChange={(e) => setOwnerImage(e.target.files[0])} />
                                                 </div>
+
                                             </div>
                                         </form>
                                     </div>

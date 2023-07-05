@@ -6,7 +6,7 @@ import api from '../../services/ApiUrl'
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ClipLoader from 'react-spinners/ClipLoader';
-
+import InputMask from 'react-input-mask'
 
 function ViewCustomer() {
     const param = useParams();
@@ -97,7 +97,7 @@ function ViewCustomer() {
                                                 <div className='col-sm-6'>
                                                     <div className="form-group">
                                                         <label>Phone</label>
-                                                        <input type="text" className="form-control" value={phone} readonly />
+                                                        <InputMask mask='(9999) 999-9999' type="text" className="form-control" value={phone} readonly />
                                                     </div>
                                                 </div>
     

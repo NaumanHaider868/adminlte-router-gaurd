@@ -8,7 +8,7 @@ import { Link,  useNavigate } from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import InputMask from 'react-input-mask'
 
 function AddOwner() {
     const [email, setEmail] = useState();
@@ -125,7 +125,7 @@ function AddOwner() {
                                         <div className='col-sm-6'>
                                             <div className="form-group">
                                                 <label>Phone</label>
-                                                <input type="text" className="form-control" value={phone} placeholder="Phone Number" onChange={(e) => setPhone(e.target.value)} />
+                                                <InputMask mask='(9999) 999-9999' type="text" className="form-control" value={phone} placeholder="Phone Number" onChange={(e) => setPhone(e.target.value)} />
                                             </div>
                                         </div>
                                         <div className='col-sm-6'>

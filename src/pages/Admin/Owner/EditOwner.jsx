@@ -6,7 +6,7 @@ import api from '../../services/ApiUrl'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import Spinner from '../../../componets/Spinner';
-
+import InputMask from 'react-input-mask'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -150,7 +150,7 @@ function EditOwner() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" className="form-control" defaultValue={phone} placeholder="Phone" onChange={(e) => setPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' type="text" className="form-control" defaultValue={phone} placeholder="Phone" onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>

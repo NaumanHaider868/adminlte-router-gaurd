@@ -5,7 +5,7 @@ import Footer from '../../../componets/Footer'
 import { useState, useEffect } from 'react'
 import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
-
+import InputMask from 'react-input-mask'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -99,43 +99,43 @@ function AddDeliveryMen() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" className="form-control" name={email} onChange={(e) => setEmail(e.target.value)} />
+                                                    <input type="email" placeholder='email' className="form-control" name={email} onChange={(e) => setEmail(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" className="form-control" name={first_name} onChange={(e) => setFirstName(e.target.value)} />
+                                                    <input type="text" placeholder='First Name' className="form-control" name={first_name} onChange={(e) => setFirstName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" className="form-control" name={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                                    <input type="text" placeholder='Last Name' className="form-control" name={last_name} onChange={(e) => setLastName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>User Name</label>
-                                                    <input type="text" className="form-control" name={username} onChange={(e) => setUserName(e.target.value)} />
+                                                    <input type="text" placeholder='User Name' className="form-control" name={username} onChange={(e) => setUserName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
-                                                    <input type="phone" className="form-control" name={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' placeholder='Phone' type="phone" className="form-control" name={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Password</label>
-                                                    <input type="password" className="form-control" name={password} onChange={(e) => setPassword(e.target.value)} />
+                                                    <input type="password" placeholder='Password' className="form-control" name={password} onChange={(e) => setPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Confiram Password</label>
-                                                    <input type="password" className="form-control" name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                    <input type="password" placeholder='Confiram Password' className="form-control" name={confirm_password} onChange={(e) => setConfirmPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'></div>

@@ -6,7 +6,7 @@ import api from '../../services/ApiUrl'
 import { Link, useNavigate } from 'react-router-dom'
 import { PaginationControl } from 'react-bootstrap-pagination-control';
 import ClipLoader from 'react-spinners/ClipLoader';
-
+import Swal from 'sweetalert2';
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -56,17 +56,40 @@ function Shops() {
         navigate('/viewshop/' + id)
     }
     const deleteProduct = (id) => {
-        setIsLoading(true)
-        api.delete(`/shops/${id}`)
-            .then((res) => {
-                getShop()
-                console.log('delete', res)
-                setTotalShop(res.data.data.shops)
-                toast.success(res.data.messages[0])
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
+        // setIsLoading(true)
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure that you want to delete this shop?",
+            icon: "warning",
+            dangerMode: true,
+            showCancelButton: true,
+            cancelButtonText: 'No',
+            confirmButtonText: 'Yes',
+        }).then((res) => {
+            if (res.isConfirmed) {
+                // console.log('delete')
+                api.delete(`/shops/${id}`)
+                    .then((res) => {
+                        getShop()
+                        console.log('delete', res)
+                        setTotalShop(res.data.data.shops)
+                        toast.success(res.data.messages[0])
+                    })
+                    .finally(() => {
+                        setIsLoading(false)
+                    })
+            }
+        })
+        // api.delete(`/shops/${id}`)
+        //     .then((res) => {
+        //         getShop()
+        //         console.log('delete', res)
+        //         setTotalShop(res.data.data.shops)
+        //         toast.success(res.data.messages[0])
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false)
+        //     })
     }
 
     const [search, setSearch] = useState();

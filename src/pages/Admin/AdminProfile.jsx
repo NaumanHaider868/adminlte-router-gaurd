@@ -5,8 +5,7 @@ import Footer from '../../componets/Footer'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Link } from 'react-router-dom'
-
+import InputMask from 'react-input-mask'
 
 function AdminProfile() {
     // const [user, setUser] = useState([]);
@@ -127,7 +126,7 @@ function AdminProfile() {
                                             <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                                 <div className="form-group">
                                                     <label for="">Phone</label>
-                                                    <input type="text" className="form-control" placeholder='Enter Phone' value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' type="text" className="form-control" placeholder='Enter Phone' value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className="col-xs-6 col-sm-6 col-md-6 col-lg-6">

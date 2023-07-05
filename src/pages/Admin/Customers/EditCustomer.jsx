@@ -4,7 +4,7 @@ import SideBar from '../../../componets/SideBar'
 import Footer from '../../../componets/Footer'
 import api from '../../services/ApiUrl'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-
+import InputMask from 'react-input-mask'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ClipLoader from 'react-spinners/ClipLoader';
@@ -112,43 +112,43 @@ function EditCustomer() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>User Name</label>
-                                                    <input type="text" className="form-control" value={username} onChange={(e) => setUserName(e.target.value)} />
+                                                    <input type="text" className="form-control" placeholder='User Name' value={username} onChange={(e) => setUserName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                                    <input type="text" className="form-control" placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>First Name</label>
-                                                    <input type="text" value={first_name} className="form-control" onChange={(e) => setFirstName(e.target.value)} />
+                                                    <input type="text" value={first_name} placeholder='First Name' className="form-control" onChange={(e) => setFirstName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Last Name</label>
-                                                    <input type="text" className="form-control" value={last_name} onChange={(e) => setLastName(e.target.value)} />
+                                                    <input type="text" className="form-control" placeholder='Last Name' value={last_name} onChange={(e) => setLastName(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' placeholder='Phone' type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Password</label>
-                                                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                                    <input type="password" placeholder='Password' className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Confirm Password</label>
-                                                    <input type="password" className="form-control" value={confirmation_password} onChange={(e) => setConfirmPassword(e.target.value)} />
+                                                    <input type="password" placeholder='Confirm Password' className="form-control" value={confirmation_password} onChange={(e) => setConfirmPassword(e.target.value)} />
                                                 </div>
                                             </div>
                                             <div className="card-footer" style={{ background: '#fff' }}>

@@ -1,20 +1,21 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import SideBar from '../../../componets/SideBar'
 import Navbar from '../../../componets/Navbar'
 import Footer from '../../../componets/Footer'
-import { useNavigate,useParams,Link } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import ClipLoader from 'react-spinners/ClipLoader';
 import api from '../../services/ApiUrl'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InputMask from 'react-input-mask';
 
 
 function EditCustomerOrder() {
     const navigate = useNavigate();
     const param = useParams();
-    console.log(param,'ids')
+    // console.log(param, 'ids')
     const [customer_name, setCustomerName] = useState('');
     const [customer_phone, setCustomerPhone] = useState();
     const [location, setLocation] = useState('');
@@ -29,9 +30,12 @@ function EditCustomerOrder() {
     const [total, setTotal] = useState();
     const [order_id, setOrderId] = useState();
     const [shopQty, setShopQty] = useState();
+    const [variation_id, setVariationId] = useState('');
+    const [variations, setVariations] = useState([])
 
 
     const [isLoadingTwo, setIsLoadingTwo] = useState(false)
+    const [isLoading3, setIsLoading3] = useState(false)
     const [alert, setAlert] = useState([]);
 
     const [delivery_man_phone, setDeliveryManPhone] = useState();
@@ -45,15 +49,19 @@ function EditCustomerOrder() {
     const handleShow = () => setShow(true);
 
     const [showItem, setShowItem] = useState(false);
-    const handleCloseItem = () => setShowItem(false);
+    const handleCloseItem = () => {
+        setShowItem(false);
+        setVariations([]);
+        setShopQty('');
+    };
 
     // edit orderItems
 
     const [orderItemObj, setOrderItemObj] = useState([]);
     const [shopOrder, setShopOrder] = useState([])
     const [shopOrderId, setShopOrderId] = useState()
-    
-    
+
+
     useEffect(() => {
         getEditOrder()
     }, []);
@@ -62,6 +70,8 @@ function EditCustomerOrder() {
         api.get(`/orders/${param.id}`)
             .then((res) => {
 
+                setVariations([]);
+                setShopQty('')
                 //Delivery Man
 
                 setDeliveryManPhone(res.data.data.order.delivery_man_phone);
@@ -79,6 +89,7 @@ function EditCustomerOrder() {
                 // orderItems
                 setOrderItem(res.data.data.orderItems);
                 setTotal(res.data.data.order.total)
+                console.log(res.data.data, 'orderItems')
                 setShopOrder(res.data.data.shopItems)
                 setOrderId(res.data.data.order.id)
                 // setItemId(res.data.data.orderItems.item_id)
@@ -110,7 +121,7 @@ function EditCustomerOrder() {
                 toast.success(res.data.messages[0])
 
             }).catch(res => {
-                console.log(res.response.data.errors)
+                // console.log(res.response.data.errors)
                 setAlert(res.response.data.errors);
                 document.querySelector('#alert-message').style.display = 'block';
                 setTimeout(() => {
@@ -125,6 +136,7 @@ function EditCustomerOrder() {
         api.get(`/orderitems/${id}`)
             .then((res) => {
                 setShowItem(true);
+                // console.log(res.data.data.orderItem,'orderItem')
                 setOrderItemObj(res.data.data.orderItem)
             })
     }
@@ -159,26 +171,56 @@ function EditCustomerOrder() {
     }
 
     const getShopId = (e) => {
-        // console.log(e.target.value, 'shopid')
+        setShopQty('')
         setShopOrderId(e.target.value)
+        setVariations([])
+        api.get(`/items/${shopOrderId}/variations`)
+            .then((res) => {
+                console.log(res.data.data.variations, 'variatios')
+                setVariations(res.data.data.variations)
+            })
     }
     let shopPayload = {
         item_id: shopOrderId,
         order_id: order_id,
         qty: shopQty,
+        variation_id: variation_id
     }
 
     const addShop = () => {
+        setIsLoading3(true)
         api.post(`/orderitems`, shopPayload)
             .then((res) => {
-                getEditOrder()
+                console.log(res.data.messages)
+                toast.success(res.data.messages[0])
+                getEditOrder();
+                setShow(false)
+            })
+            .catch((error) => {
+                console.log(error.response.data.errors, 'error');
+                const errors = error.response.data.errors || [];
+                const errorMessages = errors.map((err) => {
+                    return (
+                        <React.Fragment key={err}>
+                            {err}<br />
+                        </React.Fragment>
+                    );
+                });
+                toast.error(<div>{errorMessages}</div>);
+                setShow(false);
+            }).finally(() => {
+                setIsLoading3(false)
             })
     }
-    const backOrder=(id)=>{
-        navigate(-1)
+    const backOrder = (id) => {
+        navigate(-1);
     }
-  return (
-    <div className='wrapper'>
+    // const handleVariationId = (e)=>{
+    //     const id = (e.target.value);
+    //     setVariationId(id === variation_id ? '': id);
+    // }
+    return (
+        <div className='wrapper'>
             {/* <ToastContainer/> */}
             <Navbar />
             <SideBar />
@@ -228,7 +270,8 @@ function EditCustomerOrder() {
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <label style={{ marginTop: '18px' }}>Phone</label>
-                                                    <input className='' type="text" placeholder='Customer Phone' value={customer_phone} onChange={(e) => setCustomerPhone(e.target.value)} />
+                                                    {/* <input className='' type="text" placeholder='Customer Phone' value={customer_phone} onChange={(e) => setCustomerPhone(e.target.value)} /> */}
+                                                    <InputMask type='text' mask='(9999) 999-9999' placeholder='Customer Phone' value={customer_phone} onChange={(e) => setCustomerPhone(e.target.value)} />
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <label for="cars" style={{ marginTop: '18px' }}>Status</label>
@@ -328,21 +371,38 @@ function EditCustomerOrder() {
                                                 <div>
                                                     <label>Select Item</label>
                                                     <select className="form-select" aria-label="Default select example" onChange={getShopId}>
+                                                        <option disabled selected>Select Item</option>
                                                         {shopOrder.map((item, i) => {
                                                             return (
                                                                 <option key={i} value={item.id}>{item.name}</option>
                                                             )
                                                         })}
-                                                    </select>
+                                                    </select><br/>
+                                                    {shopOrder && variations.map((item, i) => (
+                                                        
+                                                        <React.Fragment>
+                                                            <label>{item.name}</label>&nbsp;
+                                                            <input
+                                                                key={i}
+                                                                value={item.id}
+                                                                name='variationRadio'
+                                                                // checked={variation_id === item.id}
+                                                                onChange={(e)=>setVariationId(e.target.value)}
+                                                                type='radio'
+                                                            />&nbsp;&nbsp;&nbsp;
+                                                        </React.Fragment>
+                                                    ))}
                                                     <label className='w-100 mt-2'>Qty</label>
                                                     <input type='text' value={shopQty} onChange={(e) => setShopQty(e.target.value)} className='form-control w-50' />
                                                 </div>
                                             </Modal.Body>
                                             <Modal.Footer>
                                                 <Button className='btn_Censel' variant="secondary" onClick={handleClose}>Cancel</Button>
-                                                <Button className='add_btn_right' variant="primary" onClick={() => { handleClose(); addShop(); }}>
-                                                    Add Item
+                                                <Button className='add_btn_right' variant="primary" onClick={() => { addShop(); }}>
+
+                                                    {isLoading3 && <div className='spinner-border spinner-border-sm' id='stoploading'></div>}Add Item
                                                 </Button>
+
                                             </Modal.Footer>
                                         </Modal>
 
@@ -385,7 +445,7 @@ function EditCustomerOrder() {
             </div>
             <Footer />
         </div>
-  )
+    )
 }
 
 export default EditCustomerOrder

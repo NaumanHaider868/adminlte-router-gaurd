@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate, useParams } from 'react-router-dom';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Spinner from '../../../componets/Spinner';
+import InputMask from 'react-input-mask';
 
 function EditShopOrder() {
     const [alert, setAlert] = useState([]);
@@ -175,7 +176,7 @@ function EditShopOrder() {
                                                 <div className='col-sm-6'>
                                                     <div className="form-group">
                                                         <label>Delivery Man Phone</label>
-                                                        <input type="text" className="form-control" value={delivery_man_phone} placeholder="Delivery Man Phone" onChange={(e) => setLocation(e.target.value)} />
+                                                        <InputMask mask='(9999) 999-9999' type="text" className="form-control" value={delivery_man_phone} placeholder="Delivery Man Phone" onChange={(e) => setLocation(e.target.value)} />
                                                     </div>
                                                 </div>
                                                 <div className='col-sm-6'>

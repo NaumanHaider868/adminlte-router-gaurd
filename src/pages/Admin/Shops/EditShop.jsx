@@ -7,6 +7,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../services/ApiUrl'
 import ClipLoader from 'react-spinners/ClipLoader';
 import Spinner from '../../../componets/Spinner';
+import InputMask from 'react-input-mask'
 
 import { toast } from 'react-toastify';
 function EditShop() {
@@ -145,7 +146,7 @@ function EditShop() {
                                             <div className='col-sm-6'>
                                                 <div className="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} />
                                                 </div>
                                             </div>
 

@@ -10,6 +10,7 @@ import Spinner from '../../../componets/Spinner';
 import ClipLoader from 'react-spinners/ClipLoader';
 
 import Button from 'react-bootstrap/Button';
+import InputMask from 'react-input-mask';
 import Modal from 'react-bootstrap/Modal';
 
 function EditOrder() {
@@ -246,7 +247,7 @@ function EditOrder() {
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <label style={{ marginTop: '18px' }}>Phone</label>
-                                                    <input className='' type="text" placeholder='Customer Phone' value={customer_phone} onChange={(e) => setCustomerPhone(e.target.value)} />
+                                                    <InputMask mask='(9999) 999-9999' className='' type="text" placeholder='Customer Phone' value={customer_phone} onChange={(e) => setCustomerPhone(e.target.value)} />
                                                 </div>
                                                 <div className='col-md-6'>
                                                     <label for="cars" style={{ marginTop: '18px' }}>Status</label>
